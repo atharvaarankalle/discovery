@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
 
-async function querry() {
+async function generate() {
     const openai = new OpenAI({
         apiKey: 'sk-proj-eKNyjosvJVzhz014cRXBT3BlbkFJbou5phOpITkW0sbWlakg', dangerouslyAllowBrowser: true });
     
@@ -51,5 +51,5 @@ async function querry() {
     }
 
 
-export default querry;
+export default generate;
 
