@@ -5,6 +5,7 @@ import LandingPage from "./pages/LandingPage.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import PromptPage from "./pages/PromptPage.tsx";
 import ProfilePage from "./pages/ProfilePage.tsx";
+import NavBar from "./NavBar.tsx";
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
 
         {/* "user" will likely be replaced by the user ID or similar */}
         {/* the following routes are only accessible if logged in */}
-        <Route path="user">
+        <Route path="user" element={<NavBar />}>
           <Route index element={<ProfilePage />} />
           <Route path="discover" element={<DiscoverPage />} />
           <Route path="prompt" element={<PromptPage />} />
