@@ -5,7 +5,7 @@ import LandingPage from "./pages/LandingPage.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import PromptPage from "./pages/PromptPage.tsx";
 import ProfilePage from "./pages/ProfilePage.tsx";
-import NavBar from "./NavBar.tsx";
+import NavBar from "./components/NavBar.tsx";
 
 function App() {
   return (
