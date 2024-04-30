@@ -12,8 +12,8 @@
   },
   "scripts": {
     "dev": "nodemon ./src/app.ts",
-    "start": "node ./src/app.ts",
-    "test": "test"
+    "start": "ts-node ./src/app.ts",
+    "build": "tsc"
   },
   "dependencies": {
     "express": "^4.19.2"
