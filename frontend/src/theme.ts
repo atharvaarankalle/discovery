@@ -259,7 +259,8 @@ export const theme = createTheme({
             borderBottom: `${colors.pink} 3px solid `,
             color: colors.pink,
             fontFamily: "Sora",
-            borderRadius: "0",
+            fontWeight: 600,
+            borderRadius: 0,
             "&:hover": {
               color: colors.peach,
               background: "transparent",
