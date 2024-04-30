@@ -3,9 +3,7 @@ import express, { Router } from "express";
 
 const router: Router = express.Router();
 
-// TODO: Add different routes here
-
-// TEST Endpoint
+// TEST Endpoint for /api
 router.get("/", (req, res) => {
   res.send("Hello from API :)");
 });
