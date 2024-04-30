@@ -53,7 +53,30 @@ const colors = {
   white: "#FFFFFF",
 };
 
-// declare module "@mui/material";
+declare module "@mui/material/styles" {
+  interface TypographyVariants {
+    mdSongTitle: React.CSSProperties;
+    mdSongSubtitle: React.CSSProperties;
+    smSongTitle: React.CSSProperties;
+    smSongSubtitle: React.CSSProperties;
+  }
+
+  interface TypographyVariantsOptions {
+    mdSongTitle?: React.CSSProperties;
+    mdSongSubtitle?: React.CSSProperties;
+    smSongTitle?: React.CSSProperties;
+    smSongSubtitle?: React.CSSProperties;
+  }
+}
+
+declare module "@mui/material/Typography" {
+  interface TypographyPropsVariantOverrides {
+    mdSongTitle: true;
+    mdSongSubtitle: true;
+    smSongTitle: true;
+    smSongSubtitle: true;
+  }
+}
 
 export const theme = createTheme({
   palette: {
@@ -154,6 +177,32 @@ export const theme = createTheme({
     button: {
       textTransform: "none",
       fontSize: "1rem",
+    },
+    mdSongTitle: {
+      // song widget discover feed and saved songs list
+      color: colors.lightPeach,
+      fontSize: "1.25rem",
+      fontWeight: 600,
+      fontFamily: "Sora",
+    },
+    mdSongSubtitle: {
+      // song widget discover feed and saved songs list
+      color: colors.peach,
+      fontSize: "1rem",
+      fontWeight: 400,
+      fontFamily: "Familjen Grotesk",
+    },
+    smSongTitle: {
+      // song widget submission, song search list, selected track, music player !! set colour when using
+      fontSize: "1rem",
+      fontWeight: 600,
+      fontFamily: "Sora",
+    },
+    smSongSubtitle: {
+      // song widget submission, song search list, selected track, music player !! set colour when using
+      fontSize: "0.875rem",
+      fontWeight: 400,
+      fontFamily: "Familjen Grotesk",
     },
   },
 });

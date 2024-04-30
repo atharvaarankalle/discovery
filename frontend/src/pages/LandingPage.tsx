@@ -13,6 +13,14 @@ const LandingPage = () => {
           <Typography variant="h3">Heading 3</Typography>
           <Typography variant="h4">Heading 4</Typography>
           <Typography variant="h5">Heading 5</Typography>
+          <Typography variant="mdSongTitle">Song title</Typography>
+          <Typography variant="mdSongSubtitle">
+            Song artist and album
+          </Typography>
+          <Typography variant="smSongTitle">Song title</Typography>
+          <Typography variant="smSongSubtitle">
+            Song artist and album
+          </Typography>
           <Typography variant="subtitle1" gutterBottom>
             subtitle1. Lorem ipsum dolor sit amet, consectetur adipisicing elit.
             Quos blanditiis tenetur
