@@ -53,6 +53,8 @@ const colors = {
   white: "#FFFFFF",
 };
 
+// declare module "@mui/material";
+
 export const theme = createTheme({
   palette: {
     primary: {
@@ -127,12 +129,21 @@ export const theme = createTheme({
       fontFamily: "Sora",
       letterSpacing: "0.14em",
     },
+    h5: {
+      // username in the discovery feed
+      color: colors.lightPeach,
+      fontSize: "1.5rem",
+      fontWeight: 500,
+      fontFamily: "Familjen Grotesk",
+    },
     subtitle1: {
+      // in profile page discovering since ___ & search for a track that best describes ____
       fontSize: "1.25rem",
       fontFamily: "Familjen Grotesk",
       color: colors.peach,
     },
     body1: {
+      // song suggestion caption
       fontSize: "1rem",
       fontFamily: "Familjen Grotesk",
       color: colors.lightPeach,
