@@ -44,6 +44,18 @@ const LandingPage = () => {
           <Typography variant="button" display="block" gutterBottom>
             button text
           </Typography>
+          <StyledButton variant="contained" color="lightPeach">
+            LOG IN
+          </StyledButton>
+          <StyledButton variant="contained" color="greyBlue">
+            SIGN UP
+          </StyledButton>
+          <Button variant="outlined" color="lightPeach">
+            SIGN UP
+          </Button>
+          <Button variant="underlined" color="pink">
+            SIGN UP
+          </Button>
         </Box>
       </LandingPageContent>
       <StarsBackground />
@@ -88,25 +100,13 @@ const TopBar = () => {
         flexDirection: "row",
       }}
     >
-      <Box sx={{ flexGrow: 1 }}>
+      <Box flexGrow={1}>
         <DiscoveryLogoWithtext width="200px" />
       </Box>
-      <StyledButton
-        variant="contained"
-        sx={{
-          backgroundColor: "#FFE7DD",
-          color: "#3B3B58",
-        }}
-      >
+      <StyledButton variant="contained" color="lightPeach">
         LOG IN
       </StyledButton>
-      <StyledButton
-        variant="contained"
-        sx={{
-          backgroundColor: "#3B3B58",
-          color: "#FFE7DD",
-        }}
-      >
+      <StyledButton variant="contained" color="greyBlue">
         SIGN UP
       </StyledButton>
     </AppBar>
@@ -114,16 +114,9 @@ const TopBar = () => {
 };
 
 const StyledButton = styled(Button)({
-  borderRadius: "45px",
-  // paddingY: "10px",
-  paddingX: "20px",
-  fontFamily: "Sora",
-  fontWeight: 600,
-  fontSize: "1rem",
-  minHeight: 0,
-  minWidth: 0,
   boxShadow: "0px 0px 15px 5px rgba(215, 130, 207, 0.38)",
   marginLeft: "20px",
+  padding: "0 30px",
 });
 
 export default LandingPage;

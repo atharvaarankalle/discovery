@@ -25,12 +25,9 @@ declare module "@mui/material/styles" {
   export function createTheme(options?: PaletteOptions): Palette;
 }
 
-// Update the Button's color options to include other colour options
 declare module "@mui/material/Button" {
-  interface ButtonPropsColorOverrides {
-    // pink: true;
-    // orange: true;
-    // green: true;
+  interface ButtonPropsVariantOverrides {
+    underlined: true;
   }
 }
 
@@ -203,6 +200,74 @@ export const theme = createTheme({
       fontSize: "0.875rem",
       fontWeight: 400,
       fontFamily: "Familjen Grotesk",
+    },
+  },
+  components: {
+    MuiButton: {
+      variants: [
+        {
+          props: {
+            variant: "contained",
+            color: "lightPeach",
+          },
+          style: {
+            borderRadius: "40px",
+            fontSize: "1rem",
+            fontFamily: "Sora",
+            fontWeight: 600,
+            "&:hover": {
+              backgroundColor: colors.peach,
+            },
+          },
+        },
+        {
+          props: {
+            variant: "contained",
+            color: "greyBlue",
+          },
+          style: {
+            borderRadius: "40px",
+            fontSize: "1rem",
+            fontFamily: "Sora",
+            fontWeight: 600,
+            "&:hover": {
+              backgroundColor: colors.navyBlue,
+            },
+          },
+        },
+        {
+          props: {
+            variant: "outlined",
+          },
+          style: {
+            borderRadius: "40px",
+            fontSize: "1rem",
+            fontFamily: "Sora",
+            fontWeight: 600,
+            borderWidth: "3px",
+            "&:hover": {
+              borderWidth: "3px",
+            },
+          },
+        },
+        {
+          props: {
+            variant: "underlined",
+            color: "pink",
+          },
+          style: {
+            borderBottom: `${colors.pink} 3px solid `,
+            color: colors.pink,
+            fontFamily: "Sora",
+            borderRadius: "0",
+            "&:hover": {
+              color: colors.peach,
+              background: "transparent",
+              borderColor: colors.peach,
+            },
+          },
+        },
+      ],
     },
   },
 });
