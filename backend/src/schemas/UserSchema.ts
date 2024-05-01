@@ -6,8 +6,8 @@ export interface IUser extends Document {
   displayName?: string;
   accountCreationDate: Date;
   streakCount: number;
-  likedSongs?: Array<Schema.Types.ObjectId>;
-  suggestedSongs?: Array<Schema.Types.ObjectId>;
+  likedSongs: Array<Schema.Types.ObjectId>;
+  suggestedSongs: Array<Schema.Types.ObjectId>;
   profilePic?: string;
 }
 
@@ -20,15 +20,21 @@ const userSchema = new Schema<IUser>(
     },
     displayName: String,
     accountCreationDate: {
-      Date,
+      type: Date,
       required: [true, "Account creation date is required"],
     },
     streakCount: {
-      Number,
+      type: Number,
       required: [true, "Streak count is required"],
     },
-    likedSongs: [{ type: Schema.Types.ObjectId, ref: "SuggestedSong" }],
-    suggestedSongs: [{ type: Schema.Types.ObjectId, ref: "SuggestedSong" }],
+    likedSongs: {
+      type: [{ type: Schema.Types.ObjectId, ref: "SuggestedSong" }],
+      required: [true, "Liked songs is required"],
+    },
+    suggestedSongs: {
+      type: [{ type: Schema.Types.ObjectId, ref: "SuggestedSong" }],
+      required: [true, "Suggested songs is required"],
+    },
     profilePic: String,
   },
   { timestamps: true }
