@@ -1,3 +1,11 @@
 html, body {
   margin: 0;
 }
+
+::-moz-selection {
+  background: #F1267B;
+}
+
+::selection {
+  background: #F1267B;
+}

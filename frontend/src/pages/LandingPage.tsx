@@ -1,14 +1,18 @@
-import { AppBar, Box, Button, Grow, styled, Typography } from "@mui/material";
+import { AppBar, Box, Button, Slide, styled, Typography } from "@mui/material";
 import starsBackground from "../assets/stars_background.jpg";
 import { DiscoveryLogoWithtext } from "../components/Logos.tsx";
 import { baseGlow, colors, landingBackground } from "../theme.ts";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const homePrompts = [
   "song that helps you poop",
   "daydreaming scenario song",
   "song to lock in to",
   "song stuck in your head",
+  "afternoon nap song",
+  "song to cry to",
+  "late night gaming song",
+  "academic weapon song",
 ];
 
 const LandingPage = () => {
@@ -26,13 +30,6 @@ const LandingPage = () => {
         >
           <Typography variant="h4">DISCOVER the next </Typography>
           <AnimatedPrompt promptsList={homePrompts} />
-          <Box
-            sx={{
-              maxWidth: "950px",
-              borderBottom: "3px solid",
-              borderColor: "peach.main",
-            }}
-          />
         </Box>
         <TEMP />
       </LandingPageContent>
@@ -104,19 +101,58 @@ interface AnimatedPromptProps {
 
 const AnimatedPrompt: React.FC<AnimatedPromptProps> = ({ promptsList }) => {
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
+  const [isVisible, setIsVisible] = useState(true);
+  const boxRef = useRef<HTMLElement>(null);
+
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setCurrentTextIndex((prevIndex) => (prevIndex + 1) % promptsList.length);
+  //     // setAnimateNewText(false);
+  //   }, 5000);
+  //
+  //   return () => clearInterval(interval);
+  // }, [promptsList]);
+
+  // const handleMouseEnter = () => {
+  //   setIsVisible(false);
+  //   setTimeout(() => {
+  //     setCurrentTextIndex((prevIndex) => (prevIndex + 1) % promptsList.length);
+  //     setIsVisible(true);
+  //   }, 200); // Adjust the timeout duration as needed
+  // };
+  //
+  // const handleMouseLeave = () => {
+  //   setIsVisible(true);
+  // };
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentTextIndex((prevIndex) => (prevIndex + 1) % promptsList.length);
-    }, 2000);
+      setIsVisible(false);
+      setTimeout(() => {
+        setCurrentTextIndex(
+          (prevIndex) => (prevIndex + 1) % promptsList.length,
+        );
+        setIsVisible(true);
+      }, 200); // Adjust the timeout duration as needed
+    }, 4000); // Change the interval duration to 3 seconds
 
     return () => clearInterval(interval);
-  }, [promptsList]);
+  }, []);
 
   return (
-    <Grow in={true}>
-      <Typography variant="h1">{promptsList[currentTextIndex]}</Typography>
-    </Grow>
+    <Box sx={{ overflow: "hidden" }} ref={boxRef}>
+      <Slide in={isVisible} container={boxRef.current}>
+        <Typography variant="h1">{promptsList[currentTextIndex]}</Typography>
+      </Slide>
+      <Box
+        sx={{
+          maxWidth: "950px",
+          paddingTop: "15px",
+          borderBottom: "3px solid",
+          borderColor: "peach.main",
+        }}
+      />
+    </Box>
   );
 };
 
