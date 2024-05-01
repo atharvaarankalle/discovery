@@ -1,8 +1,7 @@
 import OpenAI from 'openai';
 
 async function generate() {
-    const openai = new OpenAI({
-        apiKey: 'sk-proj-eKNyjosvJVzhz014cRXBT3BlbkFJbou5phOpITkW0sbWlakg', dangerouslyAllowBrowser: true });
+    const openai = new OpenAI();
     
     const systemPrompt = `
         You are a generator for a music application. The prompts ask users questions where their response is a particular song.

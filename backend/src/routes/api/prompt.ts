@@ -11,7 +11,8 @@ router.get("/", async (req, res) => {
         const prompt  = await generate();
 
         if (prompt) {
-            res.send(prompt)
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.json(prompt)
         } else {
             res.status(500).json({error: 'Error generating prompt'})
         }

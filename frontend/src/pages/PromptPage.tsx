@@ -1,5 +1,4 @@
 import { useState } from "react";
-import generate from "../api/openAI";
 
 const PromptPage = () => {
   const [prompt, setPrompt] = useState("Press button for prompt");
@@ -7,8 +6,12 @@ const PromptPage = () => {
   
   const handlePrompt = async () => {
     try {
-      const response = await generate(); // assuming query() is your async function
-      setPrompt(response); // setting state with the resolved string
+      const response = await fetch('http://localhost:3000/api/prompt');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setPrompt(data);
     } catch (error) {
       console.error('There was a problem fetching the message:', error);
     }
