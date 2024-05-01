@@ -141,7 +141,11 @@ const SongCard = ({
         </CardContent>
       </CardActionArea>
 
-      <CardActions>{hasLikeButton && <LikeButton />}</CardActions>
+      {hasLikeButton && (
+        <CardActions>
+          <LikeButton />
+        </CardActions>
+      )}
     </StyledCard>
   );
 };
