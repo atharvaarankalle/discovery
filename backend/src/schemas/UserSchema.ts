@@ -6,8 +6,8 @@ export interface IUser extends Document {
   displayName?: string;
   accountCreationDate: Date;
   streakCount: number;
-  likedSongs?: Array<Schema.Types.ObjectId | ISuggestedSong>;
-  suggestedSongs?: Array<Schema.Types.ObjectId | ISuggestedSong>;
+  likedSongs?: Array<Schema.Types.ObjectId>;
+  suggestedSongs?: Array<Schema.Types.ObjectId>;
   profilePic?: string;
 }
 

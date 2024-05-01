@@ -3,10 +3,10 @@ import { IUser } from "./UserSchema";
 import { IPrompt } from "./PromptSchema";
 
 export interface ISuggestedSong extends Document {
-  userId: Schema.Types.ObjectId | IUser;
+  userId: Schema.Types.ObjectId;
   songId: string;
   caption?: string;
-  prompt: Schema.Types.ObjectId | IPrompt;
+  prompt: Schema.Types.ObjectId;
 }
 
 const suggestedSongSchema = new Schema<ISuggestedSong>(
