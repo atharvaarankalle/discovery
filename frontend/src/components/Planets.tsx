@@ -7,6 +7,9 @@ import planet3 from "../assets/planet_3.svg";
 import planet4 from "../assets/planet_4.svg";
 import { FC } from "react";
 
+/**
+ * ForegroundPlanet Component
+ */
 export const ForegroundPlanet = () => {
   return (
     <>
@@ -39,21 +42,25 @@ export const ForegroundPlanet = () => {
   );
 };
 
+/* Prop types for Planet1, Planet2, Planet3, Planet4 */
 interface PlanetProps {
-  width: string;
-  height: string;
-  top: string;
-  right?: string;
-  left?: string;
+  width: string | number;
+  height: string | number;
+  top: string | number;
+  right?: string | number;
+  left?: string | number;
 }
 
-export const Planet1: FC<PlanetProps> = ({
-  width,
-  height,
-  top,
-  right,
-  left,
-}) => {
+/**
+ * Planet1 Component
+ *
+ * @param width: width of the planet
+ * @param height: height of the planet
+ * @param top: position of the planet relative to parent's top boundary
+ * @param right: position of the planet relative to parent's right boundary
+ * @param left: position of the planet relative to parent's left boundary
+ */
+export const Planet1 = ({ width, height, top, right, left }: PlanetProps) => {
   return (
     <Box
       sx={{
@@ -67,7 +74,6 @@ export const Planet1: FC<PlanetProps> = ({
     >
       <Box
         sx={{
-          // backgroundColor: "red",
           width: "100%",
           height: "100%",
           position: "absolute",
@@ -107,6 +113,15 @@ export const Planet1: FC<PlanetProps> = ({
   );
 };
 
+/**
+ * Planet2 Component
+ *
+ * @param width: width of the planet
+ * @param height: height of the planet
+ * @param top: position of the planet relative to parent's top boundary
+ * @param right: position of the planet relative to parent's right boundary
+ * @param left: position of the planet relative to parent's left boundary
+ */
 export const Planet2: FC<PlanetProps> = ({
   width,
   height,
@@ -155,6 +170,15 @@ export const Planet2: FC<PlanetProps> = ({
   );
 };
 
+/**
+ * Planet3 Component
+ *
+ * @param width: width of the planet
+ * @param height: height of the planet
+ * @param top: position of the planet relative to parent's top boundary
+ * @param right: position of the planet relative to parent's right boundary
+ * @param left: position of the planet relative to parent's left boundary
+ */
 export const Planet3: FC<PlanetProps> = ({
   width,
   height,
@@ -203,6 +227,15 @@ export const Planet3: FC<PlanetProps> = ({
   );
 };
 
+/**
+ * Planet1+4 Component
+ *
+ * @param width: width of the planet
+ * @param height: height of the planet
+ * @param top: position of the planet relative to parent's top boundary
+ * @param right: position of the planet relative to parent's right boundary
+ * @param left: position of the planet relative to parent's left boundary
+ */
 export const Planet4: FC<PlanetProps> = ({
   width,
   height,

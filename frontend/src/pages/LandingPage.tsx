@@ -1,7 +1,7 @@
 import { AppBar, Box, Button, Slide, styled, Typography } from "@mui/material";
 import starsBackground from "../assets/stars_background.jpg";
 import { DiscoveryLogoWithtext } from "../components/Logos.tsx";
-import { baseGlow, colors, landingBackground } from "../theme.ts";
+import { baseGlow, landingBackground } from "../theme.ts";
 import { useEffect, useRef, useState } from "react";
 import {
   ForegroundPlanet,
@@ -11,6 +11,7 @@ import {
   Planet4,
 } from "../components/Planets.tsx";
 
+// Example prompts to loop through in the AnimatedPrompt component
 const homePrompts = [
   "song that helps you poop",
   "daydreaming scenario song",
@@ -22,15 +23,17 @@ const homePrompts = [
   "late night gaming song",
 ];
 
-const LandingPageBackground = styled("div")({
+// Background container for the whole landing page
+const LandingPageBackground = styled("div")(({ theme }) => ({
   background: landingBackground,
-  backgroundColor: colors.navyBlue,
+  backgroundColor: `${theme.palette.primary.main}`,
   height: "100vh",
   width: "100%",
   position: "relative",
   overflow: "clip",
-});
+}));
 
+// Custom style to add transparent stars background through blend modes
 const StarsBackground = styled("div")({
   backgroundImage: `url(${starsBackground})`,
   mixBlendMode: "color-dodge",
@@ -43,18 +46,23 @@ const StarsBackground = styled("div")({
   transform: "matrix(-1, 0, 0, 1, 0, 0)",
 });
 
+// Custom style for the LOG IN and SIGN IN buttons
 const StyledButton = styled(Button)({
   boxShadow: baseGlow,
   marginLeft: "20px",
   padding: "0 30px",
 });
 
+// Container for content in landing page so that they lay on top of the background
 const LandingPageContent = styled("div")({
   position: "relative",
   zIndex: 2,
   height: "100vh",
 });
 
+/**
+ * LandingPage to contain all components within the landing page
+ */
 const LandingPage = () => {
   return (
     <LandingPageBackground>
@@ -82,6 +90,9 @@ const LandingPage = () => {
   );
 };
 
+/**
+ * TopBar Component to display logo and LOG IN and SIGN IN buttons
+ */
 const TopBar = () => {
   return (
     <AppBar
@@ -107,6 +118,9 @@ const TopBar = () => {
   );
 };
 
+/**
+ * AnimatedPrompt Component to change the example prompt in intervals and animate each change
+ */
 const AnimatedPrompt = () => {
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);

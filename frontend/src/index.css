@@ -2,6 +2,7 @@ html, body {
   margin: 0;
 }
 
+/* Changing the default text highlight colour */
 ::-moz-selection {
   background: #F1267B;
 }
