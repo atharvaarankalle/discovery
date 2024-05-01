@@ -1,6 +1,7 @@
 import { Grid } from "@mui/material";
 import SongCard from "../components/SongCard";
 const PromptPage = () => {
+  /* ALL CODE HERE IS FOR TESTING SONG CARDS USING MUI-GRID, CAN REMOVE IF YOU'D LIKE */
   const songDummyData = [
     {
       id: 1,
@@ -41,7 +42,7 @@ const PromptPage = () => {
       <h1>Prompt Page</h1>
       <Grid container spacing={1}>
         {songDummyData.map(({ id, title, album, artist, imgUrl }) => (
-          <Grid item xs={12} sm={6} md={3} lg={3} key={id}>
+          <Grid item xs={12} sm={6} md={6} lg={4} key={id}>
             <SongCard
               songTitle={title}
               album={album}

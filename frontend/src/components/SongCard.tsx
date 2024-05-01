@@ -18,6 +18,7 @@ import CustomTypography from "./CustomTypography";
 import CdImage from "../assets/cd-image.png";
 import IconTextLabel from "./IconTextLabel";
 
+// // Custom styles applied to MUI CardMedia to be the Album used in  hover animation
 const AlbumArt = styled(CardMedia)<CardMediaProps>({
   height: "100%",
   width: "auto",
@@ -25,6 +26,7 @@ const AlbumArt = styled(CardMedia)<CardMediaProps>({
   transition: "transform 0.3s ease",
 });
 
+// Custom styles applied to MUI CardMedia to be the CD image used in hover animation
 const Cd = styled(CardMedia)<CardMediaProps>({
   height: "100%",
   width: "auto",
@@ -37,15 +39,17 @@ const Cd = styled(CardMedia)<CardMediaProps>({
   transition: "transform 0.3s ease",
 });
 
-const StyledCard = styled(Card)({
+/* Custom styles applied to MUI card to be the main wrapper of SongCard */
+const StyledCard = styled(Card)(({ theme }) => ({
   display: "flex",
+  justifyContent: "space-between",
+  width: "100%",
+  height: "7rem",
   position: "relative",
-  backgroundColor: "#27274780",
-  width: "auto",
+  backgroundColor: `${theme.palette.primary.main}80`, // adds 50% opacity to colour hexcode
   transition: "background-color 0.3s ease",
-
   "&:hover": {
-    backgroundColor: "#272747",
+    backgroundColor: theme.palette.primary.main,
     " .secondImage ": {
       transform: "translateX(0%)",
     },
@@ -53,14 +57,25 @@ const StyledCard = styled(Card)({
       transform: "translateX(-50%)",
     },
   },
-});
+}));
 
+/* Prop types declaration for SongCard */
 interface SongCardPropTypes extends CardProps {
   songTitle: string;
   artist: string;
   album: string;
   albumArtSrc: string;
 }
+
+/** 
+ * SongCard Component
+ * 
+@prop songTitle: title of the song
+@prop artist: artist/s of the song
+@prop album: album the song is from
+@prop albumArtSrc: url link to the album art image url 
+
+**/
 const SongCard = ({
   songTitle,
   artist,
@@ -75,8 +90,6 @@ const SongCard = ({
       <CardActionArea
         sx={{
           display: "flex",
-          justifyContent: "space-between",
-          height: "7rem",
         }}
       >
         <AlbumArt
@@ -99,28 +112,32 @@ const SongCard = ({
           }}
         >
           <CustomTypography
-            sx={{ fontWeight: "bold", color: "#FFE7DD", mb: 0.5 }}
             tooltip={songTitle}
-            numLines={2}
-            variant="body1"
+            variant="mdSongTitle"
+            num_lines={2}
+            mb={0.5}
           >
             {songTitle}
           </CustomTypography>
 
           <IconTextLabel
             tooltip={artist}
-            variant="body2"
-            numLines={1}
-            icon={<PersonIcon sx={{ color: "#FFE7DD" }} fontSize="small" />}
+            variant="mdSongSubtitle"
+            num_lines={1}
+            icon={
+              <PersonIcon sx={{ color: "secondary.main" }} fontSize="small" />
+            }
           >
             {artist}
           </IconTextLabel>
 
           <IconTextLabel
             tooltip={album}
-            variant="body2"
-            numLines={1}
-            icon={<AlbumIcon sx={{ color: "#FFE7DD" }} fontSize="small" />}
+            variant="mdSongSubtitle"
+            num_lines={1}
+            icon={
+              <AlbumIcon sx={{ color: "secondary.main" }} fontSize="small" />
+            }
           >
             {album}
           </IconTextLabel>
