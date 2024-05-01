@@ -3,40 +3,18 @@ import starsBackground from "../assets/stars_background.jpg";
 import { DiscoveryLogoWithtext } from "../components/Logos.tsx";
 import { baseGlow, colors, landingBackground } from "../theme.ts";
 import { useEffect, useRef, useState } from "react";
+import foregroundPlanet from "../assets/foreground_planet.svg";
 
 const homePrompts = [
   "song that helps you poop",
   "daydreaming scenario song",
   "song to lock in to",
+  "academic weapon song",
   "song stuck in your head",
   "afternoon nap song",
   "song to cry to",
   "late night gaming song",
-  "academic weapon song",
 ];
-
-const LandingPage = () => {
-  return (
-    <LandingPageBackground>
-      <LandingPageContent>
-        <TopBar />
-        <Box
-          sx={{
-            padding: "150px 60px 0px 60px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "15px",
-          }}
-        >
-          <Typography variant="h4">DISCOVER the next </Typography>
-          <AnimatedPrompt promptsList={homePrompts} />
-        </Box>
-        <TEMP />
-      </LandingPageContent>
-      <StarsBackground />
-    </LandingPageBackground>
-  );
-};
 
 const LandingPageBackground = styled("div")({
   background: landingBackground,
@@ -59,10 +37,49 @@ const StarsBackground = styled("div")({
   transform: "matrix(-1, 0, 0, 1, 0, 0)",
 });
 
+const StyledButton = styled(Button)({
+  boxShadow: baseGlow,
+  marginLeft: "20px",
+  padding: "0 30px",
+});
+
 const LandingPageContent = styled("div")({
   position: "relative",
   zIndex: 1,
+  height: "100vh",
 });
+
+const ForegroundPlanet = styled("img")({
+  position: "absolute",
+  minWidth: "100%",
+  left: "50%",
+  bottom: -50,
+  transform: "translate(-50%,0 )", // This centers the element
+});
+
+const LandingPage = () => {
+  return (
+    <LandingPageBackground>
+      <LandingPageContent>
+        <TopBar />
+        <Box
+          sx={{
+            padding: "150px 60px 0px 60px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "15px",
+          }}
+        >
+          <Typography variant="h4">DISCOVER the next </Typography>
+          <AnimatedPrompt promptsList={homePrompts} />
+        </Box>
+        {/*<TEMP />*/}
+        <ForegroundPlanet src={foregroundPlanet} />
+      </LandingPageContent>
+      <StarsBackground />
+    </LandingPageBackground>
+  );
+};
 
 const TopBar = () => {
   return (
@@ -89,48 +106,17 @@ const TopBar = () => {
   );
 };
 
-const StyledButton = styled(Button)({
-  boxShadow: baseGlow,
-  marginLeft: "20px",
-  padding: "0 30px",
-});
-
-interface AnimatedPromptProps {
-  promptsList: string[];
-}
-
-const AnimatedPrompt: React.FC<AnimatedPromptProps> = ({ promptsList }) => {
+const AnimatedPrompt = () => {
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
   const boxRef = useRef<HTMLElement>(null);
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setCurrentTextIndex((prevIndex) => (prevIndex + 1) % promptsList.length);
-  //     // setAnimateNewText(false);
-  //   }, 5000);
-  //
-  //   return () => clearInterval(interval);
-  // }, [promptsList]);
-
-  // const handleMouseEnter = () => {
-  //   setIsVisible(false);
-  //   setTimeout(() => {
-  //     setCurrentTextIndex((prevIndex) => (prevIndex + 1) % promptsList.length);
-  //     setIsVisible(true);
-  //   }, 200); // Adjust the timeout duration as needed
-  // };
-  //
-  // const handleMouseLeave = () => {
-  //   setIsVisible(true);
-  // };
 
   useEffect(() => {
     const interval = setInterval(() => {
       setIsVisible(false);
       setTimeout(() => {
         setCurrentTextIndex(
-          (prevIndex) => (prevIndex + 1) % promptsList.length,
+          (prevIndex) => (prevIndex + 1) % homePrompts.length,
         );
         setIsVisible(true);
       }, 200); // Adjust the timeout duration as needed
@@ -142,7 +128,7 @@ const AnimatedPrompt: React.FC<AnimatedPromptProps> = ({ promptsList }) => {
   return (
     <Box sx={{ overflow: "hidden" }} ref={boxRef}>
       <Slide in={isVisible} container={boxRef.current}>
-        <Typography variant="h1">{promptsList[currentTextIndex]}</Typography>
+        <Typography variant="h1">{homePrompts[currentTextIndex]}</Typography>
       </Slide>
       <Box
         sx={{
