@@ -5,18 +5,16 @@ import {
   CardActions,
   CardContent,
   CardMedia,
-  IconButton,
   styled,
   CardMediaProps,
 } from "@mui/material";
 import { useState } from "react";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import PersonIcon from "@mui/icons-material/Person";
 import AlbumIcon from "@mui/icons-material/Album";
 import CustomTypography from "./CustomTypography";
 import CdImage from "../assets/cd_image.png";
 import IconTextLabel from "./IconTextLabel";
+import LikeButton from "./LikeButton";
 
 // // Custom styles applied to MUI CardMedia to be the Album used in  hover animation
 const AlbumArt = styled(CardMedia)<CardMediaProps>({
@@ -65,6 +63,7 @@ interface SongCardPropTypes extends CardProps {
   artist: string;
   album: string;
   albumArtSrc: string;
+  hasLikeButton?: boolean;
 }
 
 /** 
@@ -74,6 +73,7 @@ interface SongCardPropTypes extends CardProps {
 @prop artist: artist/s of the song
 @prop album: album the song is from
 @prop albumArtSrc: url link to the album art image url 
+@prop hasLikeButton: false by default, if true, will render a LikeButton on the right side of the card
 
 **/
 const SongCard = ({
@@ -81,10 +81,8 @@ const SongCard = ({
   artist,
   album,
   albumArtSrc,
+  hasLikeButton = false,
 }: SongCardPropTypes) => {
-  /* REFACTOR TO USE LIKE BUTTON COMPONENT WHEN MADE */
-  const [isLiked, setIsLiked] = useState(false);
-
   return (
     <StyledCard square elevation={5}>
       <CardActionArea
@@ -144,12 +142,7 @@ const SongCard = ({
         </CardContent>
       </CardActionArea>
 
-      <CardActions>
-        {/* REFACTOR TO USE LIKE BUTTON COMPONENT WHEN MADE */}
-        <IconButton sx={{ color: "#FFF" }} onClick={() => setIsLiked(!isLiked)}>
-          {isLiked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-        </IconButton>
-      </CardActions>
+      <CardActions>{hasLikeButton && <LikeButton />}</CardActions>
     </StyledCard>
   );
 };
