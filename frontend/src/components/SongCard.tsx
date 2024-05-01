@@ -6,8 +6,8 @@ import {
   CardContent,
   CardMedia,
   IconButton,
-  Stack,
   styled,
+  CardMediaProps,
 } from "@mui/material";
 import { useState } from "react";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -15,6 +15,27 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import PersonIcon from "@mui/icons-material/Person";
 import AlbumIcon from "@mui/icons-material/Album";
 import CustomTypography from "./CustomTypography";
+import CdImage from "../assets/cd-image.png";
+import IconTextLabel from "./IconTextLabel";
+
+const AlbumArt = styled(CardMedia)<CardMediaProps>({
+  height: "100%",
+  width: "auto",
+  zIndex: "1",
+  transition: "transform 0.3s ease",
+});
+
+const Cd = styled(CardMedia)<CardMediaProps>({
+  height: "100%",
+  width: "auto",
+  zIndex: "0",
+  position: "absolute",
+  top: 0,
+  left: 0,
+  objectFit: "cover",
+  transform: "translateX(-100%)",
+  transition: "transform 0.3s ease",
+});
 
 const StyledCard = styled(Card)({
   display: "flex",
@@ -40,13 +61,13 @@ interface SongCardPropTypes extends CardProps {
   album: string;
   albumArtSrc: string;
 }
-
 const SongCard = ({
   songTitle,
   artist,
   album,
   albumArtSrc,
 }: SongCardPropTypes) => {
+  /* REFACTOR TO USE LIKE BUTTON COMPONENT WHEN MADE */
   const [isLiked, setIsLiked] = useState(false);
 
   return (
@@ -58,35 +79,18 @@ const SongCard = ({
           height: "7rem",
         }}
       >
-        <CardMedia
+        <AlbumArt
           className="firstImage"
-          sx={{
-            height: "100%",
-            width: "auto",
-            zIndex: "1",
-            transition: "transform 0.3s ease",
-          }}
           title="Album cover art"
           component="img"
           image={albumArtSrc}
         />
 
-        <CardMedia
+        <Cd
           className="secondImage"
-          sx={{
-            height: "100%",
-            width: "auto",
-            zIndex: "0",
-            position: "absolute",
-            top: 0,
-            left: 0,
-            objectFit: "cover",
-            transform: "translateX(-100%)",
-            transition: "transform 0.3s ease",
-          }}
           title="CD"
           component="img"
-          src="/images/cd-image.png"
+          image={CdImage}
         />
 
         <CardContent
@@ -103,34 +107,28 @@ const SongCard = ({
             {songTitle}
           </CustomTypography>
 
-          <Stack direction="row" gap={0.5}>
-            <PersonIcon sx={{ color: "#FFE7DD" }} fontSize="small" />
-            <CustomTypography
-              variant="body2"
-              sx={{ fontWeight: "bold", color: "#F3BFBA" }}
-              tooltip={artist}
-              numLines={1}
-            >
-              {artist}
-            </CustomTypography>
-          </Stack>
+          <IconTextLabel
+            tooltip={artist}
+            variant="body2"
+            numLines={1}
+            icon={<PersonIcon sx={{ color: "#FFE7DD" }} fontSize="small" />}
+          >
+            {artist}
+          </IconTextLabel>
 
-          <Stack direction="row" gap={0.5}>
-            <AlbumIcon sx={{ color: "#FFE7DD" }} fontSize="small" />
-            <CustomTypography
-              variant="body2"
-              sx={{ fontWeight: "bold", color: "#F3BFBA" }}
-              tooltip={album}
-              numLines={1}
-            >
-              {album}
-            </CustomTypography>
-          </Stack>
+          <IconTextLabel
+            tooltip={album}
+            variant="body2"
+            numLines={1}
+            icon={<AlbumIcon sx={{ color: "#FFE7DD" }} fontSize="small" />}
+          >
+            {album}
+          </IconTextLabel>
         </CardContent>
       </CardActionArea>
 
       <CardActions>
-        {/* This should be its own component as it will make API request as well so might be too complex in this one component */}
+        {/* REFACTOR TO USE LIKE BUTTON COMPONENT WHEN MADE */}
         <IconButton sx={{ color: "#FFF" }} onClick={() => setIsLiked(!isLiked)}>
           {isLiked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
         </IconButton>

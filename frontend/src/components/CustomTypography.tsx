@@ -1,10 +1,7 @@
 import { Tooltip, Typography, TypographyProps, styled } from "@mui/material";
 
-interface TruncatableTypographyPropTypes {
-  numLines?: number;
-}
 const TruncatableTypography = styled(Typography)(
-  ({ numLines }: TruncatableTypographyPropTypes) => ({
+  ({ numLines }: { numLines?: number }) => ({
     overflow: "hidden",
     textOverflow: "ellipsis",
     display: "-webkit-box",
@@ -14,7 +11,7 @@ const TruncatableTypography = styled(Typography)(
   })
 );
 
-interface CustomTypographyPropTypes extends TypographyProps {
+export interface CustomTypographyPropTypes extends TypographyProps {
   children: React.ReactNode;
   tooltip?: string;
   numLines?: number;
