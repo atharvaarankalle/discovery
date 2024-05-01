@@ -18,7 +18,7 @@ export const ForegroundPlanet = () => {
           minWidth: "100%",
           left: "50%",
           bottom: -70,
-          transform: "translate(-50%,0 )", // This centers the element
+          transform: "translate(-50%,0 )",
           zIndex: 1,
         }}
       />
@@ -30,7 +30,7 @@ export const ForegroundPlanet = () => {
           minWidth: "100%",
           left: "50%",
           bottom: -70,
-          transform: "translate(-50%,0 )", // This centers the element
+          transform: "translate(-50%,0 )",
           zIndex: 1,
           mixBlendMode: "hard-light",
         }}

@@ -120,8 +120,8 @@ const AnimatedPrompt = () => {
           (prevIndex) => (prevIndex + 1) % homePrompts.length,
         );
         setIsVisible(true);
-      }, 200); // Adjust the timeout duration as needed
-    }, 4000); // Change the interval duration to 3 seconds
+      }, 200); // Allow for 0.2 seconds between each transition
+    }, 4000); // Change the prompt every 4 seconds
 
     return () => clearInterval(interval);
   }, []);
