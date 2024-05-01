@@ -2,10 +2,10 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 import { ISuggestedSong } from "./SuggestedSongSchema";
 
 export interface IUser extends Document {
-  username: string;
+  email: string;
   displayName?: string;
   accountCreationDate: Date;
-  streakCount?: number;
+  streakCount: number;
   likedSongs?: Array<Schema.Types.ObjectId | ISuggestedSong>;
   suggestedSongs?: Array<Schema.Types.ObjectId | ISuggestedSong>;
   profilePic?: string;
@@ -13,7 +13,7 @@ export interface IUser extends Document {
 
 const userSchema = new Schema<IUser>(
   {
-    username: {
+    email: {
       type: String,
       unique: true,
       required: [true, "Username is required"],
@@ -21,10 +21,12 @@ const userSchema = new Schema<IUser>(
     displayName: String,
     accountCreationDate: {
       Date,
-      unique: true,
       required: [true, "Account creation date is required"],
     },
-    streakCount: Number,
+    streakCount: {
+      Number,
+      required: [true, "Streak count is required"],
+    },
     likedSongs: [{ type: Schema.Types.ObjectId, ref: "SuggestedSong" }],
     suggestedSongs: [{ type: Schema.Types.ObjectId, ref: "SuggestedSong" }],
     profilePic: String,
