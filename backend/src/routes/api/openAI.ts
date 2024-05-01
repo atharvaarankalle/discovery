@@ -30,6 +30,8 @@ async function generate() {
         model: 'gpt-3.5-turbo',
         messages: [{ role: 'system', content: systemPrompt }],
         temperature: 0.8,
+        frequency_penalty: 0.5,
+        presence_penalty: 0.5,
         stream: true,
       });
     
