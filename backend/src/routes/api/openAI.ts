@@ -42,8 +42,7 @@ async function generate() {
           responseText += chunk.choices[0]?.delta?.content; 
         }
       }
-      console.log(promptWord);
-      console.log(responseText);
+
       return responseText;
     }
 
