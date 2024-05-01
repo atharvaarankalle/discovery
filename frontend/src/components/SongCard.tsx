@@ -8,7 +8,6 @@ import {
   styled,
   CardMediaProps,
 } from "@mui/material";
-import { useState } from "react";
 import PersonIcon from "@mui/icons-material/Person";
 import AlbumIcon from "@mui/icons-material/Album";
 import CustomTypography from "./CustomTypography";

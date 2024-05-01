@@ -1,9 +1,5 @@
 const PromptPage = () => {
-  return (
-    <>
-      <h1>Prompt Page</h1>
-    </>
-  );
+  return <>Prompt Page</>;
 };
 
 export default PromptPage;
