@@ -10,7 +10,7 @@ const LikeButton = () => {
   };
 
   return (
-    <IconButton onClick={handleLikeClick}>
+    <IconButton onClick={handleLikeClick} color="lightPeach">
       {isLiked ? <Favorite /> : <FavoriteBorder />}
     </IconButton>
   );
