@@ -1,0 +1,35 @@
+import mongoose, { Schema, Document, Model } from "mongoose";
+import { ISuggestedSong } from "./SuggestedSongSchema";
+
+export interface IUser extends Document {
+  username: string;
+  displayName?: string;
+  accountCreationDate: Date;
+  streakCount?: number;
+  likedSongs?: Array<Schema.Types.ObjectId | ISuggestedSong>;
+  suggestedSongs?: Array<Schema.Types.ObjectId | ISuggestedSong>;
+  profilePic?: string;
+}
+
+const userSchema = new Schema<IUser>(
+  {
+    username: {
+      type: String,
+      unique: true,
+      required: [true, "Username is required"],
+    },
+    displayName: String,
+    accountCreationDate: {
+      Date,
+      unique: true,
+      required: [true, "Account creation date is required"],
+    },
+    streakCount: Number,
+    likedSongs: [{ type: Schema.Types.ObjectId, ref: "SuggestedSong" }],
+    suggestedSongs: [{ type: Schema.Types.ObjectId, ref: "SuggestedSong" }],
+    profilePic: String,
+  },
+  { timestamps: true }
+);
+
+export const User: Model<IUser> = mongoose.model<IUser>("User", userSchema);
