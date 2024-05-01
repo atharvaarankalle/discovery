@@ -15,7 +15,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import PersonIcon from "@mui/icons-material/Person";
 import AlbumIcon from "@mui/icons-material/Album";
 import CustomTypography from "./CustomTypography";
-import CdImage from "../assets/cd-image.png";
+import CdImage from "../assets/cd_image.png";
 import IconTextLabel from "./IconTextLabel";
 
 // // Custom styles applied to MUI CardMedia to be the Album used in  hover animation
