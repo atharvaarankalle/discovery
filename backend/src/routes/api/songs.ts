@@ -30,20 +30,37 @@ const tokenMiddleware = async (req: Request, res: Response, next: any) => {
 };
 
 router.get("/search", tokenMiddleware, async (req: Request, res: Response) => {
-    const songTitle = req.query.songTitle;
+    const songTitle = String(req.query.songTitle);
+    const numSongs: number = Number(req.query.numSongs) || 6;
+    const page: number = Number(req.query.page) || 1;
+    const searchOffset: number = (page * numSongs) - numSongs;
 
     try {
         const response = await axios.get("https://api.spotify.com/v1/search", {
             params: {
                 q: songTitle,
                 type: "track",
+                limit: numSongs,
+                offset: searchOffset,
             },
             headers: {
                 Authorization: `Bearer ${SPOTIFY_API_ACCESS_TOKEN}`
             }
         });
 
-        res.status(200).send(response.data);
+        const responseData = response.data.tracks.items.map((track: any) => {
+            return {
+                id: track.id,
+                title: track.name,
+                artist: track.artists.map((artist: any) => artist.name).join(", "),
+                album: track.album.name || "",
+                albumArt: track.album.images.find((image: any) => image.height === 300)?.url || "",
+                previewUrl: track.preview_url ? track.preview_url : undefined,
+                openInSpotify: !track.preview_url ? track.external_urls.spotify : undefined
+            };
+        });
+
+        res.status(200).send(responseData);
     } catch (error: any) {
         switch (error.response.data.error.status) {
             case 401:
@@ -55,7 +72,6 @@ router.get("/search", tokenMiddleware, async (req: Request, res: Response) => {
     }
 });
 
-
 router.get("/:id", tokenMiddleware, async (req: Request, res: Response) => {
     const spotifySongId = req.params.id;
 
@@ -65,7 +81,18 @@ router.get("/:id", tokenMiddleware, async (req: Request, res: Response) => {
                 Authorization: `Bearer ${SPOTIFY_API_ACCESS_TOKEN}`
             }
         });
-        res.status(200).send(response.data);
+
+        const responseData = {
+            id: response.data.id,
+            title: response.data.name,
+            artist: response.data.artists.map((artist: any) => artist.name).join(", "),
+            album: response.data.album.name || "",
+            albumArt: response.data.album.images.find((image: any) => image.height === 300)?.url || "",
+            previewUrl: response.data.preview_url ? response.data.preview_url : undefined,
+            openInSpotify: !response.data.preview_url ? response.data.external_urls.spotify : undefined
+        };
+
+        res.status(200).send(responseData);
     } catch (error: any) {
         switch (error.response.data.error.status) {
             case 400:
