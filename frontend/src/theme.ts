@@ -21,13 +21,17 @@ declare module "@mui/material/styles" {
     greyBlue?: PaletteOptions["primary"];
     navyBlue?: PaletteOptions["primary"];
   }
-
-  export function createTheme(options?: PaletteOptions): Palette;
 }
 
 declare module "@mui/material/Button" {
   interface ButtonPropsVariantOverrides {
     underlined: true;
+  }
+
+  interface ButtonPropsColorOverrides {
+    lightPeach: true;
+    greyBlue: true;
+    pink: true;
   }
 }
 
@@ -39,7 +43,7 @@ export const landingBackground =
 export const loggedInBackground =
   "linear-gradient(125.87deg, rgba(59, 59, 88, 0.75) 20.12%, rgba(156, 90, 166, 0.75) 85.54%), #3B3B58";
 
-const colors = {
+export const colors = {
   lightPeach: "#FFE7DD",
   peach: "#F3BFBA",
   pink: "#E79DC3",
@@ -144,7 +148,6 @@ export const theme = createTheme({
       // Today's disco text, selected track text
       color: colors.peach,
       fontSize: "1.25rem",
-      textTransform: "capitalize",
       fontWeight: 700,
       fontFamily: "Sora",
       letterSpacing: "0.14em",
@@ -207,6 +210,7 @@ export const theme = createTheme({
       variants: [
         {
           props: {
+            // ONLY FOR this button of this colour e.g. <StyledButton variant="contained" color="lightPeach">
             variant: "contained",
             color: "lightPeach",
           },

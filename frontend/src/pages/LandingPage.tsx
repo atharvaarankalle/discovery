@@ -1,62 +1,40 @@
-import { AppBar, Box, Button, styled, Typography } from "@mui/material";
+import { AppBar, Box, Button, Grow, styled, Typography } from "@mui/material";
 import starsBackground from "../assets/stars_background.jpg";
 import { DiscoveryLogoWithtext } from "../components/Logos.tsx";
+import { baseGlow, colors, landingBackground } from "../theme.ts";
+import { useEffect, useState } from "react";
+
+const homePrompts = [
+  "song that helps you poop",
+  "daydreaming scenario song",
+  "song to lock in to",
+  "song stuck in your head",
+];
 
 const LandingPage = () => {
   return (
     <LandingPageBackground>
       <LandingPageContent>
         <TopBar />
-        <Box sx={{ padding: "100px" }}>
-          <Typography variant="h1">Heading 1</Typography>
-          <Typography variant="h2">Heading 2</Typography>
-          <Typography variant="h3">Heading 3</Typography>
-          <Typography variant="h4">Heading 4</Typography>
-          <Typography variant="h5">Heading 5</Typography>
-          <Typography variant="mdSongTitle">Song title</Typography>
-          <Typography variant="mdSongSubtitle">
-            Song artist and album
-          </Typography>
-          <Typography variant="smSongTitle">Song title</Typography>
-          <Typography variant="smSongSubtitle">
-            Song artist and album
-          </Typography>
-          <Typography variant="subtitle1" gutterBottom>
-            subtitle1. Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            Quos blanditiis tenetur
-          </Typography>
-          <Typography variant="subtitle2" gutterBottom>
-            subtitle2. Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            Quos blanditiis tenetur
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            body1. Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            Quos blanditiis tenetur unde suscipit, quam beatae rerum inventore
-            consectetur, neque doloribus, cupiditate numquam dignissimos laborum
-            fugiat deleniti? Eum quasi quidem quibusdam.
-          </Typography>
-          <Typography variant="body2" gutterBottom>
-            body2. Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            Quos blanditiis tenetur unde suscipit, quam beatae rerum inventore
-            consectetur, neque doloribus, cupiditate numquam dignissimos laborum
-            fugiat deleniti? Eum quasi quidem quibusdam.
-          </Typography>
-          <Typography variant="button" display="block" gutterBottom>
-            button text
-          </Typography>
-          <StyledButton variant="contained" color="lightPeach">
-            LOG IN
-          </StyledButton>
-          <StyledButton variant="contained" color="greyBlue">
-            SIGN UP
-          </StyledButton>
-          <Button variant="outlined" color="lightPeach">
-            SIGN UP
-          </Button>
-          <Button variant="underlined" color="pink">
-            SIGN UP
-          </Button>
+        <Box
+          sx={{
+            padding: "150px 60px 0px 60px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "15px",
+          }}
+        >
+          <Typography variant="h4">DISCOVER the next </Typography>
+          <AnimatedPrompt promptsList={homePrompts} />
+          <Box
+            sx={{
+              maxWidth: "950px",
+              borderBottom: "3px solid",
+              borderColor: "peach.main",
+            }}
+          />
         </Box>
+        <TEMP />
       </LandingPageContent>
       <StarsBackground />
     </LandingPageBackground>
@@ -64,11 +42,12 @@ const LandingPage = () => {
 };
 
 const LandingPageBackground = styled("div")({
-  background: "linear-gradient(116.82deg, #272747 0%, #7E4DCD 100%)",
-  backgroundColor: "#272747",
+  background: landingBackground,
+  backgroundColor: colors.navyBlue,
   height: "100vh",
   width: "100%",
   position: "relative",
+  overflow: "clip",
 });
 
 const StarsBackground = styled("div")({
@@ -114,9 +93,84 @@ const TopBar = () => {
 };
 
 const StyledButton = styled(Button)({
-  boxShadow: "0px 0px 15px 5px rgba(215, 130, 207, 0.38)",
+  boxShadow: baseGlow,
   marginLeft: "20px",
   padding: "0 30px",
 });
+
+interface AnimatedPromptProps {
+  promptsList: string[];
+}
+
+const AnimatedPrompt: React.FC<AnimatedPromptProps> = ({ promptsList }) => {
+  const [currentTextIndex, setCurrentTextIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTextIndex((prevIndex) => (prevIndex + 1) % promptsList.length);
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [promptsList]);
+
+  return (
+    <Grow in={true}>
+      <Typography variant="h1">{promptsList[currentTextIndex]}</Typography>
+    </Grow>
+  );
+};
+
+const TEMP = () => {
+  return (
+    <>
+      <Box sx={{ padding: "50px 100px" }}>
+        <Typography variant="h1">Heading 1</Typography>
+        <Typography variant="h2">Heading 2</Typography>
+        <Typography variant="h3">Heading 3</Typography>
+        <Typography variant="h4">Heading 4</Typography>
+        <Typography variant="h5">Heading 5</Typography>
+        <Typography variant="mdSongTitle">Song title</Typography>
+        <Typography variant="mdSongSubtitle">Song artist and album</Typography>
+        <Typography variant="smSongTitle">Song title</Typography>
+        <Typography variant="smSongSubtitle">Song artist and album</Typography>
+        <Typography variant="subtitle1" gutterBottom>
+          subtitle1. Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+          Quos blanditiis tenetur
+        </Typography>
+        <Typography variant="subtitle2" gutterBottom>
+          subtitle2. Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+          Quos blanditiis tenetur
+        </Typography>
+        <Typography variant="body1" gutterBottom>
+          body1. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos
+          blanditiis tenetur unde suscipit, quam beatae rerum inventore
+          consectetur, neque doloribus, cupiditate numquam dignissimos laborum
+          fugiat deleniti? Eum quasi quidem quibusdam.
+        </Typography>
+        <Typography variant="body2" gutterBottom>
+          body2. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos
+          blanditiis tenetur unde suscipit, quam beatae rerum inventore
+          consectetur, neque doloribus, cupiditate numquam dignissimos laborum
+          fugiat deleniti? Eum quasi quidem quibusdam.
+        </Typography>
+        <Typography variant="button" display="block" gutterBottom>
+          button text
+        </Typography>
+        <StyledButton variant="contained" color="lightPeach">
+          LOG IN
+        </StyledButton>
+        <StyledButton variant="contained" color="greyBlue">
+          SIGN UP
+        </StyledButton>
+        <Button variant="outlined" color="lightPeach">
+          SIGN UP
+        </Button>
+        <Button variant="underlined" color="pink">
+          SIGN UP
+        </Button>
+      </Box>
+    </>
+  );
+};
 
 export default LandingPage;
