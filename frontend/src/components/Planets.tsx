@@ -1,9 +1,10 @@
 import { Box } from "@mui/material";
 import foregroundBase from "../assets/foreground_base.svg";
 import foregroundLayer from "../assets/foreground_layer.svg";
-import planet2 from "../assets/planet_2.svg";
-import planet4 from "../assets/planet_4.svg";
 import planet1 from "../assets/planet_1.svg";
+import planet2 from "../assets/planet_2.svg";
+import planet3 from "../assets/planet_3.svg";
+import planet4 from "../assets/planet_4.svg";
 import { FC } from "react";
 
 export const ForegroundPlanet = () => {
@@ -42,16 +43,24 @@ interface PlanetProps {
   width: string;
   height: string;
   top: string;
-  right: string;
+  right?: string;
+  left?: string;
 }
 
-export const Planet1: FC<PlanetProps> = ({ width, height, top, right }) => {
+export const Planet1: FC<PlanetProps> = ({
+  width,
+  height,
+  top,
+  right,
+  left,
+}) => {
   return (
     <Box
       sx={{
         width: width,
         height: height,
         top: top,
+        left: left,
         right: right,
         position: "absolute",
       }}
@@ -98,15 +107,22 @@ export const Planet1: FC<PlanetProps> = ({ width, height, top, right }) => {
   );
 };
 
-export const Planet2: FC<PlanetProps> = ({ width, height, top, right }) => {
+export const Planet2: FC<PlanetProps> = ({
+  width,
+  height,
+  top,
+  right,
+  left,
+}) => {
   return (
     <Box
       sx={{
         width: width,
         height: height,
-        position: "absolute",
         top: top,
+        left: left,
         right: right,
+        position: "absolute",
       }}
     >
       <Box
@@ -139,7 +155,61 @@ export const Planet2: FC<PlanetProps> = ({ width, height, top, right }) => {
   );
 };
 
-export const Planet4: FC<PlanetProps> = ({ width, height, top, right }) => {
+export const Planet3: FC<PlanetProps> = ({
+  width,
+  height,
+  top,
+  right,
+  left,
+}) => {
+  return (
+    <Box
+      sx={{
+        width: width,
+        height: height,
+        top: top,
+        left: left,
+        right: right,
+        position: "absolute",
+      }}
+    >
+      <Box
+        sx={{
+          width: "95%",
+          height: "95%",
+          position: "absolute",
+          backgroundColor: "#4D4078",
+          borderRadius: "500px",
+          filter: "blur(5px)",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      />
+      <Box
+        component="img"
+        src={planet3}
+        sx={{
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          top: "50%",
+          left: "50%",
+          mixBlendMode: "plus-lighter",
+          transform: "translate(-50%, -50%)",
+        }}
+      />
+    </Box>
+  );
+};
+
+export const Planet4: FC<PlanetProps> = ({
+  width,
+  height,
+  top,
+  right,
+  left,
+}) => {
   return (
     <Box
       component="img"
@@ -148,6 +218,7 @@ export const Planet4: FC<PlanetProps> = ({ width, height, top, right }) => {
         width: width,
         height: height,
         top: top,
+        left: left,
         right: right,
         position: "absolute",
         mixBlendMode: "plus-lighter",

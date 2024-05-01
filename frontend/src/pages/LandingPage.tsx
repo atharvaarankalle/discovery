@@ -7,6 +7,7 @@ import {
   ForegroundPlanet,
   Planet1,
   Planet2,
+  Planet3,
   Planet4,
 } from "../components/Planets.tsx";
 
@@ -73,7 +74,8 @@ const LandingPage = () => {
       </LandingPageContent>
       <StarsBackground />
       <Planet1 width="400px" height="400px" top="60vh" right="80vw" />
-      <Planet2 width="1200px" height="1200px" top="5vh" right="-30vw" />
+      <Planet2 width="1200px" height="1200px" top="5vh" left="50vw" />
+      <Planet3 width="300px" height="300px" top="-25vh" left="75vw" />
       <Planet4 width="50px" height="50px" top="50vh" right="75vw" />
       <ForegroundPlanet />
     </LandingPageBackground>
