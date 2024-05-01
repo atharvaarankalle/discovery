@@ -7,6 +7,9 @@ const LikeButton = () => {
 
   const handleLikeClick = () => {
     setIsLiked(!isLiked);
+
+    // TODO: Call endpoint to add song to the user's liked songs.
+    // Will likely need to pass in some details from SuggestionCard / SongCard (i.e., user id, song id, etc.)
   };
 
   return (
