@@ -10,6 +10,7 @@ const PORT = process.env.BACKEND_PORT ?? 3000;
 
 app.use("/", routes);
 
+// This doesn't do anything atm for api request but might help with other requests
 app.use(cors({
   methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH']
 }));

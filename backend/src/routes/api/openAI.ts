@@ -1,8 +1,14 @@
 import OpenAI from 'openai';
 
+function randomWord(words: []) {
+  return words[Math.floor(Math.random() * words.length)];
+}
+
 async function generate() {
     const openai = new OpenAI();
-    
+    const data = require('./gptTopics.json');
+    const words = data.words;
+    const promptWord = randomWord(words);
     const systemPrompt = `
         You are a generator for a music application. The prompts ask users questions where their response is a particular song.
 
@@ -15,26 +21,15 @@ async function generate() {
         - Only return a valid string. Do NOT include any text outside of the string object. Do not provide any additional explanations or context. 
         Just the string is needed.
         - Do not encapsulate response in quotation marks.
-        - Randomly pick and base it on a topic in the following array of 100 words (use a randomizer):
-        [
-            "balmy", "scorching", "dreamy", "treble", "mournful", "chilly", "cool", "orchestra", "concert",
-            "chill", "gardening", "buzzy", "instrumental", "harmony", "bass", "freezing", "tranquil", "melancholy",
-            "genre", "skating", "happy", "stormy", "soothing", "wild", "cloudy", "painting", "atmospheric", "rainy",
-            "serene", "clear", "reading", "hopeful", "joyful", "pessimistic", "yoga", "intense", "acoustic", "note",
-            "cold", "writing", "humid", "shopping", "sad", "excited", "lyric", "singing", "frosty", "beat", "gloomy",
-            "lazy", "spooky", "rhythm", "vibrant", "dancing", "moody", "groovy", "melody", "blustery", "energetic",
-            "spirited", "edgy", "thunderous", "depressed", "melodic", "cosmic", "working", "windy", "anxious",
-            "restless", "sunny", "relaxed", "mellow", "meditating", "hiking", "jogging", "despair", "dry", "foggy",
-            "tempo", "cooking", "chord", "studying", "warm", "elated", "relaxing", "hot", "swimming", "lively", "tune",
-            "upbeat", "traveling", "vocal", "fishing", "content", "optimistic", "symphony", "cheerful", "harmonize",
-            "cycling", "downcast"
-          ]
+        - STRICTLY generate a question with the topic of: "${promptWord}", without explicity using this word in the final response.
+        - DO NOT use 'go-to'.
           
     `;
 
     const stream = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
         messages: [{ role: 'system', content: systemPrompt }],
+        temperature: 0.8,
         stream: true,
       });
     
@@ -45,6 +40,7 @@ async function generate() {
           responseText += chunk.choices[0]?.delta?.content; 
         }
       }
+      console.log(promptWord);
       console.log(responseText);
       return responseText;
     }
