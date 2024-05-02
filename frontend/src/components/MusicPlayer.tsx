@@ -113,8 +113,9 @@ interface ActiveMusicPlayerProps {
  * @param songData: Object containing data of the selected song (song title, artists, album, album cover, and song audio)
  */
 const ActiveMusicPlayerContent = ({ songData }: ActiveMusicPlayerProps) => {
+  const { songTitle, artists, album, albumArtSrc, songAudioSrc } = songData;
   const [isPlaying, setIsPlaying] = useState(false);
-  const songAudioRef = useRef(new Audio(songData.songAudioSrc));
+  const songAudioRef = useRef(new Audio(songAudioSrc));
 
   // handle switching playing and pausing the song audio
   const handleTogglePlaying = () => {
@@ -153,30 +154,30 @@ const ActiveMusicPlayerContent = ({ songData }: ActiveMusicPlayerProps) => {
 
   return (
     <>
-      <Box component="img" src={songData.albumArtSrc} height="100%" />
+      <Box component="img" src={albumArtSrc} height="100%" />
       <SongInformation flexGrow={1}>
         <CustomTypography
-          tooltip={songData.songTitle}
+          tooltip={songTitle}
           variant="smSongTitle"
           color="peach.main"
           num_lines={2}
           mb={0.5}
         >
-          {songData.songTitle}
+          {songTitle}
         </CustomTypography>
         <IconTextLabel
           variant="smSongSubtitle"
           color="pink.main"
           icon={<PersonIcon sx={{ color: "peach.main" }} fontSize="small" />}
         >
-          {songData.artists}
+          {artists}
         </IconTextLabel>
         <IconTextLabel
           variant="smSongSubtitle"
           color="pink.main"
           icon={<AlbumIcon sx={{ color: "peach.main" }} fontSize="small" />}
         >
-          {songData.album}
+          {album}
         </IconTextLabel>
       </SongInformation>
       <Box
