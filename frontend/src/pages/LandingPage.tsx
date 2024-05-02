@@ -72,7 +72,7 @@ const LandingPage = () => {
       <MusicPlayer
         songTitle="About You Now"
         album="It's About Time"
-        artist="Sugababes"
+        artists="Sugababes"
         albumArtSrc={test}
         songAudioSrc={spongebob}
       />

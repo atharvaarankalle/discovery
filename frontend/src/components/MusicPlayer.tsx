@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 
+// Custom styling for the Music Player Card component
 const MusicPlayerCard = styled(Card)(({ theme }) => ({
   width: "550px",
   height: "75px",
@@ -29,23 +30,34 @@ const MusicPlayerCard = styled(Card)(({ theme }) => ({
   gap: "15px",
 }));
 
+/* Prop types for the MusicPlayer component */
 interface MusicPlayerProps {
   songTitle?: string;
-  artist?: string;
+  artists?: string;
   album?: string;
   albumArtSrc?: string;
   songAudioSrc?: string;
 }
 
+/**
+ * MusicPlayer Component
+ *
+ * @param songTitle: the title of the selected song (OPTIONAL)
+ * @param artists: the artists of the selected song (OPTIONAL)
+ * @param album: the title of the album the song is from (OPTIONAL)
+ * @param albumArtSrc: the url link to the album cover (OPTIONAL)
+ * @param songAudioSrc: the url link to the song audio (OPTIONAL)
+ */
 export const MusicPlayer = ({
   songTitle,
-  artist,
+  artists,
   album,
   albumArtSrc,
   songAudioSrc,
 }: MusicPlayerProps) => {
   // check if the user has selected a song to play
-  const songSelected = songTitle && artist && album && albumArtSrc;
+  const songSelected =
+    songTitle && artists && album && albumArtSrc && songAudioSrc;
 
   return (
     <MusicPlayerCard elevation={5}>
@@ -53,25 +65,26 @@ export const MusicPlayer = ({
         <ActiveMusicPlayerContent
           songTitle={songTitle}
           album={album}
-          artist={artist}
+          artists={artists}
           albumArtSrc={albumArtSrc}
           songAudioSrc={songAudioSrc}
         />
       ) : (
         <IdleMusicPlayerContent />
       )}
-      {/*<IdleMusicPlayerContent />*/}
     </MusicPlayerCard>
   );
 };
 
+/**
+ * IdleMusicPlayerContent Component
+ */
 const IdleMusicPlayerContent = () => {
   return (
     <>
       <Typography variant="smSongTitle" color="peach.main">
         Click a track to play a snippet
       </Typography>
-      {/*<Box component="img" src={test} width={100} />*/}
       <Box
         component="img"
         src={musicNotPlayingCharacter}
@@ -82,6 +95,7 @@ const IdleMusicPlayerContent = () => {
   );
 };
 
+// Custom styling for the SongInformation Box component
 const SongInformation = styled(Box)({
   display: "flex",
   flexDirection: "column",
@@ -90,6 +104,7 @@ const SongInformation = styled(Box)({
   gap: "5px",
 });
 
+// Custom styling for the Play/Pause button
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   color: `${theme.palette.primary.main}`,
   backgroundColor: `${theme.palette.peach.main}`,
@@ -100,17 +115,27 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
   },
 }));
 
+/* Prop type for the ActiveMusicPlayer Component */
 interface ActiveMusicPlayerProps {
   songTitle: string;
-  artist: string;
+  artists: string;
   album: string;
   albumArtSrc: string;
   songAudioSrc: string;
 }
 
+/**
+ * ActiveMusicPlayerContent Component
+ *
+ * @param songTitle: the title of the selected song
+ * @param artists: the artists of the selected song
+ * @param album: the title of the album the song is from
+ * @param albumArtSrc: the url link to the album cover
+ * @param songAudioSrc: the url link to the song audio
+ */
 const ActiveMusicPlayerContent = ({
   songTitle,
-  artist,
+  artists,
   album,
   albumArtSrc,
   songAudioSrc,
@@ -118,6 +143,7 @@ const ActiveMusicPlayerContent = ({
   const [isPlaying, setIsPlaying] = useState(false);
   const songAudioRef = useRef(new Audio(songAudioSrc));
 
+  // handle switching playing and pausing the song audio
   const handleTogglePlaying = () => {
     if (!isPlaying) {
       const audioPlayPromise = songAudioRef.current.play();
@@ -137,6 +163,7 @@ const ActiveMusicPlayerContent = ({
     }
   };
 
+  // handle pause and play state when the song audio ends
   useEffect(() => {
     const currentSong = songAudioRef.current;
 
@@ -168,7 +195,7 @@ const ActiveMusicPlayerContent = ({
           color="pink.main"
           icon={<PersonIcon sx={{ color: "peach.main" }} fontSize="small" />}
         >
-          {artist}
+          {artists}
         </IconTextLabel>
         <IconTextLabel
           variant="smSongSubtitle"
