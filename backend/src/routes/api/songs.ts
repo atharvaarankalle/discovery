@@ -29,7 +29,7 @@ const tokenMiddleware = async (req: Request, res: Response, next: any) => {
             TOKEN_EXPIRATION_TIME = Date.now() + (data.expires_in * 1000);
         } catch (error) {
             console.error("Error fetching Spotify API access token: ", error);
-            res.status(500).send('Internal Server Error');
+            res.status(500).json({ message: "Internal server error" });
             return;
         }
     }
@@ -88,7 +88,7 @@ router.get("/search", tokenMiddleware, async (req: Request, res: Response) => {
 
     // If no song title or page number is provided, send a 400 Bad Request response
     if (!searchQuery || !page) {
-        res.status(400).send("Please provide a song title and page number");
+        res.status(400).json({ error: "Please provide a song title and page number" });
         return;
     }
 
@@ -110,7 +110,7 @@ router.get("/search", tokenMiddleware, async (req: Request, res: Response) => {
 
         // If no songs are found matching the search query, send a 404 Not Found response
         if (response.data.tracks.items.length === 0) {
-            res.status(404).send("No songs found matching the search query");
+            res.status(404).json({ error: "No songs found matching the search query" });
             return;
         }
 
@@ -119,14 +119,14 @@ router.get("/search", tokenMiddleware, async (req: Request, res: Response) => {
             return formatResponseData(track);
         });
 
-        res.status(200).send(responseData);
+        res.status(200).json(responseData);
     } catch (error: any) {
         switch (error.response.data.error.status) {
             case 401:
-                res.status(401).send("Unauthorized");
+                res.status(401).json({ message: "Unauthorized" });
                 return;
             default:
-                res.status(error.response.data.error.status).send(error.message);
+                res.status(error.response.data.error.status).json({ message: error.message });
         }
     }
 });
@@ -167,20 +167,20 @@ router.get("/:id", tokenMiddleware, async (req: Request, res: Response) => {
 
         const responseData = formatResponseData(response.data);
 
-        res.status(200).send(responseData);
+        res.status(200).json(responseData);
     } catch (error: any) {
         switch (error.response.data.error.status) {
             case 400:
-                res.status(400).send("Invalid Spotify ID");
+                res.status(400).json({ message: "Invalid Spotify ID" });
                 break;
             case 401:
-                res.status(401).send("Unauthorized");
+                res.status(401).json({ message: "Unauthorized" });
                 break;
             case 404:
-                res.status(404).send("Song with the specified ID not found");
+                res.status(404).json({ message: "Song with the specified ID not found" });
                 break;
             default:
-                res.status(error.response.data.error.status).send(error.message);
+                res.status(error.response.data.error.status).json({ message: error.message });
         }
     }
 });
