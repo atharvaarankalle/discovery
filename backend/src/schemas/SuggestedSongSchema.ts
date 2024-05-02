@@ -2,6 +2,7 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 import { User } from "../schemas/UserSchema";
 import { Prompt } from "../schemas/PromptSchema";
 
+
 export interface ISuggestedSong extends Document {
   userId: Schema.Types.ObjectId;
   spotifySongId: string;
