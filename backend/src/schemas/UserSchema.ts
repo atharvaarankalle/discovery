@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
+import { SuggestedSong } from "../schemas/SuggestedSongSchema";
 
 export interface IUser extends Document {
   email: string;
@@ -27,11 +28,11 @@ const userSchema = new Schema<IUser>(
       required: [true, "Streak count is required"],
     },
     likedSongs: {
-      type: [{ type: Schema.Types.ObjectId, ref: "SuggestedSong" }],
+      type: [{ type: Schema.Types.ObjectId, ref: SuggestedSong }],
       required: [true, "Liked songs is required"],
     },
     suggestedSongs: {
-      type: [{ type: Schema.Types.ObjectId, ref: "SuggestedSong" }],
+      type: [{ type: Schema.Types.ObjectId, ref: SuggestedSong }],
       required: [true, "Suggested songs is required"],
     },
     profilePic: String,

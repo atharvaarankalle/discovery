@@ -4,7 +4,19 @@ import { User, IUser } from "../../schemas/UserSchema";
 
 const router: Router = express.Router();
 
-// TODO: Add endpoints here
+// POST a new user's profile info
+router.post("/", async (req: Request, res: Response) => {
+  try {
+    const userData: IUser = req.body;
+    const newUser = new User(userData);
+
+    const savedUser = await newUser.save();
+    return res.status(201).json(savedUser);
+  } catch (error) {
+    console.error("Error creating new user:", error);
+    return res.status(500);
+  }
+});
 
 // GET user's profile info
 router.get("/:id", async (req: Request, res: Response) => {
