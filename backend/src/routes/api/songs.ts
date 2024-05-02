@@ -61,8 +61,8 @@ const formatResponseData = (trackData: any) => {
  * 
  * Query Parameters:
  * - searchQuery: The query to search for songs (required)
- * - numSongs: The number of songs to search for (default: 6)
- * - page: The page number of the search results (default: 1)
+ * - numSongs: The number of songs to search for, with the default being 6
+ * - page: The page number of the search results, with the default being 1 (required)
  * 
  * Response:
  * An array of objects, each containing the following information about a song:
@@ -80,7 +80,6 @@ const formatResponseData = (trackData: any) => {
  * - 401 Unauthorized: The Spotify API access token is invalid
  * - 404 Not Found: No songs were found matching the search query
  */
-
 router.get("/search", tokenMiddleware, async (req: Request, res: Response) => {
     // Get values from query parameters passed from the frontend
     const searchQuery: string | undefined = req.query.searchQuery && String(req.query.searchQuery);
@@ -138,7 +137,7 @@ router.get("/search", tokenMiddleware, async (req: Request, res: Response) => {
  * Retrieves information about a song from the Spotify API based on the Spotify ID provided in the path parameters.
  * 
  * Path Parameters:
- * - id: The Spotify ID of the song
+ * - id: The Spotify ID of the song (required)
  * 
  * Response:
  * An object containing the following information about the song:
