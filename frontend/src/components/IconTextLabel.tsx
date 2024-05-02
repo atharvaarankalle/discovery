@@ -12,7 +12,7 @@ interface IconTextLabelPropTypes extends CustomTypographyPropTypes {
  * IconTextLabel Component
  * 
 @prop children: text to wrap with this IconTextLabel Component 
-@prop icon: MUI icon component that you desire to be displayed
+@prop icon: icon/image component that you desire to be displayed
 @prop tooltip: optional prop that contains tooltip text if desired
 @prop all other valid MUI Typography props...
 

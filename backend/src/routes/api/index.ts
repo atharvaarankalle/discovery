@@ -21,4 +21,7 @@ router.use("/prompt", prompt);
 import songs from "./songs";
 router.use("/songs", songs);
 
+import feed from "./feed";
+router.use("/feed", feed);
+
 export default router;
