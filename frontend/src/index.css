@@ -4,11 +4,11 @@ html, body {
 
 /* Changing the default text highlight colour */
 ::-moz-selection {
-  background: #000000;
-  color: #FFD057;
+  background: #FFD057;
+  color: #000000;
 }
 
 ::selection {
-  background: #000000;
-  color: #FFD057;
+  background: #FFD057;
+  color: #000000;
 }

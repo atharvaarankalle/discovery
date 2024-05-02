@@ -101,7 +101,6 @@ const SongInformation = styled(Box)({
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "flex-start",
-  gap: "5px",
 });
 
 // Custom styling for the Play/Pause button
@@ -187,6 +186,7 @@ const ActiveMusicPlayerContent = ({
           variant="smSongTitle"
           color="peach.main"
           num_lines={2}
+          mb={0.5}
         >
           {songTitle}
         </CustomTypography>
