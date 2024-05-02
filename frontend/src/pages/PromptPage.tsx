@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { baseGlow, colors, landingBackground } from "../theme.ts";
-import { AppBar, Box, Button, Grow, styled, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { AppBar, Box, Button, Grow, styled, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, InputAdornment, IconButton } from "@mui/material";
 
 const PromptPage = () => {
   const [prompt, setPrompt] = useState("Press button for prompt");
@@ -24,6 +24,10 @@ const PromptPage = () => {
     setInputValue(event.target.value);
   };
 
+  const clearInput = () => {
+    setInputValue('');
+  };
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -44,14 +48,51 @@ const PromptPage = () => {
         <Typography variant="h4">TODAY'S DISCO: </Typography>
         <Typography variant="h2">{prompt}</Typography>
         <Button variant="contained" onClick={handlePrompt}>Generate</Button>
-        <Box sx={{ paddingY: 5}}>
-          <input
-            type="text"
+        <Box sx={{paddingY: 5, width: 800}}>
+          <TextField
+            variant="outlined"
             value={inputValue}
             onChange={handleInputChange}
-            placeholder="Enter your answer"
-            />
-          <p>You typed: {inputValue}</p> {/* Displaying the typed value */}
+            placeholder="Search"
+            fullWidth
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <IconButton>
+                    SearchIcon
+                  </IconButton>
+                </InputAdornment>
+              ),
+              endAdornment: inputValue && (
+                <InputAdornment position="end">
+                  <IconButton onClick={clearInput}>
+                    X
+                  </IconButton>
+                </InputAdornment>
+              ),
+              style: { color: 'white' }
+            }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: 'transparent',
+                },
+                '&:hover fieldset': {
+                  borderColor: 'transparent',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: 'transparent',
+                }
+              },
+              background: 'rgba(0, 0, 0, 0.15)', // Semi-transparent background
+              borderRadius: '4px', // Rounded corners
+            }}
+          />
+          <Box sx={{paddingY: 2}}>
+            <Typography variant="body2" sx={{color: colors.peach}}>
+              Search for a track that best describes the prompt above
+            </Typography>
+          </Box>
         </Box>
         <Button onClick={handleOpen} sx={{ 
             position: 'fixed', bottom: 20, left: 20,
