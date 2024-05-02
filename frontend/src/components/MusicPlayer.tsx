@@ -88,7 +88,7 @@ const IdleMusicPlayerContent = () => {
       <Box
         component="img"
         src={musicNotPlayingCharacter}
-        width={100}
+        height="100%"
         sx={{ imageRendering: "pixelated" }}
       />
     </>
