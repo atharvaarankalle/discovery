@@ -4,6 +4,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SongCard from "./SongCard";
 import CustomTypography from "./CustomTypography";
 
+/* Custom styles applied to MUI Box to be the main wrapper of SongSuggestionCard */
 const StyledBox = styled(Box)(({ theme }) => ({
     display: "flex",
     flexDirection: "column",
@@ -14,6 +15,7 @@ const StyledBox = styled(Box)(({ theme }) => ({
     borderRadius: "1rem",
 }));
 
+/* Prop types declaration for SongSuggestionCard */
 interface SongSuggestionCardPropTypes extends BoxProps {
     username: string;
     comment?: string;
@@ -25,6 +27,13 @@ interface SongSuggestionCardPropTypes extends BoxProps {
     }
 }
 
+/**
+ * SongSuggestionCard Component
+ * 
+ * @prop username: username of the user who suggested the song
+ * @prop comment: optional prop for the comment made by the user about the song
+ * @prop songData: object containing song data such as song title, artist, album, and album art source
+ */
 const SongSuggestionCard = ({ username, comment, songData }: SongSuggestionCardPropTypes) => {
     return (
         <StyledBox>
