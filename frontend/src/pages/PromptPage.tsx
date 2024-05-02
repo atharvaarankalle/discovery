@@ -91,7 +91,18 @@ const PromptPage = () => {
           Skip <SkipNextIcon/>
         </SkipButton>
       </Box>
-      <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        sx={{
+          backdropFilter: "blur(3px)",
+          '& .MuiPaper-root': {
+            borderRadius: 4,
+          }
+        }} 
+      >
         <DialogBackground>
           <Box sx={{p: 2}}>
           <DialogTitle id="alert-dialog-title">
