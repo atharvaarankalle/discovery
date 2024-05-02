@@ -5,20 +5,22 @@ import CustomTypography from "./CustomTypography.tsx";
 import IconTextLabel from "./IconTextLabel.tsx";
 import PersonIcon from "@mui/icons-material/Person";
 import AlbumIcon from "@mui/icons-material/Album";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { baseGlow } from "../theme.ts";
+import { useState } from "react";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import PauseIcon from "@mui/icons-material/Pause";
 
 const MusicPlayerCard = styled(Card)(({ theme }) => ({
   width: "550px",
   height: "75px",
-  backgroundColor: `${theme.palette.primary.dark}99`,
+  backgroundColor: `${theme.palette.primary.dark}80`,
   zIndex: 3,
-  position: "absolute",
+  position: "fixed",
   bottom: 0,
   left: "50%",
   transform: "translate(-50%, -50%)",
   borderRadius: "15px",
-  backdropFilter: "blur(10px)",
+  backdropFilter: "blur(5px)",
   padding: "20px",
   display: "flex",
   flexDirection: "row",
@@ -40,9 +42,12 @@ export const MusicPlayer = ({
   album,
   albumArtSrc,
 }: MusicPlayerProps) => {
+  // check if the user has selected a song to play
+  const songSelected = songTitle && artist && album && albumArtSrc;
+
   return (
     <MusicPlayerCard elevation={4}>
-      {songTitle ? (
+      {songSelected ? (
         <ActiveMusicPlayerContent
           songTitle={songTitle}
           album={album}
@@ -105,6 +110,8 @@ const ActiveMusicPlayerContent = ({
   album,
   albumArtSrc,
 }: ActiveMusicPlayerProps) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+
   return (
     <>
       <Box component="img" src={albumArtSrc} height="100%" />
@@ -134,12 +141,15 @@ const ActiveMusicPlayerContent = ({
       </SongInformation>
       <Box
         component="img"
-        src={musicPlayingCharacter}
+        src={isPlaying ? musicPlayingCharacter : musicNotPlayingCharacter}
         height="100%"
         sx={{ imageRendering: "pixelated" }}
       />
-      <StyledIconButton aria-label="play/pause snippet">
-        <PlayArrowIcon />
+      <StyledIconButton
+        aria-label="play/pause snippet"
+        onClick={() => setIsPlaying(!isPlaying)}
+      >
+        {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
       </StyledIconButton>
     </>
   );
