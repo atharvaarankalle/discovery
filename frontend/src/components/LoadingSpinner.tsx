@@ -43,7 +43,13 @@ const LoadingSpinner = () => {
     <Box sx={{ m: 1, position: "relative" }} width={size}>
       <DiscoveryLogo
         width={String(80)}
-        style={{ position: "absolute", top: 20, left: 20, zIndex: 1 }}
+        style={{
+          position: "absolute",
+          top: 20,
+          left: 20,
+          zIndex: 1,
+          userSelect: "none",
+        }}
         draggable="false"
       />
       {getStyledSpinner(theme, size)}
