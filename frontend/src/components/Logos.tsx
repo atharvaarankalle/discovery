@@ -2,7 +2,7 @@ import discovery_logo_with_text from "../assets/discovery_logo_with_text.svg";
 import discovery_logo from "../assets/discovery_logo.svg";
 
 /* Prop types for DiscoveryLogoWithText and DiscoveryLogo */
-interface LogoPropTypes {
+interface LogoPropTypes extends React.ImgHTMLAttributes<HTMLImageElement> {
   width?: string | number;
   height?: string | number;
 }
@@ -30,13 +30,14 @@ export const DiscoveryLogoWithtext = ({ width, height }: LogoPropTypes) => {
  * @param width: width of the logo
  * @param height: height of the logo
  */
-export const DiscoveryLogo = ({ width, height }: LogoPropTypes) => {
+export const DiscoveryLogo = ({ width, height, ...props }: LogoPropTypes) => {
   return (
     <img
       src={discovery_logo}
       alt="Discovery Logo"
       width={width}
       height={height}
+      {...props}
     />
   );
 };
