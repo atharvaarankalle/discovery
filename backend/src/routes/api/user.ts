@@ -78,6 +78,33 @@ router.get("/:id/liked", async (req: Request, res: Response) => {
   }
 });
 
+// PUT add a song to a user's list of liked songs
+router.put("/:id/liked", async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.id;
+    const { songId } = req.body;
+
+    const user: IUser | null = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Check if the song is already liked
+    if (user.likedSongs.includes(songId)) {
+      return res.status(400).json({ message: "Song is already liked" });
+    }
+
+    user.likedSongs.push(songId);
+    const updatedUser = await user.save();
+
+    return res.json(updatedUser);
+  } catch (error) {
+    console.error("Error adding song to user's liked songs:", error);
+    return res.status(500);
+  }
+});
+
 // DELETE a song from a user's list of liked songs
 router.delete("/:id/liked/:songId", async (req: Request, res: Response) => {
   try {
