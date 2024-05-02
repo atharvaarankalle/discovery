@@ -17,7 +17,7 @@ const StyledBox = styled(Box)(({ theme }) => ({
 interface SongSuggestionCardPropTypes extends BoxProps {
     username: string;
     profilePictureSrc: string;
-    comment?: string;
+    caption?: string;
     songData: {
         songTitle: string;
         artist: string;
@@ -30,15 +30,15 @@ interface SongSuggestionCardPropTypes extends BoxProps {
  * SongSuggestionCard Component
  * 
  * @prop username: username of the user who suggested the song
- * @prop comment: optional prop for the comment made by the user about the song
+ * @prop caption: optional prop for the caption the user writes to go along with their song suggestion
  * @prop songData: object containing song data such as song title, artist, album, and album art source
  */
-const SongSuggestionCard = ({ username, profilePictureSrc, comment, songData }: SongSuggestionCardPropTypes) => {
+const SongSuggestionCard = ({ username, profilePictureSrc, caption, songData: { songTitle, artist, album, albumArtSrc } }: SongSuggestionCardPropTypes) => {
     return (
         <StyledBox>
             <IconTextLabel icon={ <Avatar alt={username} src={profilePictureSrc} sx={{ mr: 1 }} /> } children={username} variant="h5" />
-            {comment && <CustomTypography fontStyle="italic">{comment}</CustomTypography>}
-            <SongCard songTitle={songData.songTitle} artist={songData.artist} album={songData.album} albumArtSrc={songData.albumArtSrc} hasLikeButton />
+            {caption && <CustomTypography fontStyle="italic">{caption}</CustomTypography>}
+            <SongCard songTitle={songTitle} artist={artist} album={album} albumArtSrc={albumArtSrc} hasLikeButton />
         </StyledBox>
     );
 };
