@@ -11,6 +11,11 @@ export const DiscoveryLogoWithtext = ({ width }: { width: string }) => {
   );
 };
 
-export const DiscoveryLogo = ({ width }: { width: string }) => {
-  return <img src={discovery_logo} alt="Discovery Logo" width={width} />;
+interface DiscoveryLogoProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+  width: string;
+}
+export const DiscoveryLogo = ({ width, ...props }: DiscoveryLogoProps) => {
+  return (
+    <img src={discovery_logo} alt="Discovery Logo" width={width} {...props} />
+  );
 };
