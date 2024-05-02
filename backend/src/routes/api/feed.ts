@@ -9,7 +9,7 @@ import {
 
 const router: Router = express.Router();
 
-type GetSuggestedSongsReqBody = {
+type GetSuggestedSongsQueryParams = {
   date?: Date;
 };
 
@@ -19,13 +19,18 @@ type GetSuggestedSongsReqBody = {
  * Endpoint for getting SuggestedSong entries based for a specific date.
  * By default, it will take today's date, but you can also specify a date via request body.
  * Recommended input date format: "YYYY-MM-DD"
+ *
+ * @param date (optional) - date for the song suggestions. Default: today's date.
  */
 router.get(
   "/",
-  async (req: Request<any, any, GetSuggestedSongsReqBody>, res: Response) => {
+  async (
+    req: Request<any, any, any, GetSuggestedSongsQueryParams>,
+    res: Response
+  ) => {
     try {
       const date: Date = new Date(
-        req.body.date ?? new Date().setUTCHours(0, 0, 0, 0) // Uses the date in body if specified, otherwise get's today's date.
+        req.query.date ?? new Date().setUTCHours(0, 0, 0, 0) // Uses the date in body if specified, otherwise get's today's date.
       );
       const prompt: IPrompt | null = await Prompt.findOne({ date });
 
