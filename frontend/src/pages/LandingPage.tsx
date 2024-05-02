@@ -3,6 +3,7 @@ import starsBackground from "../assets/stars_background.jpg";
 import { DiscoveryLogoWithtext } from "../components/Logos.tsx";
 import { baseGlow, colors, landingBackground } from "../theme.ts";
 import { useEffect, useState } from "react";
+import { MusicPlayer } from "../components/MusicPlayer.tsx";
 
 const homePrompts = [
   "song that helps you poop",
@@ -14,6 +15,7 @@ const homePrompts = [
 const LandingPage = () => {
   return (
     <LandingPageBackground>
+      <MusicPlayer />
       <LandingPageContent>
         <TopBar />
         <Box
