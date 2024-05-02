@@ -1,7 +1,8 @@
 import { useState } from "react";
 import SearchIcon from '@mui/icons-material/Search';
-import { baseGlow, colors, landingBackground } from "../theme.ts";
-import { AppBar, Box, Button, Grow, styled, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, InputAdornment, IconButton } from "@mui/material";
+import SkipNextIcon from '@mui/icons-material/SkipNext';
+import { colors, landingBackground } from "../theme.ts";
+import { Box, Button, styled, Typography, Dialog, DialogActions, DialogContent, DialogTitle, TextField, InputAdornment, IconButton } from "@mui/material";
 
 const PromptPage = () => {
   const [prompt, setPrompt] = useState("Press button for prompt");
@@ -79,15 +80,15 @@ const PromptPage = () => {
                   borderColor: 'transparent',
                 }
               },
-              background: 'rgba(0, 0, 0, 0.15)', // Semi-transparent background
+              background: 'rgba(255, 229, 180, 0.05)', // Semi-transparent background
               borderRadius: '4px'
             }}
           />
           <Box
             sx={{
-              width: '100%', // Full width of the container
-              height: '2px', // Thickness of the line
-              backgroundColor: colors.peach, // Custom color defined in your theme
+              width: '100%', 
+              height: '2px', 
+              backgroundColor: colors.peach, 
             }}
           />
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -98,7 +99,7 @@ const PromptPage = () => {
               fontFamily: 'Sora', 
               textTransform: 'none',
               ':hover': {
-                textDecoration: 'underline' // Ensures underline appears on hover
+                textDecoration: 'underline'
               }
             }}>
               Clear Search
@@ -121,7 +122,7 @@ const PromptPage = () => {
               textDecoration: 'underline' // Underline on hover
             } 
           }}>
-          Skip
+          Skip <SkipNextIcon/>
         </Button>
       </Box>
       <Dialog
@@ -150,9 +151,9 @@ const PromptPage = () => {
               </Typography>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose}>Cancel</Button>
-              <Button onClick={handleConfirmQuit} autoFocus>
-                Quit
+              <Button variant="outlined" color="lightPeach" onClick={handleClose}>Cancel</Button>
+              <Button variant="contained" color="lightPeach" onClick={handleConfirmQuit} autoFocus>
+                Skip <SkipNextIcon/>
               </Button>
             </DialogActions>
           </Box>
