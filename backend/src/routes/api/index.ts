@@ -18,4 +18,7 @@ router.use("/user", user);
 import prompt from "./prompt";
 router.use("/prompt", prompt);
 
+import feed from "./feed";
+router.use("/feed", feed);
+
 export default router;
