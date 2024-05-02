@@ -1,18 +1,70 @@
-import { AppBar, Box, Button, Grow, styled, Typography } from "@mui/material";
+import { AppBar, Box, Button, Slide, styled, Typography } from "@mui/material";
 import starsBackground from "../assets/stars_background.jpg";
 import { DiscoveryLogoWithtext } from "../components/Logos.tsx";
-import { baseGlow, colors, landingBackground } from "../theme.ts";
-import { useEffect, useState } from "react";
+import { baseGlow, landingBackground } from "../theme.ts";
+import { useEffect, useRef, useState } from "react";
+import {
+  ForegroundPlanet,
+  Planet1,
+  Planet2,
+  Planet3,
+  Planet4,
+} from "../components/Planets.tsx";
 import { MusicPlayer } from "../components/MusicPlayer.tsx";
 import test from "../assets/test.png";
 
+// Example prompts to loop through in the AnimatedPrompt component
 const homePrompts = [
   "song that helps you poop",
   "daydreaming scenario song",
   "song to lock in to",
+  "academic weapon song",
   "song stuck in your head",
+  "afternoon nap song",
+  "song to cry to",
+  "late night gaming song",
 ];
 
+// Background container for the whole landing page
+const LandingPageBackground = styled("div")(({ theme }) => ({
+  background: landingBackground,
+  backgroundColor: `${theme.palette.primary.main}`,
+  height: "100vh",
+  width: "100%",
+  position: "relative",
+  overflow: "clip",
+}));
+
+// Custom style to add transparent stars background through blend modes
+const StarsBackground = styled("div")({
+  backgroundImage: `url(${starsBackground})`,
+  mixBlendMode: "color-dodge",
+  height: "100%",
+  width: "100%",
+  position: "absolute",
+  top: 0,
+  left: 0,
+  backgroundSize: "cover",
+  transform: "matrix(-1, 0, 0, 1, 0, 0)",
+});
+
+// Custom style for the LOG IN and SIGN IN buttons
+const StyledButton = styled(Button)({
+  boxShadow: baseGlow,
+  marginLeft: "20px",
+  padding: "0 30px",
+});
+
+// Container for content in landing page so that they lay on top of the background
+const LandingPageContent = styled("div")({
+  position: "relative",
+  zIndex: 2,
+  height: "100vh",
+});
+
+/**
+ * LandingPage to contain all components within the landing page
+ */
 const LandingPage = () => {
   return (
     <LandingPageBackground>
@@ -33,48 +85,22 @@ const LandingPage = () => {
           }}
         >
           <Typography variant="h4">DISCOVER the next </Typography>
-          <AnimatedPrompt promptsList={homePrompts} />
-          <Box
-            sx={{
-              maxWidth: "950px",
-              borderBottom: "3px solid",
-              borderColor: "peach.main",
-            }}
-          />
+          <AnimatedPrompt />
         </Box>
-        <TEMP />
       </LandingPageContent>
       <StarsBackground />
+      <Planet1 width="400px" height="400px" top="60vh" right="80vw" />
+      <Planet2 width="1200px" height="1200px" top="5vh" left="50vw" />
+      <Planet3 width="300px" height="300px" top="-25vh" left="75vw" />
+      <Planet4 width="50px" height="50px" top="50vh" right="75vw" />
+      <ForegroundPlanet />
     </LandingPageBackground>
   );
 };
 
-const LandingPageBackground = styled("div")({
-  background: landingBackground,
-  backgroundColor: colors.navyBlue,
-  height: "100vh",
-  width: "100%",
-  position: "relative",
-  overflow: "clip",
-});
-
-const StarsBackground = styled("div")({
-  backgroundImage: `url(${starsBackground})`,
-  mixBlendMode: "color-dodge",
-  height: "100%",
-  width: "100%",
-  position: "absolute",
-  top: 0,
-  left: 0,
-  backgroundSize: "cover",
-  transform: "matrix(-1, 0, 0, 1, 0, 0)",
-});
-
-const LandingPageContent = styled("div")({
-  position: "relative",
-  zIndex: 1,
-});
-
+/**
+ * TopBar Component to display logo and LOG IN and SIGN IN buttons
+ */
 const TopBar = () => {
   return (
     <AppBar
@@ -100,84 +126,42 @@ const TopBar = () => {
   );
 };
 
-const StyledButton = styled(Button)({
-  boxShadow: baseGlow,
-  marginLeft: "20px",
-  padding: "0 30px",
-});
-
-interface AnimatedPromptProps {
-  promptsList: string[];
-}
-
-const AnimatedPrompt: React.FC<AnimatedPromptProps> = ({ promptsList }) => {
+/**
+ * AnimatedPrompt Component to change the example prompt in intervals and animate each change
+ */
+const AnimatedPrompt = () => {
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
+  const [isVisible, setIsVisible] = useState(true);
+  const boxRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentTextIndex((prevIndex) => (prevIndex + 1) % promptsList.length);
-    }, 2000);
+      setIsVisible(false);
+      setTimeout(() => {
+        setCurrentTextIndex(
+          (prevIndex) => (prevIndex + 1) % homePrompts.length,
+        );
+        setIsVisible(true);
+      }, 200); // Allow for 0.2 seconds between each transition
+    }, 4000); // Change the prompt every 4 seconds
 
     return () => clearInterval(interval);
-  }, [promptsList]);
+  }, []);
 
   return (
-    <Grow in={true}>
-      <Typography variant="h1">{promptsList[currentTextIndex]}</Typography>
-    </Grow>
-  );
-};
-
-const TEMP = () => {
-  return (
-    <>
-      <Box sx={{ padding: "50px 100px" }}>
-        <Typography variant="h1">Heading 1</Typography>
-        <Typography variant="h2">Heading 2</Typography>
-        <Typography variant="h3">Heading 3</Typography>
-        <Typography variant="h4">Heading 4</Typography>
-        <Typography variant="h5">Heading 5</Typography>
-        <Typography variant="mdSongTitle">Song title</Typography>
-        <Typography variant="mdSongSubtitle">Song artist and album</Typography>
-        <Typography variant="smSongTitle">Song title</Typography>
-        <Typography variant="smSongSubtitle">Song artist and album</Typography>
-        <Typography variant="subtitle1" gutterBottom>
-          subtitle1. Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-          Quos blanditiis tenetur
-        </Typography>
-        <Typography variant="subtitle2" gutterBottom>
-          subtitle2. Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-          Quos blanditiis tenetur
-        </Typography>
-        <Typography variant="body1" gutterBottom>
-          body1. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos
-          blanditiis tenetur unde suscipit, quam beatae rerum inventore
-          consectetur, neque doloribus, cupiditate numquam dignissimos laborum
-          fugiat deleniti? Eum quasi quidem quibusdam.
-        </Typography>
-        <Typography variant="body2" gutterBottom>
-          body2. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos
-          blanditiis tenetur unde suscipit, quam beatae rerum inventore
-          consectetur, neque doloribus, cupiditate numquam dignissimos laborum
-          fugiat deleniti? Eum quasi quidem quibusdam.
-        </Typography>
-        <Typography variant="button" display="block" gutterBottom>
-          button text
-        </Typography>
-        <StyledButton variant="contained" color="lightPeach">
-          LOG IN
-        </StyledButton>
-        <StyledButton variant="contained" color="greyBlue">
-          SIGN UP
-        </StyledButton>
-        <Button variant="outlined" color="lightPeach">
-          SIGN UP
-        </Button>
-        <Button variant="underlined" color="pink">
-          SIGN UP
-        </Button>
-      </Box>
-    </>
+    <Box sx={{ overflow: "hidden" }} ref={boxRef}>
+      <Slide in={isVisible} container={boxRef.current}>
+        <Typography variant="h1">{homePrompts[currentTextIndex]}</Typography>
+      </Slide>
+      <Box
+        sx={{
+          maxWidth: "950px",
+          paddingTop: "15px",
+          borderBottom: "3px solid",
+          borderColor: "peach.main",
+        }}
+      />
+    </Box>
   );
 };
 
