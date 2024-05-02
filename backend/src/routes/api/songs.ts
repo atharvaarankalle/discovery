@@ -39,10 +39,10 @@ const tokenMiddleware = async (req: Request, res: Response, next: any) => {
 /**
  * GET /api/songs/search
  * 
- * Searches for a certain number of songs from the Spotify API based on the song title provided in the query parameters.
+ * Searches for a certain number of songs from the Spotify API based on a search query provided in the query parameters.
  * 
  * Query Parameters:
- * - songTitle: The title of the song to search for
+ * - searchQuery: The query to search for songs (required)
  * - numSongs: The number of songs to search for (default: 6)
  * - page: The page number of the search results (default: 1)
  * 
@@ -68,13 +68,13 @@ let currentLimit: number = 6;
 
 router.get("/search", tokenMiddleware, async (req: Request, res: Response) => {
     // Get values from query parameters passed from the frontend
-    const songTitle: string | undefined = req.query.songTitle ? String(req.query.songTitle) : undefined;
+    const searchQuery: string | undefined = req.query.searchQuery ? String(req.query.searchQuery) : undefined;
     const numSongs: number = Number(req.query.numSongs) || 6;
     const page: number | undefined = req.query.page ? Number(req.query.page) : undefined;
     const responseData: any = [];
 
     // If no song title or page number is provided, send a 400 Bad Request response
-    if (songTitle === undefined || page === undefined) {
+    if (searchQuery === undefined || page === undefined) {
         res.status(400).send("Please provide a song title and page number");
         currentSearchOffset = 0;
         return;
@@ -85,17 +85,17 @@ router.get("/search", tokenMiddleware, async (req: Request, res: Response) => {
         currentSearchOffset = Math.max((page * numSongs) - numSongs, currentSearchOffset);
 
         // If the search query has changed, the page has changed, or the number of songs requested has changed, reset the current search offset
-        if (savedSongSearch !== songTitle || previousPage > page || currentLimit !== numSongs) {
+        if (savedSongSearch !== searchQuery || previousPage > page || currentLimit !== numSongs) {
             currentSearchOffset = 0;
         }
-        savedSongSearch = songTitle;
+        savedSongSearch = searchQuery;
         previousPage = page;
         currentLimit = numSongs;
 
         try {
             const response = await axios.get("https://api.spotify.com/v1/search", {
                 params: {
-                    q: songTitle,
+                    q: searchQuery,
                     type: "track",
                     limit: numSongs,
                     offset: currentSearchOffset,
