@@ -1,4 +1,5 @@
 import { useState } from "react";
+import SearchIcon from '@mui/icons-material/Search';
 import { baseGlow, colors, landingBackground } from "../theme.ts";
 import { AppBar, Box, Button, Grow, styled, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, InputAdornment, IconButton } from "@mui/material";
 
@@ -47,8 +48,9 @@ const PromptPage = () => {
       <Box sx={{ p: 3, m: 2}}>
         <Typography variant="h4">TODAY'S DISCO: </Typography>
         <Typography variant="h2">{prompt}</Typography>
-        <Button variant="contained" onClick={handlePrompt}>Generate</Button>
-        <Box sx={{paddingY: 5, width: 800}}>
+        <Button variant="contained" sx={{marginY: 3}} onClick={handlePrompt}>Generate</Button>
+        <Box sx={{marginY: 5, width: '80%'}}>
+          
           <TextField
             variant="outlined"
             value={inputValue}
@@ -59,18 +61,11 @@ const PromptPage = () => {
               startAdornment: (
                 <InputAdornment position="start">
                   <IconButton>
-                    SearchIcon
+                    <SearchIcon sx={{color: colors.peach, fontSize: '2.5rem'}}/>
                   </IconButton>
                 </InputAdornment>
               ),
-              endAdornment: inputValue && (
-                <InputAdornment position="end">
-                  <IconButton onClick={clearInput}>
-                    X
-                  </IconButton>
-                </InputAdornment>
-              ),
-              style: { color: 'white' }
+              style: { color: colors.lightPeach }
             }}
             sx={{
               '& .MuiOutlinedInput-root': {
@@ -85,10 +80,31 @@ const PromptPage = () => {
                 }
               },
               background: 'rgba(0, 0, 0, 0.15)', // Semi-transparent background
-              borderRadius: '4px', // Rounded corners
+              borderRadius: '4px'
             }}
           />
-          <Box sx={{paddingY: 2}}>
+          <Box
+            sx={{
+              width: '100%', // Full width of the container
+              height: '2px', // Thickness of the line
+              backgroundColor: colors.peach, // Custom color defined in your theme
+            }}
+          />
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button onClick={clearInput} sx={{
+              color: colors.peach,
+              fontSize: '0.75rem', 
+              fontWeight: 400, 
+              fontFamily: 'Sora', 
+              textTransform: 'none',
+              ':hover': {
+                textDecoration: 'underline' // Ensures underline appears on hover
+              }
+            }}>
+              Clear Search
+            </Button>
+          </Box>
+          <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             <Typography variant="body2" sx={{color: colors.peach}}>
               Search for a track that best describes the prompt above
             </Typography>
