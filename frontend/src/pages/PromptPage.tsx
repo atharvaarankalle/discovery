@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Button, Typography, Dialog, DialogActions, DialogContent, DialogTitle, InputAdornment, IconButton } from "@mui/material";
+import { Box, Button, Typography, Dialog, DialogActions, DialogContent, DialogTitle, InputAdornment } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import { colors } from "../theme";
@@ -61,9 +61,7 @@ const PromptPage = () => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <IconButton>
-                    <SearchIcon sx={{color: colors.peach, fontSize: '2.5rem'}}/>
-                  </IconButton>
+                  <SearchIcon sx={{color: colors.peach, fontSize: '2.5rem'}}/>
                 </InputAdornment>
               ),
               style: { color: colors.lightPeach }
