@@ -16,7 +16,7 @@ const StyledBox = styled(Box)(({ theme }) => ({
 
 interface SongSuggestionCardPropTypes extends BoxProps {
     username: string;
-    comment: string;
+    comment?: string;
     songData: {
         songTitle: string;
         artist: string;
@@ -29,10 +29,10 @@ const SongSuggestionCard = ({ username, comment, songData }: SongSuggestionCardP
     return (
         <StyledBox>
             <IconTextLabel icon={<AccountCircleIcon color="secondary" fontSize="large" />} children={username} variant="h5" />
-            <CustomTypography fontStyle="italic">{comment}</CustomTypography>
+            {comment && <CustomTypography fontStyle="italic">{comment}</CustomTypography>}
             <SongCard songTitle={songData.songTitle} artist={songData.artist} album={songData.album} albumArtSrc={songData.albumArtSrc} hasLikeButton />
         </StyledBox>
-    )
-}
+    );
+};
 
 export default SongSuggestionCard;
