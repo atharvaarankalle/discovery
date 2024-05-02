@@ -4,6 +4,7 @@ import { DiscoveryLogoWithtext } from "../components/Logos.tsx";
 import { baseGlow, colors, landingBackground } from "../theme.ts";
 import { useEffect, useState } from "react";
 import { MusicPlayer } from "../components/MusicPlayer.tsx";
+import test from "../assets/test.png";
 
 const homePrompts = [
   "song that helps you poop",
@@ -15,7 +16,12 @@ const homePrompts = [
 const LandingPage = () => {
   return (
     <LandingPageBackground>
-      <MusicPlayer />
+      <MusicPlayer
+        songTitle="About You Now"
+        album="It's About Time"
+        artist="Sugababes"
+        albumArtSrc={test}
+      />
       <LandingPageContent>
         <TopBar />
         <Box
