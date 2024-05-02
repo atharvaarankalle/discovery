@@ -21,6 +21,7 @@ const getStyledSpinner = (theme: Theme, size: number) => (
     <CircularProgress
       sx={{
         circle: { stroke: "url(#theme_gradient)" },
+        animationDuration: `${4}s`,
       }}
       size={size}
       thickness={3}
