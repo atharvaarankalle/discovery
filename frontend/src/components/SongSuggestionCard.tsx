@@ -1,6 +1,5 @@
-import { Box, BoxProps, styled } from "@mui/material";
+import { Avatar, Box, BoxProps, styled } from "@mui/material";
 import IconTextLabel from "./IconTextLabel";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SongCard from "./SongCard";
 import CustomTypography from "./CustomTypography";
 
@@ -8,16 +7,16 @@ import CustomTypography from "./CustomTypography";
 const StyledBox = styled(Box)(({ theme }) => ({
     display: "flex",
     flexDirection: "column",
-    width: "100%",
     gap: "1rem",
-    backgroundColor: `${theme.palette.primary.main}75`, // adds 46% opacity to colour hexcode
-    padding: "1rem",
-    borderRadius: "1rem",
+    backgroundColor: `#12122975`, // TODO: replace '#121229 with the value from the theme (the 75 at the end adds 46% opacity to colour hexcode)
+    padding: "1.25rem",
+    borderRadius: "1.25rem",
 }));
 
 /* Prop types declaration for SongSuggestionCard */
 interface SongSuggestionCardPropTypes extends BoxProps {
     username: string;
+    profilePictureSrc: string;
     comment?: string;
     songData: {
         songTitle: string;
@@ -34,10 +33,10 @@ interface SongSuggestionCardPropTypes extends BoxProps {
  * @prop comment: optional prop for the comment made by the user about the song
  * @prop songData: object containing song data such as song title, artist, album, and album art source
  */
-const SongSuggestionCard = ({ username, comment, songData }: SongSuggestionCardPropTypes) => {
+const SongSuggestionCard = ({ username, profilePictureSrc, comment, songData }: SongSuggestionCardPropTypes) => {
     return (
         <StyledBox>
-            <IconTextLabel icon={<AccountCircleIcon color="secondary" fontSize="large" />} children={username} variant="h5" />
+            <IconTextLabel icon={ <Avatar alt={username} src={profilePictureSrc} sx={{ mr: 1 }} /> } children={username} variant="h5" />
             {comment && <CustomTypography fontStyle="italic">{comment}</CustomTypography>}
             <SongCard songTitle={songData.songTitle} artist={songData.artist} album={songData.album} albumArtSrc={songData.albumArtSrc} hasLikeButton />
         </StyledBox>
