@@ -1,6 +1,4 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
-import { IUser } from "./UserSchema";
-import { IPrompt } from "./PromptSchema";
 
 export interface ISuggestedSong extends Document {
   userId: Schema.Types.ObjectId;
