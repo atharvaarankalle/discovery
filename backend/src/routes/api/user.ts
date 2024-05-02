@@ -13,8 +13,9 @@ router.post("/", async (req: Request, res: Response) => {
     const savedUser = await newUser.save();
     return res.status(201).json(savedUser);
   } catch (error) {
-    console.error("Error creating new user:", error);
-    return res.status(500);
+    return res
+      .status(500)
+      .json({ message: `Error creating new user: ${error}` });
   }
 });
 
@@ -30,10 +31,9 @@ router.get("/:id", async (req: Request, res: Response) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    return res.json({ user });
+    return res.json(user);
   } catch (error) {
-    console.error("Error fetching user", error);
-    return res.status(500);
+    return res.status(500).json({ message: `Error fetching user: ${error}` });
   }
 });
 
@@ -51,10 +51,11 @@ router.patch("/:id", async (req: Request, res: Response) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    return res.json({ updatedUser });
+    return res.json(updatedUser);
   } catch (error) {
-    console.error("Error updating user profile", error);
-    return res.status(500);
+    return res
+      .status(500)
+      .json({ message: `Error updating user profile: ${error}` });
   }
 });
 
@@ -71,10 +72,11 @@ router.get("/:id/liked", async (req: Request, res: Response) => {
     }
 
     const likedSongs = user.likedSongs;
-    return res.json({ likedSongs });
+    return res.json(likedSongs);
   } catch (error) {
-    console.error("Error fetching user's liked songs:", error);
-    return res.status(500);
+    return res
+      .status(500)
+      .json({ message: `Error fetching user's liked songs: ${error}` });
   }
 });
 
@@ -100,8 +102,9 @@ router.put("/:id/liked", async (req: Request, res: Response) => {
 
     return res.json(updatedUser);
   } catch (error) {
-    console.error("Error adding song to user's liked songs:", error);
-    return res.status(500);
+    return res
+      .status(500)
+      .json({ message: `Error adding song to user's liked songs: ${error}` });
   }
 });
 
@@ -123,8 +126,9 @@ router.delete("/:id/liked/:songId", async (req: Request, res: Response) => {
 
     return res.json(updatedUser);
   } catch (error) {
-    console.error("Error deleting song from user's liked songs:", error);
-    return res.status(500);
+    return res.status(500).json({
+      message: `Error deleting song from user's liked songs: ${error}`,
+    });
   }
 });
 
