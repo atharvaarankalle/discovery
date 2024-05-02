@@ -12,6 +12,7 @@ import {
 } from "../components/Planets.tsx";
 import { MusicPlayer } from "../components/MusicPlayer.tsx";
 import test from "../assets/test.png";
+import spongebob from "../assets/spongebob-boowomp.mp3";
 
 // Example prompts to loop through in the AnimatedPrompt component
 const homePrompts = [
@@ -73,6 +74,7 @@ const LandingPage = () => {
         album="It's About Time"
         artist="Sugababes"
         albumArtSrc={test}
+        songAudioSrc={spongebob}
       />
       <LandingPageContent>
         <TopBar />

@@ -6,14 +6,14 @@ import IconTextLabel from "./IconTextLabel.tsx";
 import PersonIcon from "@mui/icons-material/Person";
 import AlbumIcon from "@mui/icons-material/Album";
 import { baseGlow } from "../theme.ts";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 
 const MusicPlayerCard = styled(Card)(({ theme }) => ({
   width: "550px",
   height: "75px",
-  backgroundColor: `${theme.palette.primary.dark}80`,
+  backgroundColor: `${theme.palette.primary.dark}B3`,
   zIndex: 3,
   position: "fixed",
   bottom: 0,
@@ -34,6 +34,7 @@ interface MusicPlayerProps {
   artist?: string;
   album?: string;
   albumArtSrc?: string;
+  songAudioSrc?: string;
 }
 
 export const MusicPlayer = ({
@@ -41,18 +42,20 @@ export const MusicPlayer = ({
   artist,
   album,
   albumArtSrc,
+  songAudioSrc,
 }: MusicPlayerProps) => {
   // check if the user has selected a song to play
   const songSelected = songTitle && artist && album && albumArtSrc;
 
   return (
-    <MusicPlayerCard elevation={4}>
+    <MusicPlayerCard elevation={5}>
       {songSelected ? (
         <ActiveMusicPlayerContent
           songTitle={songTitle}
           album={album}
           artist={artist}
           albumArtSrc={albumArtSrc}
+          songAudioSrc={songAudioSrc}
         />
       ) : (
         <IdleMusicPlayerContent />
@@ -90,9 +93,9 @@ const SongInformation = styled(Box)({
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   color: `${theme.palette.primary.main}`,
   backgroundColor: `${theme.palette.peach.main}`,
+  transition: "0.2s",
   "&:hover": {
     backgroundColor: theme.palette.lightPeach.main,
-    transition: "0.2s",
     boxShadow: baseGlow,
   },
 }));
@@ -102,6 +105,7 @@ interface ActiveMusicPlayerProps {
   artist: string;
   album: string;
   albumArtSrc: string;
+  songAudioSrc: string;
 }
 
 const ActiveMusicPlayerContent = ({
@@ -109,8 +113,43 @@ const ActiveMusicPlayerContent = ({
   artist,
   album,
   albumArtSrc,
+  songAudioSrc,
 }: ActiveMusicPlayerProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const songAudioRef = useRef(new Audio(songAudioSrc));
+
+  const handleTogglePlaying = () => {
+    if (!isPlaying) {
+      const audioPlayPromise = songAudioRef.current.play();
+
+      if (audioPlayPromise) {
+        audioPlayPromise
+          .then(() => {
+            setIsPlaying(true);
+          })
+          .catch((error) => {
+            console.log("Failed to play the selected track", error);
+          });
+      }
+    } else {
+      songAudioRef.current.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  useEffect(() => {
+    const currentSong = songAudioRef.current;
+
+    const handleSongEnd = () => {
+      setIsPlaying(false);
+    };
+
+    currentSong.addEventListener("ended", handleSongEnd);
+
+    return () => {
+      currentSong.removeEventListener("ended", handleSongEnd);
+    };
+  }, []);
 
   return (
     <>
@@ -147,7 +186,7 @@ const ActiveMusicPlayerContent = ({
       />
       <StyledIconButton
         aria-label="play/pause snippet"
-        onClick={() => setIsPlaying(!isPlaying)}
+        onClick={handleTogglePlaying}
       >
         {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
       </StyledIconButton>
