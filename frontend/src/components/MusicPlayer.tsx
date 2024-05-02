@@ -32,43 +32,25 @@ const MusicPlayerCard = styled(Card)(({ theme }) => ({
 
 /* Prop types for the MusicPlayer component */
 interface MusicPlayerProps {
-  songTitle?: string;
-  artists?: string;
-  album?: string;
-  albumArtSrc?: string;
-  songAudioSrc?: string;
+  songData?: {
+    songTitle: string;
+    artists: string;
+    album: string;
+    albumArtSrc: string;
+    songAudioSrc: string;
+  };
 }
 
 /**
  * MusicPlayer Component
  *
- * @param songTitle: the title of the selected song (OPTIONAL)
- * @param artists: the artists of the selected song (OPTIONAL)
- * @param album: the title of the album the song is from (OPTIONAL)
- * @param albumArtSrc: the url link to the album cover (OPTIONAL)
- * @param songAudioSrc: the url link to the song audio (OPTIONAL)
+ * @param songData: Object containing data of the selected song (song title, artists, album, album cover, and song audio)
  */
-export const MusicPlayer = ({
-  songTitle,
-  artists,
-  album,
-  albumArtSrc,
-  songAudioSrc,
-}: MusicPlayerProps) => {
-  // check if the user has selected a song to play
-  const songSelected =
-    songTitle && artists && album && albumArtSrc && songAudioSrc;
-
+export const MusicPlayer = ({ songData }: MusicPlayerProps) => {
   return (
     <MusicPlayerCard elevation={5}>
-      {songSelected ? (
-        <ActiveMusicPlayerContent
-          songTitle={songTitle}
-          album={album}
-          artists={artists}
-          albumArtSrc={albumArtSrc}
-          songAudioSrc={songAudioSrc}
-        />
+      {songData !== undefined ? (
+        <ActiveMusicPlayerContent songData={songData} />
       ) : (
         <IdleMusicPlayerContent />
       )}
@@ -116,31 +98,23 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
 
 /* Prop type for the ActiveMusicPlayer Component */
 interface ActiveMusicPlayerProps {
-  songTitle: string;
-  artists: string;
-  album: string;
-  albumArtSrc: string;
-  songAudioSrc: string;
+  songData: {
+    songTitle: string;
+    artists: string;
+    album: string;
+    albumArtSrc: string;
+    songAudioSrc: string;
+  };
 }
 
 /**
  * ActiveMusicPlayerContent Component
  *
- * @param songTitle: the title of the selected song
- * @param artists: the artists of the selected song
- * @param album: the title of the album the song is from
- * @param albumArtSrc: the url link to the album cover
- * @param songAudioSrc: the url link to the song audio
+ * @param songData: Object containing data of the selected song (song title, artists, album, album cover, and song audio)
  */
-const ActiveMusicPlayerContent = ({
-  songTitle,
-  artists,
-  album,
-  albumArtSrc,
-  songAudioSrc,
-}: ActiveMusicPlayerProps) => {
+const ActiveMusicPlayerContent = ({ songData }: ActiveMusicPlayerProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const songAudioRef = useRef(new Audio(songAudioSrc));
+  const songAudioRef = useRef(new Audio(songData.songAudioSrc));
 
   // handle switching playing and pausing the song audio
   const handleTogglePlaying = () => {
@@ -179,30 +153,30 @@ const ActiveMusicPlayerContent = ({
 
   return (
     <>
-      <Box component="img" src={albumArtSrc} height="100%" />
+      <Box component="img" src={songData.albumArtSrc} height="100%" />
       <SongInformation flexGrow={1}>
         <CustomTypography
-          tooltip={songTitle}
+          tooltip={songData.songTitle}
           variant="smSongTitle"
           color="peach.main"
           num_lines={2}
           mb={0.5}
         >
-          {songTitle}
+          {songData.songTitle}
         </CustomTypography>
         <IconTextLabel
           variant="smSongSubtitle"
           color="pink.main"
           icon={<PersonIcon sx={{ color: "peach.main" }} fontSize="small" />}
         >
-          {artists}
+          {songData.artists}
         </IconTextLabel>
         <IconTextLabel
           variant="smSongSubtitle"
           color="pink.main"
           icon={<AlbumIcon sx={{ color: "peach.main" }} fontSize="small" />}
         >
-          {album}
+          {songData.album}
         </IconTextLabel>
       </SongInformation>
       <Box
