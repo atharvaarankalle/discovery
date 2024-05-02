@@ -1,10 +1,8 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
-import { IUser } from "./UserSchema";
-import { IPrompt } from "./PromptSchema";
 
 export interface ISuggestedSong extends Document {
   userId: Schema.Types.ObjectId;
-  songId: string;
+  spotifySongId: string;
   caption?: string;
   prompt: Schema.Types.ObjectId;
 }
@@ -16,7 +14,7 @@ const suggestedSongSchema = new Schema<ISuggestedSong>(
       ref: "User",
       required: [true, "User ID is required"],
     },
-    songId: {
+    spotifySongId: {
       type: String,
       required: [true, "Song ID is required"],
     },
