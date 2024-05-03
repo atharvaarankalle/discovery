@@ -1,6 +1,12 @@
 // current route: /api/user
 import express, { Router, Request, Response } from "express";
 import { User, IUser } from "../../schemas/UserSchema";
+import {
+  ISuggestedSong,
+  SuggestedSong,
+} from "../../schemas/SuggestedSongSchema";
+import { Schema } from "mongoose";
+import { IPrompt, Prompt } from "../../schemas/PromptSchema";
 
 const router: Router = express.Router();
 
@@ -132,4 +138,48 @@ router.delete("/:id/liked/:songId", async (req: Request, res: Response) => {
   }
 });
 
+// PUT add a song to a user's suggested songs, and add new suggested song entry
+router.put("/:id/suggested", async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.id;
+    const {
+      spotifySongId,
+      caption,
+      prompt,
+    }: {
+      spotifySongId: string;
+      caption: string;
+      prompt: Schema.Types.ObjectId;
+    } = req.body;
+
+    const user: IUser | null = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Create a new suggested song entry
+    const suggestedSong: ISuggestedSong = new SuggestedSong({
+      user: userId,
+      spotifySongId: spotifySongId,
+      caption: caption,
+      prompt: prompt,
+    });
+    await suggestedSong.save();
+
+    // Calculate streaks
+
+    // Append the new suggested song to the user's suggested songs
+    user.suggestedSongs.push(suggestedSong._id);
+    const updatedUser = await user.save();
+
+    return res.json(updatedUser);
+  } catch (error) {
+    return res.status(500).json({
+      message: `Error adding song to suggested songs: ${error}`,
+    });
+  }
+});
+
 export default router;
+}
