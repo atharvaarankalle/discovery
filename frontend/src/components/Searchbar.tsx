@@ -3,6 +3,7 @@ import { Box, Button, InputAdornment, styled, TextField, } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import { colors } from "../theme";
 
+//Styling for searchbar
 const StyledTextField = styled(TextField)({
     '& .MuiOutlinedInput-root': {
       '& fieldset': { borderColor: 'transparent' },
@@ -13,6 +14,7 @@ const StyledTextField = styled(TextField)({
     borderRadius: '4px'
   });
 
+//Styling for clear search button
 const ClearSearchButton = styled(Button)({
 color: colors.peach,
 fontSize: '0.75rem', 
@@ -23,6 +25,13 @@ textTransform: 'none',
     textDecoration: 'underline'
 }
 });
+
+/**
+ * Search bar component. No set width, therefore width should be set upon call.
+ * The search is done as the user type and not upon confirm.
+ * Clear search button gets 
+ * @returns Searchbar
+ */
 
 export const Searchbar = () => {
 
