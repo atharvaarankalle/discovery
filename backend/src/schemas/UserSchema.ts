@@ -1,5 +1,4 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
-import { ISuggestedSong } from "./SuggestedSongSchema";
 
 export interface IUser extends Document {
   email: string;
