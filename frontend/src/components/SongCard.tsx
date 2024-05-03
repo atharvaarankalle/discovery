@@ -59,10 +59,12 @@ const StyledCard = styled(Card)(({ theme }) => ({
 
 /* Prop types declaration for SongCardBase */
 export interface SongCardBasePropTypes extends CardProps {
-  songTitle: string;
-  artist: string;
-  album: string;
-  albumArtSrc: string;
+  songData: {
+    songTitle: string;
+    artist: string;
+    album: string;
+    albumArtSrc: string;
+  };
   type: "small" | "medium" | "large";
   onCardClick?: () => void;
 }
@@ -70,22 +72,17 @@ export interface SongCardBasePropTypes extends CardProps {
 /** 
  * SongCardBase Component
  * 
-@prop songTitle: title of the song
-@prop artist: artist/s of the song
-@prop album: album the song is from
-@prop albumArtSrc: url link to the album art image url 
+@prop songData: an object containing song data such as:
+      songTitle: title of the song
+      artist: artist/s of the song
+      album: album the song is from
+      albumArtSrc: url link to the album art image url 
 @prop type: required prop with value of "small", "medium" or "large", indicating what SongCard type to render
-@prop onCardClick: the onClick function for the card area, only required for "medium" or "large" SongCards
+@prop onCardClick: the onClick function for the card area. optional prop if type='small'
 
 **/
-const SongCard = ({
-  songTitle,
-  artist,
-  album,
-  albumArtSrc,
-  type,
-  onCardClick,
-}: SongCardBasePropTypes) => {
+const SongCard = ({ songData, type, onCardClick }: SongCardBasePropTypes) => {
+  const { songTitle, artist, album, albumArtSrc } = songData;
   const [isSelected, setIsSelected] = useState<boolean>(false);
   const theme: Theme = useTheme(); // importing theme object to use in sx prop
 

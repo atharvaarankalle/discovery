@@ -11,12 +11,12 @@ const StyledToolTip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
 ))(({ theme }) => ({
   [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: `#121229`, // to replace with theme.palette.darkestBlue.main
+    backgroundColor: theme.palette.primary.dark,
     color: theme.palette.peach.main,
     boxShadow: theme.shadows[1],
   },
   [`& .${tooltipClasses.arrow}`]: {
-    color: `#121229`, // to replace with theme.palette.darkestBlue.main
+    color: theme.palette.primary.dark,
   },
 }));
 
