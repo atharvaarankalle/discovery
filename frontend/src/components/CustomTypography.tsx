@@ -1,4 +1,24 @@
-import { Tooltip, Typography, TypographyProps, styled } from "@mui/material";
+import {
+  Tooltip,
+  TooltipProps,
+  tooltipClasses,
+  Typography,
+  TypographyProps,
+  styled,
+} from "@mui/material";
+
+const StyledToolTip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.primary.dark,
+    color: theme.palette.peach.main,
+    boxShadow: theme.shadows[1],
+  },
+  [`& .${tooltipClasses.arrow}`]: {
+    color: theme.palette.primary.dark,
+  },
+}));
 
 // Adding custom styling to the MUI Typography to allow text to truncate after a specific number of lines
 const TruncatableTypography = styled(Typography)(
@@ -8,7 +28,7 @@ const TruncatableTypography = styled(Typography)(
     display: "-webkit-box",
     WebkitLineClamp: num_lines,
     WebkitBoxOrient: "vertical",
-    width: "100%",
+    width: "fit-content",
   })
 );
 
@@ -35,11 +55,11 @@ const CustomTypography = ({
 }: CustomTypographyPropTypes) => (
   <>
     {tooltip ? (
-      <Tooltip title={tooltip} placement="top-start" arrow disableInteractive>
+      <StyledToolTip title={tooltip} placement="top" arrow disableInteractive>
         <TruncatableTypography {...props} num_lines={num_lines}>
           {children}
         </TruncatableTypography>
-      </Tooltip>
+      </StyledToolTip>
     ) : (
       <TruncatableTypography {...props} num_lines={num_lines}>
         {children}

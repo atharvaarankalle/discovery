@@ -57,6 +57,7 @@ export const colors = {
   purple: "#9C5AA6",
   greyBlue: "#3B3B58",
   navyBlue: "#272747",
+  darkestBlue: "#121229",
   white: "#FFFFFF",
 };
 
@@ -89,6 +90,7 @@ export const theme = createTheme({
   palette: {
     primary: {
       main: colors.navyBlue,
+      dark: colors.darkestBlue,
       contrastText: colors.lightPeach,
     },
     secondary: {
