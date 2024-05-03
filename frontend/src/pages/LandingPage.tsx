@@ -10,6 +10,8 @@ import {
   Planet3,
   Planet4,
 } from "../components/Planets.tsx";
+import {MusicPlayer} from "../components/MusicPlayer.tsx";
+import cd_image from "../assets/cd_image.png";
 
 // Example prompts to loop through in the AnimatedPrompt component
 const homePrompts = [
@@ -66,6 +68,15 @@ const LandingPageContent = styled("div")({
 const LandingPage = () => {
   return (
     <LandingPageBackground>
+      <MusicPlayer
+        songData={{
+          songTitle: "hahah",
+          artists: "huhuhu",
+          album: "wdfjkbd",
+          albumArtSrc: cd_image,
+          openInSpotifyUrl: 
+        }}
+      />
       <LandingPageContent>
         <TopBar />
         <Box

@@ -37,7 +37,8 @@ interface MusicPlayerProps {
     artists: string;
     album: string;
     albumArtSrc: string;
-    songAudioSrc: string;
+    songAudioSrc: string | undefined;
+    openInSpotifyUrl: string | undefined;
   };
 }
 
@@ -47,12 +48,20 @@ interface MusicPlayerProps {
  * @param songData: Object containing data of the selected song (song title, artists, album, album cover, and song audio)
  */
 export const MusicPlayer = ({ songData }: MusicPlayerProps) => {
+  // const {songAudioSrc, openInSpotifyUrl} = songData;
+
+
+  const isPreviewAvailable = !!songData && !!songData.songAudioSrc;
+
   return (
     <MusicPlayerCard elevation={5}>
-      {songData !== undefined ? (
+
+      {!songData && <IdleMusicPlayerContent />}
+
+      {isPreviewAvailable ? (
         <ActiveMusicPlayerContent songData={songData} />
       ) : (
-        <IdleMusicPlayerContent />
+        <PreviewUnavailableMusicPlayerContent/>
       )}
     </MusicPlayerCard>
   );
@@ -76,6 +85,22 @@ const IdleMusicPlayerContent = () => {
     </>
   );
 };
+
+const PreviewUnavailableMusicPlayerContent = () => {
+  return (
+    <>
+      <Typography variant="smSongTitle" color="peach.main">
+        Aw man
+      </Typography>
+      <Box
+        component="img"
+        src={musicNotPlayingCharacter}
+        height="100%"
+        sx={{ imageRendering: "pixelated" }}
+      />
+    </>
+  );
+}
 
 // Custom styling for the SongInformation Box component
 const SongInformation = styled(Box)({
@@ -103,7 +128,8 @@ interface ActiveMusicPlayerProps {
     artists: string;
     album: string;
     albumArtSrc: string;
-    songAudioSrc: string;
+    songAudioSrc?: string;
+    openInSpotifyUrl?: string;
   };
 }
 
