@@ -1,4 +1,7 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
+import { User } from "../schemas/UserSchema";
+import { Prompt } from "../schemas/PromptSchema";
+
 
 export interface ISuggestedSong extends Document {
   userId: Schema.Types.ObjectId;
@@ -21,7 +24,7 @@ const suggestedSongSchema = new Schema<ISuggestedSong>(
     caption: String,
     prompt: {
       type: Schema.Types.ObjectId,
-      ref: "Prompt",
+      ref: Prompt,
       required: [true, "Prompt ID is required"],
     },
   },
