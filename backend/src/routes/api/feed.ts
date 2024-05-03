@@ -39,7 +39,9 @@ router.get(
         const promptId: Schema.Types.ObjectId = prompt._id;
         const suggestedSongs: Array<ISuggestedSong> = await SuggestedSong.find({
           prompt: promptId,
-        });
+        })
+          .populate({ path: "user", select: ["profilePic", "displayName"] })
+          .populate({ path: "prompt", select: "prompt" });
 
         if (suggestedSongs.length > 0) {
           // Returning the suggested songs
