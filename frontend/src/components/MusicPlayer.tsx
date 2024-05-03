@@ -1,14 +1,24 @@
-import { Box, Card, IconButton, styled, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  IconButton,
+  styled,
+  Typography,
+} from "@mui/material";
 import musicNotPlayingCharacter from "../assets/music_not_playing.png";
+import musicNotAvailableCharacter from "../assets/music_not_available.png";
 import musicPlayingCharacter from "../assets/music_playing.gif";
 import CustomTypography from "./CustomTypography.tsx";
 import IconTextLabel from "./IconTextLabel.tsx";
 import PersonIcon from "@mui/icons-material/Person";
 import AlbumIcon from "@mui/icons-material/Album";
-import { baseGlow } from "../theme.ts";
+import { baseGlow, glowHoverStyle } from "../theme.ts";
 import { useEffect, useRef, useState } from "react";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import { Theme } from "@mui/material/styles";
 
 // Custom styling for the Music Player Card component
 const MusicPlayerCard = styled(Card)(({ theme }) => ({
@@ -22,7 +32,7 @@ const MusicPlayerCard = styled(Card)(({ theme }) => ({
   transform: "translate(-50%, -50%)",
   borderRadius: "15px",
   backdropFilter: "blur(5px)",
-  padding: "20px",
+  padding: "25px",
   display: "flex",
   flexDirection: "row",
   justifyContent: "space-between",
@@ -48,21 +58,20 @@ interface MusicPlayerProps {
  * @param songData: Object containing data of the selected song (song title, artists, album, album cover, and song audio)
  */
 export const MusicPlayer = ({ songData }: MusicPlayerProps) => {
-  // const {songAudioSrc, openInSpotifyUrl} = songData;
+  // const { songAudioSrc, openInSpotifyUrl } = songData;
 
+  const isSongSelected = songData !== undefined;
 
-  const isPreviewAvailable = !!songData && !!songData.songAudioSrc;
+  const isPreviewAvailable =
+    isSongSelected && !!songData.songAudioSrc && !songData.openInSpotifyUrl;
+  const isPreviewUnavailable =
+    isSongSelected && !!songData.openInSpotifyUrl && !songData.songAudioSrc;
 
   return (
     <MusicPlayerCard elevation={5}>
-
-      {!songData && <IdleMusicPlayerContent />}
-
-      {isPreviewAvailable ? (
-        <ActiveMusicPlayerContent songData={songData} />
-      ) : (
-        <PreviewUnavailableMusicPlayerContent/>
-      )}
+      {!isSongSelected && <IdleMusicPlayerContent />}
+      {isPreviewAvailable && <ActiveMusicPlayerContent songData={songData} />}
+      {isPreviewUnavailable && <PreviewUnavailableMusicPlayerContent />}
     </MusicPlayerCard>
   );
 };
@@ -86,24 +95,62 @@ const IdleMusicPlayerContent = () => {
   );
 };
 
+// /* Prop type for the SongMusicPlayerContent Component */
+// interface SongMusicPlayerContentProps {
+//   songData: {
+//     songTitle: string;
+//     artists: string;
+//     album: string;
+//     albumArtSrc: string;
+//     songAudioSrc?: string | undefined;
+//     openInSpotifyUrl?: string | undefined;
+//   };
+// }
+//
+// const SongMusicPlayerContent = ({ songData }: SongMusicPlayerContentProps) => {
+//   const { songAudioSrc } = songData;
+//
+//   // const isPreviewAvailable =
+//
+//   return (
+//     <>
+//       {songAudioSrc !== undefined ? (
+//         <ActiveMusicPlayerContent songData={songData} />
+//       ) : (
+//         <PreviewUnavailableMusicPlayerContent />
+//       )}
+//     </>
+//   );
+// };
+
 const PreviewUnavailableMusicPlayerContent = () => {
   return (
     <>
-      <Typography variant="smSongTitle" color="peach.main">
-        Aw man
-      </Typography>
+      <MusicPlayerInfo>
+        <Typography variant="smSongTitle" color="secondary.main" mb={1}>
+          Oops! Looks like the song preview is unavailable :(
+        </Typography>
+        <Button
+          variant="contained"
+          color="peach"
+          endIcon={<OpenInNewIcon />}
+          sx={{ ...glowHoverStyle }}
+        >
+          Open in Spotify Web
+        </Button>
+      </MusicPlayerInfo>
       <Box
         component="img"
-        src={musicNotPlayingCharacter}
+        src={musicNotAvailableCharacter}
         height="100%"
         sx={{ imageRendering: "pixelated" }}
       />
     </>
   );
-}
+};
 
-// Custom styling for the SongInformation Box component
-const SongInformation = styled(Box)({
+// Custom styling for the MusicPlayerInfo Box component
+const MusicPlayerInfo = styled(Box)({
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
@@ -115,10 +162,7 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
   color: `${theme.palette.primary.main}`,
   backgroundColor: `${theme.palette.peach.main}`,
   transition: "0.2s",
-  "&:hover": {
-    backgroundColor: theme.palette.lightPeach.main,
-    boxShadow: baseGlow,
-  },
+  ...glowHoverStyle,
 }));
 
 /* Prop type for the ActiveMusicPlayer Component */
@@ -128,8 +172,8 @@ interface ActiveMusicPlayerProps {
     artists: string;
     album: string;
     albumArtSrc: string;
-    songAudioSrc?: string;
-    openInSpotifyUrl?: string;
+    songAudioSrc: string | undefined;
+    openInSpotifyUrl: string | undefined;
   };
 }
 
@@ -145,7 +189,7 @@ const ActiveMusicPlayerContent = ({ songData }: ActiveMusicPlayerProps) => {
 
   // handle switching playing and pausing the song audio
   const handleTogglePlaying = () => {
-    if (!isPlaying) {
+    if (!isPlaying && songAudioRef.current) {
       const audioPlayPromise = songAudioRef.current.play();
 
       if (audioPlayPromise) {
@@ -181,7 +225,7 @@ const ActiveMusicPlayerContent = ({ songData }: ActiveMusicPlayerProps) => {
   return (
     <>
       <Box component="img" src={albumArtSrc} height="100%" />
-      <SongInformation flexGrow={1}>
+      <MusicPlayerInfo flexGrow={1}>
         <CustomTypography
           tooltip={songTitle}
           variant="smSongTitle"
@@ -205,7 +249,7 @@ const ActiveMusicPlayerContent = ({ songData }: ActiveMusicPlayerProps) => {
         >
           {album}
         </IconTextLabel>
-      </SongInformation>
+      </MusicPlayerInfo>
       <Box
         component="img"
         src={isPlaying ? musicPlayingCharacter : musicNotPlayingCharacter}
