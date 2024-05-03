@@ -19,7 +19,7 @@ const UserAppBase = () => {
       {/* TODO in future issue: NavBar */}
       <NavBar />
       {/* adding spacing around all child elements */}
-      <Box m={"2rem"}>
+      <Box m={"3rem"}>
         <Outlet />
       </Box>
     </LoggedInBackground>
