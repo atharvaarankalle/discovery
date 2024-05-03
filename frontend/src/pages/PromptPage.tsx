@@ -1,13 +1,12 @@
 import { useState } from "react";
-import { Box, Button, Typography, Dialog, DialogActions, DialogContent, DialogTitle, InputAdornment } from "@mui/material";
-import SearchIcon from '@mui/icons-material/Search';
+import { Box, Button, Typography, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import { colors } from "../theme";
-import { PageBackground, DialogBackground, StyledTextField, ClearSearchButton, SkipButton } from "../components/PromptPageComponents";
+import { PageBackground, DialogBackground, SkipButton } from "../components/PromptPageComponents";
+import { Searchbar } from "../components/Searchbar"
 
 const PromptPage = () => {
   const [prompt, setPrompt] = useState("Press button for prompt");
-  const [inputValue, setInputValue] = useState('');
   const [open, setOpen] = useState(false);
   
   const handlePrompt = async () => {
@@ -21,15 +20,6 @@ const PromptPage = () => {
     } catch (error) {
       console.error('There was a problem fetching the message:', error);
     }
-  };
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
-    //Search Spotify API goes here
-  };
-
-  const clearInput = () => {
-    setInputValue('');
   };
 
   const handleOpen = () => {
@@ -53,32 +43,7 @@ const PromptPage = () => {
         <Typography variant="h2">{prompt}</Typography>
         <Button variant="contained" sx={{marginY: 3}} onClick={handlePrompt}>Generate</Button>
         <Box sx={{marginY: 5, width: '80%'}}>
-          <StyledTextField
-            value={inputValue}
-            onChange={handleInputChange}
-            placeholder="Search"
-            fullWidth
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon sx={{color: colors.peach, fontSize: '2.5rem'}}/>
-                </InputAdornment>
-              ),
-              style: { color: colors.lightPeach }
-            }}
-          />
-          <Box
-            sx={{
-              width: '100%', 
-              height: '2px', 
-              backgroundColor: colors.peach, 
-            }}
-          />
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <ClearSearchButton onClick={clearInput}>
-              Clear Search
-            </ClearSearchButton>
-          </Box>
+          <Searchbar/>
           <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             <Typography variant="body2" sx={{color: colors.peach}}>
               Search for a track that best describes the prompt above
