@@ -1,12 +1,35 @@
-html, body {
+html,
+body {
   margin: 0;
 }
 
 /* Changing the default text highlight colour */
 ::-moz-selection {
-  background: #F1267B;
+  background: #f1267b;
 }
 
 ::selection {
-  background: #F1267B;
+  background: #f1267b;
+}
+
+/* Changing scrollbar default style for Webkit Browsers */
+::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+/* Scrollbar track style */
+::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 1rem;
+}
+
+/* Scrollbar handle style */
+::-webkit-scrollbar-thumb {
+  background: #9c5aa6;
+  border-radius: 0.5rem; /* rounding the scrollbar ends */
+}
+
+/* Scrollbar on hover colour */
+::-webkit-scrollbar-thumb:hover {
+  background: #ba88c2;
 }
