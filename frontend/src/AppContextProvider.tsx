@@ -1,37 +1,42 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
 
-export const AppContext = createContext({});
+/* SongData object prop types */
+export interface SongData {
+  songTitle: string;
+  artists: string;
+  album: string;
+  albumArtSrc: string;
+  songAudioSrc: string | undefined;
+  openInSpotifyUrl: string | undefined;
+}
+
+/* AppContext prop types */
+interface AppContextType {
+  currentPreviewSong: SongData | null;
+  setCurrentPreviewSong: (song: SongData | null) => void;
+}
+
+export const AppContext = createContext<AppContextType>({
+  currentPreviewSong: null,
+  setCurrentPreviewSong: () => {},
+});
 
 interface AppContextProviderProps {
   children: ReactNode;
 }
 
 // TODO: Set currentPreviewSong back to initial on log out OR log in
+// TODO: Wrap pages accessible to logged in users with AppContextProvider (likely through NavBar)
 export function AppContextProvider({ children }: AppContextProviderProps) {
   // For storing the song that the user has selected to preview as a state over the discovery feed and user profile
   const [currentPreviewSong, setCurrentPreviewSong] = useLocalStorage(
     "currentPreviewSong",
-    {},
+    undefined,
   );
-
-  function handlePreviewSong(
-    song:
-      | {
-          songTitle: string;
-          artists: string;
-          album: string;
-          albumArtSrc: string;
-          songAudioSrc: string | undefined;
-          openInSpotifyUrl: string | undefined;
-        }
-      | undefined,
-  ) {
-    setCurrentPreviewSong(song);
-  }
 
   const context = {
     currentPreviewSong,
-    handlePreviewSong,
+    setCurrentPreviewSong,
   };
 
   return <AppContext.Provider value={context}>{children}</AppContext.Provider>;

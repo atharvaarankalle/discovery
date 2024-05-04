@@ -13,12 +13,11 @@ import CustomTypography from "./CustomTypography.tsx";
 import IconTextLabel from "./IconTextLabel.tsx";
 import PersonIcon from "@mui/icons-material/Person";
 import AlbumIcon from "@mui/icons-material/Album";
-import { baseGlow, glowHoverStyle } from "../theme.ts";
+import { glowHoverStyle } from "../theme.ts";
 import { useContext, useEffect, useRef, useState } from "react";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import { Theme } from "@mui/material/styles";
 import { AppContext } from "../AppContextProvider.tsx";
 
 // Custom styling for the Music Player Card component
@@ -41,39 +40,14 @@ const MusicPlayerCard = styled(Card)(({ theme }) => ({
   gap: "15px",
 }));
 
-/* Prop types for the MusicPlayer component */
-interface MusicPlayerProps {
-  songData?: {
-    songTitle: string;
-    artists: string;
-    album: string;
-    albumArtSrc: string;
-    songAudioSrc: string | undefined;
-    openInSpotifyUrl: string | undefined;
-  };
-}
-
 /**
  * MusicPlayer Component
  */
 export const MusicPlayer = () => {
   const { currentPreviewSong } = useContext(AppContext);
 
-  console.log("WOW", currentPreviewSong);
-
-  // const isSongSelected = currentPreviewSong !== undefined;
-  //
-  // const isPreviewAvailable =
-  //   isSongSelected &&
-  //   !!currentPreviewSong.songAudioSrc &&
-  //   !currentPreviewSong.openInSpotifyUrl;
-  // const isPreviewUnavailable =
-  //   isSongSelected &&
-  //   !!currentPreviewSong.openInSpotifyUrl &&
-  //   !currentPreviewSong.songAudioSrc;
-
   return (
-    <MusicPlayerCard elevation={5}>
+    <MusicPlayerCard elevation={0}>
       {currentPreviewSong ? (
         currentPreviewSong.songAudioSrc ? (
           <ActiveMusicPlayerContent />
@@ -106,12 +80,14 @@ const IdleMusicPlayerContent = () => {
   );
 };
 
+/**
+ * IdleMusicPlayerContent Component
+ */
 const UnavailableMusicPlayerContent = () => {
-  const { currentPreviewSong } = useState(AppContext);
+  const { currentPreviewSong } = useContext(AppContext);
 
   const handleOpenSpotifyLink = () => {
-    console.log("HI", currentPreviewSong.openInSpotifyUrl);
-    // window.open(currentPreviewSong.openInSpotifyUrl, "_blank", "noreferrer");
+    window.open(currentPreviewSong?.openInSpotifyUrl, "_blank", "noreferrer");
   };
 
   return (
@@ -158,13 +134,12 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
 
 /**
  * ActiveMusicPlayerContent Component
- *
- * @param songData: Object containing data of the selected song (song title, artists, album, album cover, and song audio)
  */
 const ActiveMusicPlayerContent = () => {
-  const { currentPreviewSong } = useState(AppContext);
+  const { currentPreviewSong } = useContext(AppContext);
   const [isPlaying, setIsPlaying] = useState(false);
-  const songAudioRef = useRef(new Audio(currentPreviewSong.songAudioSrc));
+
+  const songAudioRef = useRef(new Audio(currentPreviewSong?.songAudioSrc));
 
   // handle switching playing and pausing the song audio
   const handleTogglePlaying = () => {
@@ -203,30 +178,34 @@ const ActiveMusicPlayerContent = () => {
 
   return (
     <>
-      <Box component="img" src={currentPreviewSong.albumArtSrc} height="100%" />
+      <Box
+        component="img"
+        src={currentPreviewSong?.albumArtSrc}
+        height="100%"
+      />
       <MusicPlayerInfo flexGrow={1}>
         <CustomTypography
-          tooltip={currentPreviewSong.songTitle}
+          tooltip={currentPreviewSong?.songTitle}
           variant="smSongTitle"
           color="peach.main"
           num_lines={2}
           mb={0.5}
         >
-          {currentPreviewSong.songTitle}
+          {currentPreviewSong?.songTitle}
         </CustomTypography>
         <IconTextLabel
           variant="smSongSubtitle"
           color="pink.main"
           icon={<PersonIcon sx={{ color: "peach.main" }} fontSize="small" />}
         >
-          {currentPreviewSong.artists}
+          {currentPreviewSong?.artists}
         </IconTextLabel>
         <IconTextLabel
           variant="smSongSubtitle"
           color="pink.main"
           icon={<AlbumIcon sx={{ color: "peach.main" }} fontSize="small" />}
         >
-          {currentPreviewSong.album}
+          {currentPreviewSong?.album}
         </IconTextLabel>
       </MusicPlayerInfo>
       <Box
