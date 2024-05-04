@@ -5,7 +5,7 @@ import planet1 from "../assets/planet_1.svg";
 import planet2 from "../assets/planet_2.svg";
 import planet3 from "../assets/planet_3.svg";
 import planet4 from "../assets/planet_4.svg";
-import { FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 /**
  * ForegroundPlanet Component
@@ -134,14 +134,8 @@ export const Planet1 = ({ width, height, top, right, left }: PlanetProps) => {
  * @param right: position of the planet relative to parent's right boundary
  * @param left: position of the planet relative to parent's left boundary
  */
-export const Planet2: FC<PlanetProps> = ({
-  width,
-  height,
-  top,
-  right,
-  left,
-}) => {
-  const [isGlow, setIsGlow] = useState(true);
+export const Planet2 = ({ width, height, top, right, left }: PlanetProps) => {
+  const [isGlow, setIsGlow] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -218,13 +212,7 @@ export const Planet2: FC<PlanetProps> = ({
  * @param right: position of the planet relative to parent's right boundary
  * @param left: position of the planet relative to parent's left boundary
  */
-export const Planet3: FC<PlanetProps> = ({
-  width,
-  height,
-  top,
-  right,
-  left,
-}) => {
+export const Planet3 = ({ width, height, top, right, left }: PlanetProps) => {
   return (
     <Box
       sx={{
@@ -275,13 +263,7 @@ export const Planet3: FC<PlanetProps> = ({
  * @param right: position of the planet relative to parent's right boundary
  * @param left: position of the planet relative to parent's left boundary
  */
-export const Planet4: FC<PlanetProps> = ({
-  width,
-  height,
-  top,
-  right,
-  left,
-}) => {
+export const Planet4 = ({ width, height, top, right, left }: PlanetProps) => {
   return (
     <Box
       component="img"
