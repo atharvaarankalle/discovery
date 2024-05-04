@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Button, InputAdornment, styled, TextField, } from "@mui/material";
+import { Box, InputAdornment, Link, styled, TextField, } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import { colors } from "../theme";
 
@@ -8,21 +8,29 @@ const StyledTextField = styled(TextField)({
     '& .MuiOutlinedInput-root': {
       '& fieldset': { borderColor: 'transparent' },
       '&:hover fieldset': { borderColor: 'transparent' },
-      '&.Mui-focused fieldset': { borderColor: 'transparent' }
-    },
-    background: 'rgba(255, 229, 180, 0.05)',
-    borderRadius: '4px'
+      '&.Mui-focused fieldset': { 
+        borderColor: 'transparent',
+        borderWidth: '0 0 0.2rem 0',
+        borderBottomColor: colors.peach, 
+        transition: "border-bottom 0.2s ease",  
+    }},
+    background: `${colors.lightPeach}0F`,
+    borderRadius: "0.2rem",
+    borderColor: 'transparent',
   });
 
 //Styling for clear search button
-const ClearSearchButton = styled(Button)({
+const ClearSearchLink = styled(Link)({
+component: "button",
+variant: "body1",
 color: colors.peach,
-fontSize: '0.75rem', 
+fontSize: '1rem', 
 fontWeight: 400, 
-fontFamily: 'Sora', 
+fontFamily: 'Familjen Grotesk', 
 textTransform: 'none',
 ':hover': {
-    textDecoration: 'underline'
+    textDecoration: 'underline',
+    cursor: 'pointer',
 }
 });
 
@@ -57,20 +65,14 @@ export const Searchbar = () => {
                     <SearchIcon sx={{color: colors.peach, fontSize: '2.5rem'}}/>
                     </InputAdornment>
                 ),
-                style: { color: colors.lightPeach }
+                style: { color: colors.lightPeach },
                 }}
             />
-            <Box
-                sx={{
-                width: '100%', 
-                height: '2px', 
-                backgroundColor: colors.peach, 
-                }}
-            />
+
             <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <ClearSearchButton onClick={clearInput}>
+                <ClearSearchLink onClick={clearInput}>
                 Clear Search
-                </ClearSearchButton>
+                </ClearSearchLink>
             </Box>
         </Box>
     );
