@@ -14,11 +14,12 @@ import IconTextLabel from "./IconTextLabel.tsx";
 import PersonIcon from "@mui/icons-material/Person";
 import AlbumIcon from "@mui/icons-material/Album";
 import { baseGlow, glowHoverStyle } from "../theme.ts";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { Theme } from "@mui/material/styles";
+import { AppContext } from "../AppContextProvider.tsx";
 
 // Custom styling for the Music Player Card component
 const MusicPlayerCard = styled(Card)(({ theme }) => ({
@@ -54,24 +55,34 @@ interface MusicPlayerProps {
 
 /**
  * MusicPlayer Component
- *
- * @param songData: Object containing data of the selected song (song title, artists, album, album cover, and song audio)
  */
-export const MusicPlayer = ({ songData }: MusicPlayerProps) => {
-  // const { songAudioSrc, openInSpotifyUrl } = songData;
+export const MusicPlayer = () => {
+  const { currentPreviewSong } = useContext(AppContext);
 
-  const isSongSelected = songData !== undefined;
+  console.log("WOW", currentPreviewSong);
 
-  const isPreviewAvailable =
-    isSongSelected && !!songData.songAudioSrc && !songData.openInSpotifyUrl;
-  const isPreviewUnavailable =
-    isSongSelected && !!songData.openInSpotifyUrl && !songData.songAudioSrc;
+  // const isSongSelected = currentPreviewSong !== undefined;
+  //
+  // const isPreviewAvailable =
+  //   isSongSelected &&
+  //   !!currentPreviewSong.songAudioSrc &&
+  //   !currentPreviewSong.openInSpotifyUrl;
+  // const isPreviewUnavailable =
+  //   isSongSelected &&
+  //   !!currentPreviewSong.openInSpotifyUrl &&
+  //   !currentPreviewSong.songAudioSrc;
 
   return (
     <MusicPlayerCard elevation={5}>
-      {!isSongSelected && <IdleMusicPlayerContent />}
-      {isPreviewAvailable && <ActiveMusicPlayerContent songData={songData} />}
-      {isPreviewUnavailable && <PreviewUnavailableMusicPlayerContent />}
+      {currentPreviewSong ? (
+        currentPreviewSong.songAudioSrc ? (
+          <ActiveMusicPlayerContent />
+        ) : (
+          <UnavailableMusicPlayerContent />
+        )
+      ) : (
+        <IdleMusicPlayerContent />
+      )}
     </MusicPlayerCard>
   );
 };
@@ -95,35 +106,14 @@ const IdleMusicPlayerContent = () => {
   );
 };
 
-// /* Prop type for the SongMusicPlayerContent Component */
-// interface SongMusicPlayerContentProps {
-//   songData: {
-//     songTitle: string;
-//     artists: string;
-//     album: string;
-//     albumArtSrc: string;
-//     songAudioSrc?: string | undefined;
-//     openInSpotifyUrl?: string | undefined;
-//   };
-// }
-//
-// const SongMusicPlayerContent = ({ songData }: SongMusicPlayerContentProps) => {
-//   const { songAudioSrc } = songData;
-//
-//   // const isPreviewAvailable =
-//
-//   return (
-//     <>
-//       {songAudioSrc !== undefined ? (
-//         <ActiveMusicPlayerContent songData={songData} />
-//       ) : (
-//         <PreviewUnavailableMusicPlayerContent />
-//       )}
-//     </>
-//   );
-// };
+const UnavailableMusicPlayerContent = () => {
+  const { currentPreviewSong } = useState(AppContext);
 
-const PreviewUnavailableMusicPlayerContent = () => {
+  const handleOpenSpotifyLink = () => {
+    console.log("HI", currentPreviewSong.openInSpotifyUrl);
+    // window.open(currentPreviewSong.openInSpotifyUrl, "_blank", "noreferrer");
+  };
+
   return (
     <>
       <MusicPlayerInfo>
@@ -135,6 +125,7 @@ const PreviewUnavailableMusicPlayerContent = () => {
           color="peach"
           endIcon={<OpenInNewIcon />}
           sx={{ ...glowHoverStyle }}
+          onClick={handleOpenSpotifyLink}
         >
           Open in Spotify Web
         </Button>
@@ -165,27 +156,15 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
   ...glowHoverStyle,
 }));
 
-/* Prop type for the ActiveMusicPlayer Component */
-interface ActiveMusicPlayerProps {
-  songData: {
-    songTitle: string;
-    artists: string;
-    album: string;
-    albumArtSrc: string;
-    songAudioSrc: string | undefined;
-    openInSpotifyUrl: string | undefined;
-  };
-}
-
 /**
  * ActiveMusicPlayerContent Component
  *
  * @param songData: Object containing data of the selected song (song title, artists, album, album cover, and song audio)
  */
-const ActiveMusicPlayerContent = ({ songData }: ActiveMusicPlayerProps) => {
-  const { songTitle, artists, album, albumArtSrc, songAudioSrc } = songData;
+const ActiveMusicPlayerContent = () => {
+  const { currentPreviewSong } = useState(AppContext);
   const [isPlaying, setIsPlaying] = useState(false);
-  const songAudioRef = useRef(new Audio(songAudioSrc));
+  const songAudioRef = useRef(new Audio(currentPreviewSong.songAudioSrc));
 
   // handle switching playing and pausing the song audio
   const handleTogglePlaying = () => {
@@ -224,30 +203,30 @@ const ActiveMusicPlayerContent = ({ songData }: ActiveMusicPlayerProps) => {
 
   return (
     <>
-      <Box component="img" src={albumArtSrc} height="100%" />
+      <Box component="img" src={currentPreviewSong.albumArtSrc} height="100%" />
       <MusicPlayerInfo flexGrow={1}>
         <CustomTypography
-          tooltip={songTitle}
+          tooltip={currentPreviewSong.songTitle}
           variant="smSongTitle"
           color="peach.main"
           num_lines={2}
           mb={0.5}
         >
-          {songTitle}
+          {currentPreviewSong.songTitle}
         </CustomTypography>
         <IconTextLabel
           variant="smSongSubtitle"
           color="pink.main"
           icon={<PersonIcon sx={{ color: "peach.main" }} fontSize="small" />}
         >
-          {artists}
+          {currentPreviewSong.artists}
         </IconTextLabel>
         <IconTextLabel
           variant="smSongSubtitle"
           color="pink.main"
           icon={<AlbumIcon sx={{ color: "peach.main" }} fontSize="small" />}
         >
-          {album}
+          {currentPreviewSong.album}
         </IconTextLabel>
       </MusicPlayerInfo>
       <Box

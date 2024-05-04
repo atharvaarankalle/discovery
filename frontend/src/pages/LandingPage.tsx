@@ -2,7 +2,7 @@ import { AppBar, Box, Button, Slide, styled, Typography } from "@mui/material";
 import starsBackground from "../assets/stars_background.jpg";
 import { DiscoveryLogoWithtext } from "../components/Logos.tsx";
 import { baseGlow, landingBackground } from "../theme.ts";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import {
   ForegroundPlanet,
   Planet1,
@@ -10,8 +10,13 @@ import {
   Planet3,
   Planet4,
 } from "../components/Planets.tsx";
-import {MusicPlayer} from "../components/MusicPlayer.tsx";
+import { MusicPlayer } from "../components/MusicPlayer.tsx";
 import cd_image from "../assets/cd_image.png";
+import sound from "../assets/spongebob-boowomp.mp3";
+import sound1 from "../assets/stellar-echoes-202315.mp3";
+import sound2 from "../assets/boop.mp3";
+import { AppContext, AppContextProvider } from "../AppContextProvider.tsx";
+import caroline from "../assets/prettyinpossible.m4a";
 
 // Example prompts to loop through in the AnimatedPrompt component
 const homePrompts = [
@@ -65,17 +70,19 @@ const LandingPageContent = styled("div")({
 /**
  * LandingPage to contain all components within the landing page
  */
-const LandingPage = () => {
+const LandingPage1 = () => {
   return (
     <LandingPageBackground>
       <MusicPlayer
-        songData={{
-          songTitle: "hahah",
-          artists: "huhuhu",
-          album: "wdfjkbd",
-          albumArtSrc: cd_image,
-          openInSpotifyUrl: 
-        }}
+      // songData={{
+      //   songTitle: "hahah",
+      //   artists: "huhuhu",
+      //   album: "wdfjkbd",
+      //   albumArtSrc: cd_image,
+      //   songAudioSrc: undefined,
+      //   openInSpotifyUrl: "undefined",
+      // }}
+      // songData={undefined}
       />
       <LandingPageContent>
         <TopBar />
@@ -105,6 +112,17 @@ const LandingPage = () => {
  * TopBar Component to display logo and LOG IN and SIGN IN buttons
  */
 const TopBar = () => {
+  const { handlePreviewSong } = useContext(AppContext);
+
+  const songAttempt = {
+    songTitle: "hahah",
+    artists: "huhuhu",
+    album: "wdfjkbd",
+    albumArtSrc: cd_image,
+    songAudioSrc: sound,
+    openInSpotifyUrl: "www",
+  };
+
   return (
     <AppBar
       position="fixed"
@@ -119,7 +137,11 @@ const TopBar = () => {
       <Box flexGrow={1}>
         <DiscoveryLogoWithtext width="200px" />
       </Box>
-      <StyledButton variant="contained" color="lightPeach">
+      <StyledButton
+        variant="contained"
+        color="lightPeach"
+        onClick={() => handlePreviewSong(songAttempt)}
+      >
         LOG IN
       </StyledButton>
       <StyledButton variant="contained" color="greyBlue">
@@ -165,6 +187,14 @@ const AnimatedPrompt = () => {
         }}
       />
     </Box>
+  );
+};
+
+const LandingPage = () => {
+  return (
+    <AppContextProvider>
+      <LandingPage1 />
+    </AppContextProvider>
   );
 };
 

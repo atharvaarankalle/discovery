@@ -6,21 +6,26 @@ interface AppContextProviderProps {
   children: ReactNode;
 }
 
+// TODO: Set currentPreviewSong back to initial on log out OR log in
 export function AppContextProvider({ children }: AppContextProviderProps) {
   // For storing the song that the user has selected to preview as a state over the discovery feed and user profile
   const [currentPreviewSong, setCurrentPreviewSong] = useLocalStorage(
     "currentPreviewSong",
-    undefined,
+    {},
   );
 
-  function handlePreviewSong(song: {
-    songTitle: string;
-    artists: string;
-    album: string;
-    albumArtSrc: string;
-    songAudioSrc: string | undefined;
-    openInSpotifyUrl: string | undefined;
-  }) {
+  function handlePreviewSong(
+    song:
+      | {
+          songTitle: string;
+          artists: string;
+          album: string;
+          albumArtSrc: string;
+          songAudioSrc: string | undefined;
+          openInSpotifyUrl: string | undefined;
+        }
+      | undefined,
+  ) {
     setCurrentPreviewSong(song);
   }
 
