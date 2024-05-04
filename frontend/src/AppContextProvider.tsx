@@ -1,14 +1,5 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
-
-/* SongData object prop types */
-export interface SongData {
-  songTitle: string;
-  artists: string;
-  album: string;
-  albumArtSrc: string;
-  songAudioSrc: string | undefined;
-  openInSpotifyUrl: string | undefined;
-}
+import { SongData } from "./utils/interfaces.ts";
 
 /* AppContext prop types */
 interface AppContextType {
