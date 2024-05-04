@@ -66,7 +66,7 @@ export const Planet1 = ({ width, height, top, right, left }: PlanetProps) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setIsGlow((prevIsGlow) => !prevIsGlow);
-    }, 3000); // Change the prompt every second
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [setIsGlow]);
@@ -140,7 +140,7 @@ export const Planet2 = ({ width, height, top, right, left }: PlanetProps) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setIsGlow((prevIsGlow) => !prevIsGlow);
-    }, 3000); // Change the prompt every second
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [setIsGlow]);
