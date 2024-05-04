@@ -203,13 +203,17 @@ async function updateStreaks(
 
   // Get the date for the prompt
   const lastPrompt = await Prompt.findById(lastSuggestedSong.prompt);
-  const lastSuggestedSongDate: Date | undefined = lastPrompt?.date;
+  const lastSuggestedSongDate = lastPrompt?.date as Date | undefined;
 
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
 
   // Check if the date of the last suggested song is yesterday
-  if (lastSuggestedSongDate === yesterday) {
+  if (
+    lastSuggestedSongDate?.getFullYear === yesterday.getFullYear &&
+    lastSuggestedSongDate?.getMonth === yesterday.getMonth &&
+    lastSuggestedSongDate?.getDate === yesterday.getDate
+  ) {
     user.streakCount++;
     user.save();
   }
