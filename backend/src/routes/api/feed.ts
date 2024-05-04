@@ -6,6 +6,7 @@ import {
   ISuggestedSong,
   SuggestedSong,
 } from "../../schemas/SuggestedSongSchema";
+import { getTodaysDate } from "../../utils/DateUtils";
 
 const router: Router = express.Router();
 
@@ -30,7 +31,7 @@ router.get(
   ) => {
     try {
       const date: Date = new Date(
-        req.query.date ?? new Date().setUTCHours(0, 0, 0, 0) // Uses the date in body if specified, otherwise get's today's date.
+        req.query.date ?? getTodaysDate() // Uses the date in body if specified, otherwise get's today's date.
       );
       const prompt: IPrompt | null = await Prompt.findOne({ date });
 
