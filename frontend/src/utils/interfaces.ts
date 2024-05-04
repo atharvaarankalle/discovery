@@ -1,4 +1,8 @@
-/* SongData object prop types */
+/*
+ * Commonly used interfaces for proptypes
+ */
+
+// SongData object prop types
 export interface SongData {
   songTitle: string;
   artists: string;
