@@ -10,7 +10,6 @@ import {
   Planet3,
   Planet4,
 } from "../components/Planets.tsx";
-import { MusicPlayer } from "../components/MusicPlayer.tsx";
 
 // Example prompts to loop through in the AnimatedPrompt component
 const homePrompts = [
@@ -67,7 +66,6 @@ const LandingPageContent = styled("div")({
 const LandingPage = () => {
   return (
     <LandingPageBackground>
-      <MusicPlayer />
       <LandingPageContent>
         <TopBar />
         <Box
