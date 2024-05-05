@@ -1,8 +1,7 @@
-import { Box, Button, Drawer, DrawerProps, TextField, styled, useMediaQuery } from "@mui/material";
+import { Box, Button, Drawer, DrawerProps, TextField, styled } from "@mui/material";
 import CustomTypography from "./CustomTypography";
 import SongCard from "./SongCard";
 import SendIcon from '@mui/icons-material/Send';
-import { Theme, useTheme } from "@mui/material/styles";
 
 /* Custom styles applied to MUI Drawer */
 const StyledDrawer = styled(Drawer)(() => ({
@@ -12,15 +11,12 @@ const StyledDrawer = styled(Drawer)(() => ({
 }));
 
 /* Custom styles applied to MUI Box to be the main wrapper for the content in PromptSideDrawer */
-const StyledBox = styled(Box)(({ theme }) => ({
+const StyledBox = styled(Box)(() => ({
+    width: "30rem",
     display: "flex",
     flexDirection: "column",
     padding: "4rem 2rem",
-    gap: "0.5rem",
-    [theme.breakpoints.up("md")]: {
-        paddingTop: "7rem",
-        width: "30rem"
-    }
+    gap: "0.5rem"
 }));
 
 /* Custom styles applied to MUI TextField */
@@ -73,11 +69,8 @@ interface PromptSideDrawerPropTypes extends DrawerProps {
  * @prop songData: object containing song data such as song title, artist, album, and album art source
  */
 const PromptSideDrawer = ({ drawerOpen, toggleDrawer, songData }: PromptSideDrawerPropTypes) => {
-    const theme: Theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
     return (
-        <StyledDrawer open={drawerOpen} onClose={() => toggleDrawer(false)} anchor={isMobile ? 'bottom' : 'right'} hideBackdrop>
+        <StyledDrawer open={drawerOpen} onClose={() => toggleDrawer(false)} anchor="right" hideBackdrop>
             <StyledBox>
                 <CustomTypography variant="h4" textAlign="left">SELECTED TRACK:</CustomTypography>
                 <SongCard songData={songData} type="small" />
