@@ -169,10 +169,7 @@ router.put("/:id/suggested", async (req: Request, res: Response) => {
     });
     await suggestedSong.save();
 
-    // Calculate streaks
-    const lastSuggestedSong =
-      user.suggestedSongs[user.suggestedSongs.length - 1];
-    updateStreaks(user, lastSuggestedSong);
+    await updateStreaks(user);
 
     // Append the new suggested song to the user's suggested songs
     user.suggestedSongs.push(suggestedSong._id);
@@ -189,18 +186,18 @@ router.put("/:id/suggested", async (req: Request, res: Response) => {
 export default router;
 
 // Updates the streak count if the last suggested song date is yesterday
-async function updateStreaks(
-  user: IUser,
-  lastSuggestedSongId: Schema.Types.ObjectId
-) {
-  // user has never suggested a song
-  if (!lastSuggestedSongId) {
+async function updateStreaks(user: IUser) {
+  // User has never suggested a song
+  if (user.suggestedSongs.length == 0) {
     user.streakCount = 1;
   }
 
+  const lastSuggestedSongId =
+    user.suggestedSongs[user.suggestedSongs.length - 1];
+
   const lastSuggestedSong = await SuggestedSong.findById(lastSuggestedSongId);
   if (!lastSuggestedSong) {
-    return; // suggested song is not found
+    throw new Error("Last suggested song not found");
   }
 
   // Get the date for the prompt
