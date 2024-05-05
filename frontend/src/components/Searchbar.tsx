@@ -73,7 +73,7 @@ export const Searchbar = () => {
         <SearchIcon sx={{ color: colors.peach, fontSize: "2.5rem" }} />
         <StyledTextField
           variant="filled"
-          label="search"
+          label="Search"
           color="peach"
           value={inputValue}
           onChange={handleInputChange}
