@@ -6,9 +6,9 @@ import {
   SuggestedSong,
 } from "../../schemas/SuggestedSongSchema";
 import { Schema } from "mongoose";
-import { IPrompt, Prompt } from "../../schemas/PromptSchema";
-import { compareDates } from "../../utils/DateUtils";
 import { Prompt } from "../../schemas/PromptSchema";
+import { compareDates, getTodaysDate } from "../../utils/DateUtils";
+import { assert } from "console";
 
 const router: Router = express.Router();
 
@@ -137,6 +137,51 @@ router.delete("/:id/liked/:songId", async (req: Request, res: Response) => {
     return res.status(500).json({
       message: `Error deleting song from user's liked songs: ${error}`,
     });
+  }
+});
+
+// GET today's suggested song from a user
+router.get("/:id/suggested/today", async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.id;
+    const user: IUser | null = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Find the date of the last suggested song
+    if (user.suggestedSongs.length == 0) {
+      return res.status(404).json({ message: "User has no suggested songs" });
+    }
+    const lastSuggestedSongId =
+      user.suggestedSongs[user.suggestedSongs.length - 1];
+
+    const lastSuggestedSong = await SuggestedSong.findById(lastSuggestedSongId);
+    if (!lastSuggestedSong) {
+      return res
+        .status(404)
+        .json({ message: "Last suggested song is not found" });
+    }
+    // Get the date for the prompt
+    const lastPrompt = await Prompt.findById(lastSuggestedSong.prompt);
+    const lastSuggestedSongDate = lastPrompt?.date as Date | Schema.Types.Date;
+
+    if (
+      compareDates({ date1: lastSuggestedSongDate, date2: getTodaysDate() })
+    ) {
+      return res.json(lastSuggestedSong);
+    } else {
+      return res
+        .status(404)
+        .json({ message: "Last suggested song is not from today" });
+    }
+  } catch (error) {
+    return res
+      .status(500)
+      .json({
+        message: `Error fetching user's today's suggested song: ${error}`,
+      });
   }
 });
 
