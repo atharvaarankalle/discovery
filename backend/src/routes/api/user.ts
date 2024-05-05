@@ -8,7 +8,6 @@ import {
 import { Schema } from "mongoose";
 import { Prompt } from "../../schemas/PromptSchema";
 import { compareDates, getTodaysDate } from "../../utils/DateUtils";
-import { assert } from "console";
 
 const router: Router = express.Router();
 
@@ -177,11 +176,9 @@ router.get("/:id/suggested/today", async (req: Request, res: Response) => {
         .json({ message: "Last suggested song is not from today" });
     }
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        message: `Error fetching user's today's suggested song: ${error}`,
-      });
+    return res.status(500).json({
+      message: `Error fetching user's today's suggested song: ${error}`,
+    });
   }
 });
 
@@ -235,6 +232,7 @@ async function updateStreaks(user: IUser) {
   // User has never suggested a song
   if (user.suggestedSongs.length == 0) {
     user.streakCount = 1;
+    return;
   }
 
   const lastSuggestedSongId =
@@ -255,9 +253,9 @@ async function updateStreaks(user: IUser) {
   // Check if the date of the last suggested song is yesterday
   if (compareDates({ date1: lastSuggestedSongDate, date2: yesterday })) {
     user.streakCount++;
-    await user.save();
   } else {
     user.streakCount = 0;
-    await user.save();
   }
+  await user.save();
+  return;
 }
