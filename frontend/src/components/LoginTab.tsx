@@ -10,7 +10,7 @@ const LoginTab = () => {
     <>
       <CustomTextField label="Email" />
       <CustomTextField label="Password" type="password" />
-      <StyledButton variant="contained" color="lightPeach" fullWidth={false}>
+      <StyledButton variant="contained" color="lightPeach">
         LOG IN
       </StyledButton>
     </>
