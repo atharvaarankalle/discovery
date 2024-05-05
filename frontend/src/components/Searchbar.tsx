@@ -50,9 +50,7 @@ export const Searchbar = () => {
       >
         <SearchIcon sx={{ color: colors.peach, fontSize: "2.5rem" }} />
         <CustomTextField
-          variant="filled"
           label="Search"
-          color="peach"
           value={inputValue}
           onChange={handleInputChange}
         />

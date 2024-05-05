@@ -25,7 +25,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
 }));
 
 const CustomTextField = (props: TextFieldProps) => {
-  return <StyledTextField {...props} />;
+  return <StyledTextField variant="filled" color="peach" {...props} />;
 };
 
 export default CustomTextField;

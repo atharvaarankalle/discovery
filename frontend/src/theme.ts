@@ -10,6 +10,7 @@ declare module "@mui/material/styles" {
     purple: Palette["primary"];
     greyBlue: Palette["primary"];
     navyBlue: Palette["primary"];
+    darkGrey: Palette["primary"];
   }
 
   interface PaletteOptions {
@@ -20,6 +21,7 @@ declare module "@mui/material/styles" {
     purple?: PaletteOptions["primary"];
     greyBlue?: PaletteOptions["primary"];
     navyBlue?: PaletteOptions["primary"];
+    darkGrey?: PaletteOptions["primary"];
   }
 }
 
@@ -65,6 +67,7 @@ export const colors = {
   navyBlue: "#272747",
   darkestBlue: "#121229",
   white: "#FFFFFF",
+  darkGrey: "#272727",
 };
 
 declare module "@mui/material/styles" {
@@ -132,6 +135,10 @@ export const theme = createTheme({
     },
     navyBlue: {
       main: colors.navyBlue,
+      contrastText: colors.lightPeach,
+    },
+    darkGrey: {
+      main: colors.darkGrey,
       contrastText: colors.lightPeach,
     },
   },
