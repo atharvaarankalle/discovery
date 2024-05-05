@@ -1,12 +1,12 @@
 import {
   Card,
-  CardProps,
   CardActionArea,
   CardActions,
   CardContent,
   CardMedia,
-  styled,
   CardMediaProps,
+  CardProps,
+  styled,
   Theme,
   useTheme,
 } from "@mui/material";
@@ -17,6 +17,7 @@ import CdImage from "../assets/cd_image.png";
 import IconTextLabel from "./IconTextLabel";
 import LikeButton from "./LikeButton";
 import { useState } from "react";
+import { SongData } from "../utils/interfaces.ts";
 
 // Custom styles applied to MUI CardMedia to be the Album used in  hover animation
 const AlbumArt = styled(CardMedia)<CardMediaProps>({
@@ -59,30 +60,21 @@ const StyledCard = styled(Card)(({ theme }) => ({
 
 /* Prop types declaration for SongCardBase */
 export interface SongCardBasePropTypes extends CardProps {
-  songData: {
-    songTitle: string;
-    artist: string;
-    album: string;
-    albumArtSrc: string;
-  };
+  songData: SongData;
   type: "small" | "medium" | "large";
   onCardClick?: () => void;
 }
 
-/** 
+/**
  * SongCardBase Component
- * 
-@prop songData: an object containing song data such as:
-      songTitle: title of the song
-      artist: artist/s of the song
-      album: album the song is from
-      albumArtSrc: url link to the album art image url 
-@prop type: required prop with value of "small", "medium" or "large", indicating what SongCard type to render
-@prop onCardClick: the onClick function for the card area. optional prop if type='small'
+ *
+ @prop songData: an object containing song data (see interfaces.ts for more information)
+ @prop type: required prop with value of "small", "medium" or "large", indicating what SongCard type to render
+ @prop onCardClick: the onClick function for the card area. optional prop if type='small'
 
-**/
+ **/
 const SongCard = ({ songData, type, onCardClick }: SongCardBasePropTypes) => {
-  const { songTitle, artist, album, albumArtSrc } = songData;
+  const { songTitle, artists, album, albumArtSrc } = songData;
   const [isSelected, setIsSelected] = useState<boolean>(false);
   const theme: Theme = useTheme(); // importing theme object to use in sx prop
 
@@ -93,7 +85,7 @@ const SongCard = ({ songData, type, onCardClick }: SongCardBasePropTypes) => {
   };
 
   // deciding card height based on what size (variant) it is
-  let cardHeight: string = "7rem";
+  let cardHeight: string;
   switch (type) {
     case "small":
       cardHeight = "5rem";
@@ -159,7 +151,7 @@ const SongCard = ({ songData, type, onCardClick }: SongCardBasePropTypes) => {
           </CustomTypography>
 
           <IconTextLabel
-            tooltip={artist}
+            tooltip={artists}
             variant={type === "small" ? "smSongSubtitle" : "mdSongSubtitle"}
             color={"peach.main"}
             num_lines={1}
@@ -167,7 +159,7 @@ const SongCard = ({ songData, type, onCardClick }: SongCardBasePropTypes) => {
               <PersonIcon sx={{ color: "secondary.main" }} fontSize="small" />
             }
           >
-            {artist}
+            {artists}
           </IconTextLabel>
 
           <IconTextLabel

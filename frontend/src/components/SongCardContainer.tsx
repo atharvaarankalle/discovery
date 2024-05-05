@@ -2,6 +2,7 @@ import { Box, Grid, styled, Typography } from "@mui/material";
 import SongCard from "./SongCard.tsx";
 import Pagination from "@mui/material/Pagination";
 import { ChangeEvent, useState } from "react";
+import { SongData } from "../utils/interfaces.ts";
 
 const StyledPagination = styled(Pagination)(({ theme }) => ({
   "& .MuiPaginationItem-root": {
@@ -20,7 +21,11 @@ const StyledPagination = styled(Pagination)(({ theme }) => ({
     },
 }));
 
-export const SavedSongsContainer = ({ songs }) => {
+interface SongContainerProps {
+  songs?: SongData[];
+}
+
+export const SavedSongsContainer = ({ songs }: SongContainerProps) => {
   return (
     <SongCardContainer
       songs={songs}
@@ -32,7 +37,7 @@ export const SavedSongsContainer = ({ songs }) => {
   );
 };
 
-export const SongSelectionContainer = ({ songs }) => {
+export const SongSelectionContainer = ({ songs }: SongContainerProps) => {
   return (
     <SongCardContainer
       songs={songs}
@@ -44,25 +49,39 @@ export const SongSelectionContainer = ({ songs }) => {
   );
 };
 
+interface SongCardContainerProps {
+  songs?: SongData[];
+  itemsPerPage: number;
+  songCardType: "small" | "medium" | "large";
+  height: string | number;
+  noDataMessage: string;
+}
+
 const SongCardContainer = ({
-  songs = null,
+  songs = undefined,
   itemsPerPage,
   songCardType,
   height,
   noDataMessage,
-}) => {
+}: SongCardContainerProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = songs ? Math.ceil(songs.length / itemsPerPage) : 0;
 
-  const getSongsToDisplay = (songList, currentPage, itemsPerPage) => {
-    return songList.slice(
-      (currentPage - 1) * itemsPerPage,
-      currentPage * itemsPerPage,
-    );
+  const getSongsToDisplay = (
+    songList: SongData[] | undefined,
+    currentPage: number,
+    itemsPerPage: number,
+  ) => {
+    return songList
+      ? songList.slice(
+          (currentPage - 1) * itemsPerPage,
+          currentPage * itemsPerPage,
+        )
+      : undefined;
   };
 
   const [pageContents, setPageContents] = useState(
-    songs ? getSongsToDisplay(songs, currentPage, itemsPerPage) : null,
+    songs ? getSongsToDisplay(songs, currentPage, itemsPerPage) : undefined,
   );
 
   const handleChangePage = (e: ChangeEvent<unknown>, pageNumber: number) => {
@@ -108,7 +127,17 @@ const SongCardContainer = ({
   );
 };
 
-const SongCardGrid = ({ pageContents, songCardType, noDataMessage }) => {
+interface SongCardGridProps {
+  pageContents?: SongData[];
+  songCardType: "small" | "medium" | "large";
+  noDataMessage: string;
+}
+
+const SongCardGrid = ({
+  pageContents,
+  songCardType,
+  noDataMessage,
+}: SongCardGridProps) => {
   if (!pageContents) {
     return (
       <Box
@@ -124,20 +153,10 @@ const SongCardGrid = ({ pageContents, songCardType, noDataMessage }) => {
   return (
     <Grid container spacing={3}>
       {pageContents.map((songData, index) => (
-        <SongCardItem
-          key={index}
-          songData={songData}
-          songCardType={songCardType}
-        />
+        <Grid item xs={12} md={6} key={index}>
+          <SongCard songData={songData} type={songCardType} />
+        </Grid>
       ))}
-    </Grid>
-  );
-};
-
-const SongCardItem = ({ songData, songCardType }) => {
-  return (
-    <Grid item xs={12} md={6}>
-      <SongCard songData={songData} type={songCardType} />
     </Grid>
   );
 };
