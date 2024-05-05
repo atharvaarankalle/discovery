@@ -5,7 +5,7 @@ import planet1 from "../assets/planet_1.svg";
 import planet2 from "../assets/planet_2.svg";
 import planet3 from "../assets/planet_3.svg";
 import planet4 from "../assets/planet_4.svg";
-import { FC } from "react";
+import { useEffect, useState } from "react";
 
 /**
  * ForegroundPlanet Component
@@ -61,6 +61,16 @@ interface PlanetProps {
  * @param left: position of the planet relative to parent's left boundary
  */
 export const Planet1 = ({ width, height, top, right, left }: PlanetProps) => {
+  const [isGlow, setIsGlow] = useState(true);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsGlow(!isGlow);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [setIsGlow]);
+
   return (
     <Box
       sx={{
@@ -78,6 +88,8 @@ export const Planet1 = ({ width, height, top, right, left }: PlanetProps) => {
           height: "100%",
           position: "absolute",
           mixBlendMode: "hard-light",
+          opacity: isGlow ? 1 : 0.3,
+          transition: "3s",
           background:
             "radial-gradient(50% 50% at 50% 50%, #E79DC3 44%, #D782CF 64%, #9C5AA6 87.5%, rgba(156, 90, 166, 0) 100%)",
         }}
@@ -122,13 +134,17 @@ export const Planet1 = ({ width, height, top, right, left }: PlanetProps) => {
  * @param right: position of the planet relative to parent's right boundary
  * @param left: position of the planet relative to parent's left boundary
  */
-export const Planet2: FC<PlanetProps> = ({
-  width,
-  height,
-  top,
-  right,
-  left,
-}) => {
+export const Planet2 = ({ width, height, top, right, left }: PlanetProps) => {
+  const [isGlow, setIsGlow] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsGlow((prevIsGlow) => !prevIsGlow);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [setIsGlow]);
+
   return (
     <Box
       sx={{
@@ -154,6 +170,21 @@ export const Planet2: FC<PlanetProps> = ({
         }}
       />
       <Box
+        sx={{
+          width: "100%",
+          height: "100%",
+          position: "absolute",
+          mixBlendMode: "hard-light",
+          opacity: isGlow ? 1 : 0.5,
+          transition: "3s",
+          top: "50%",
+          left: "47%",
+          transform: "translate(-50%, -50%)",
+          background:
+            "radial-gradient(50% 50% at 50% 50%, #E79DC3 49.8%, #D782CF 68.8%, #9C5AA6 90.3%, rgba(128, 128, 135, 0) 100%)",
+        }}
+      />
+      <Box
         component="img"
         src={planet2}
         sx={{
@@ -163,6 +194,8 @@ export const Planet2: FC<PlanetProps> = ({
           top: "50%",
           left: "50%",
           mixBlendMode: "hard-light",
+          opacity: isGlow ? 1 : 0.7,
+          transition: "3s",
           transform: "translate(-50%, -50%)",
         }}
       />
@@ -179,13 +212,7 @@ export const Planet2: FC<PlanetProps> = ({
  * @param right: position of the planet relative to parent's right boundary
  * @param left: position of the planet relative to parent's left boundary
  */
-export const Planet3: FC<PlanetProps> = ({
-  width,
-  height,
-  top,
-  right,
-  left,
-}) => {
+export const Planet3 = ({ width, height, top, right, left }: PlanetProps) => {
   return (
     <Box
       sx={{
@@ -236,13 +263,7 @@ export const Planet3: FC<PlanetProps> = ({
  * @param right: position of the planet relative to parent's right boundary
  * @param left: position of the planet relative to parent's left boundary
  */
-export const Planet4: FC<PlanetProps> = ({
-  width,
-  height,
-  top,
-  right,
-  left,
-}) => {
+export const Planet4 = ({ width, height, top, right, left }: PlanetProps) => {
   return (
     <Box
       component="img"
