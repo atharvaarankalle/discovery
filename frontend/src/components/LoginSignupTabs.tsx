@@ -2,8 +2,6 @@ import { Box, Tab, Tabs, styled, Theme, useTheme } from "@mui/material";
 import { ReactNode, SyntheticEvent, useState } from "react";
 import { baseGlow } from "../theme";
 
-type TabsTypes = "login" | "signup";
-
 const StyledLoginSignup = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.navyBlue.main,
   color: theme.palette.lightPeach.main,
@@ -24,12 +22,18 @@ const StyledTab = styled(Tab)(({ theme }) => ({
   },
 }));
 
-const StyledTabContent = styled(Box)(({ theme }) => ({
+const StyledTabContent = styled(Box)({
   padding: "2em",
-}));
+});
 
-const LoginSignupTabs = () => {
-  const [currentTabValue, setCurrentTabValue] = useState<TabsTypes>("login");
+type TabsTypes = "login" | "signup";
+
+type LoginSignupTabsProps = {
+  initialTab?: TabsTypes;
+};
+
+const LoginSignupTabs = ({ initialTab = "login" }: LoginSignupTabsProps) => {
+  const [currentTabValue, setCurrentTabValue] = useState<TabsTypes>(initialTab);
   const theme: Theme = useTheme();
 
   const handleTabChange = (event: SyntheticEvent, newValue: TabsTypes) => {
