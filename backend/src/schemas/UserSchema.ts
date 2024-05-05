@@ -22,7 +22,7 @@ const userSchema = new Schema<IUser>(
     displayName: String,
     password: {
       type: String,
-      required: [true, "Username is required"],
+      required: [true, "Password is required"],
     },
     accountCreationDate: {
       type: Date,

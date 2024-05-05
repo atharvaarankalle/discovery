@@ -28,7 +28,7 @@ export const authenticateToken: RequestHandler = (
   next: NextFunction
 ) => {
   // if req is made to login or signup endpoints, skip auth token verification
-  if (req.path === "/login" || req.path === "/signup") {
+  if (req.path === "/auth/login" || req.path === "/auth/signup") {
     return next();
   }
 
