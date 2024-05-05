@@ -5,11 +5,11 @@ import CustomTypography from "./CustomTypography";
 import IconTextLabel from "./IconTextLabel";
 import LogoutIcon from '@mui/icons-material/Logout';
 
+/* Custom styles applied to MUI Menu */
 const StyledMenu = styled(Menu)(({ theme }) => ({
     "& .MuiPaper-root": {
         backgroundColor: theme.palette.navyBlue.main,
-        borderRadius: "0.7rem",
-        width: "6%"
+        borderRadius: "0.7rem"
     },
     "& .MuiMenuItem-root": {
         "&:hover": {
@@ -18,12 +18,19 @@ const StyledMenu = styled(Menu)(({ theme }) => ({
     },
 }));
 
+/* Prop types declaration for NavBarDropdownMenu */
 interface NavBarDropdownMenuPropTypes {
-    profilePictureSrc?: string;
     username: string;
+    profilePictureSrc?: string;
 }
 
-const NavBarDropdownMenu = ({ profilePictureSrc, username }: NavBarDropdownMenuPropTypes) => {
+/**
+ * NavBarDropdownMenu Component
+ * 
+ * @prop username: username of the user to display in the dropdown menu
+ * @prop profilePictureSrc: optional prop for the source of the user's profile picture
+ */
+const NavBarDropdownMenu = ({ username, profilePictureSrc }: NavBarDropdownMenuPropTypes) => {
     const theme: Theme = useTheme();
     const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
 
@@ -59,7 +66,7 @@ const NavBarDropdownMenu = ({ profilePictureSrc, username }: NavBarDropdownMenuP
                 </MenuItem>
                 <Divider sx={{ backgroundColor: `${theme.palette.pink.main}40` }} />
                 <MenuItem>
-                    <IconTextLabel variant="body1" icon={<LogoutIcon sx={{ color: theme.palette.pink.main }} />}>Sign out</IconTextLabel>
+                    <IconTextLabel variant="body1" icon={<LogoutIcon sx={{ color: theme.palette.pink.main, mr: 1 }} />}>Sign out</IconTextLabel>
                 </MenuItem>
             </StyledMenu>
         </>
