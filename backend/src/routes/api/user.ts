@@ -8,6 +8,7 @@ import {
 import { Schema } from "mongoose";
 import { IPrompt, Prompt } from "../../schemas/PromptSchema";
 import { compareDates } from "../../utils/DateUtils";
+import { Prompt } from "../../schemas/PromptSchema";
 
 const router: Router = express.Router();
 
@@ -212,9 +213,9 @@ async function updateStreaks(
   // Check if the date of the last suggested song is yesterday
   if (compareDates({ date1: lastSuggestedSongDate, date2: yesterday })) {
     user.streakCount++;
-    user.save();
+    await user.save();
   } else {
     user.streakCount = 0;
-    user.save();
+    await user.save();
   }
 }
