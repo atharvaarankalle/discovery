@@ -1,7 +1,8 @@
-import { Box, Tab, Tabs, styled, Theme, useTheme, Button } from "@mui/material";
+import { Box, Tab, Tabs, styled, Theme, useTheme } from "@mui/material";
 import { ReactNode, SyntheticEvent, useState } from "react";
 import { baseGlow } from "../theme";
-import CustomTextField from "./CustomTextField";
+import LoginTab from "./LoginTab";
+import SignupTab from "./SignupTab";
 
 const StyledLoginSignup = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.darkGrey.main,
@@ -30,10 +31,6 @@ const StyledTabContent = styled(Box)({
   justifyContent: "space-evenly",
   alignItems: "center",
   gap: "2em",
-});
-
-const StyledButton = styled(Button)({
-  fontWeight: "bold",
 });
 
 type TabsTypes = "login" | "signup";
@@ -83,19 +80,3 @@ type TabContentProps = {
 const TabContent = ({ currentTab, tabValue, children }: TabContentProps) =>
   currentTab === tabValue && <StyledTabContent>{children}</StyledTabContent>;
 export default LoginSignupTabs;
-
-const LoginTab = () => {
-  return (
-    <>
-      <CustomTextField label="Email" />
-      <CustomTextField label="Password" type="password" />
-      <StyledButton variant="contained" color="lightPeach" fullWidth={false}>
-        LOG IN
-      </StyledButton>
-    </>
-  );
-};
-
-const SignupTab = () => {
-  return <>Sign up tab</>;
-};
