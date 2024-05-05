@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import SongCard from "./SongCard.tsx";
 import testAlbum from "../assets/It's_About_Time_(SWV_album).jpeg";
 import Pagination from "@mui/material/Pagination";
@@ -35,6 +35,156 @@ const testSongData = [
     album: "It's About Time",
     albumArtSrc: testAlbum,
   },
+  {
+    songTitle: "Weak 6",
+    artist: "SWV",
+    album: "It's About Time",
+    albumArtSrc: testAlbum,
+  },
+  {
+    songTitle: "Weak 6",
+    artist: "SWV",
+    album: "It's About Time",
+    albumArtSrc: testAlbum,
+  },
+  {
+    songTitle: "Weak 7",
+    artist: "SWV",
+    album: "It's About Time",
+    albumArtSrc: testAlbum,
+  },
+  {
+    songTitle: "Weak 8",
+    artist: "SWV",
+    album: "It's About Time",
+    albumArtSrc: testAlbum,
+  },
+  {
+    songTitle: "Weak 9",
+    artist: "SWV",
+    album: "It's About Time",
+    albumArtSrc: testAlbum,
+  },
+  {
+    songTitle: "Weak 10",
+    artist: "SWV",
+    album: "It's About Time",
+    albumArtSrc: testAlbum,
+  },
+  {
+    songTitle: "Weak 11",
+    artist: "SWV",
+    album: "It's About Time",
+    albumArtSrc: testAlbum,
+  },
+  {
+    songTitle: "Weak 12",
+    artist: "SWV",
+    album: "It's About Time",
+    albumArtSrc: testAlbum,
+  },
+  {
+    songTitle: "Weak 13",
+    artist: "SWV",
+    album: "It's About Time",
+    albumArtSrc: testAlbum,
+  },
+  {
+    songTitle: "Weak 10",
+    artist: "SWV",
+    album: "It's About Time",
+    albumArtSrc: testAlbum,
+  },
+  {
+    songTitle: "Weak 11",
+    artist: "SWV",
+    album: "It's About Time",
+    albumArtSrc: testAlbum,
+  },
+  {
+    songTitle: "Weak 12",
+    artist: "SWV",
+    album: "It's About Time",
+    albumArtSrc: testAlbum,
+  },
+  {
+    songTitle: "Weak 13",
+    artist: "SWV",
+    album: "It's About Time",
+    albumArtSrc: testAlbum,
+  },
+  {
+    songTitle: "Weak 10",
+    artist: "SWV",
+    album: "It's About Time",
+    albumArtSrc: testAlbum,
+  },
+  {
+    songTitle: "Weak 11",
+    artist: "SWV",
+    album: "It's About Time",
+    albumArtSrc: testAlbum,
+  },
+  {
+    songTitle: "Weak 12",
+    artist: "SWV",
+    album: "It's About Time",
+    albumArtSrc: testAlbum,
+  },
+  {
+    songTitle: "Weak 13",
+    artist: "SWV",
+    album: "It's About Time",
+    albumArtSrc: testAlbum,
+  },
+  {
+    songTitle: "Weak 10",
+    artist: "SWV",
+    album: "It's About Time",
+    albumArtSrc: testAlbum,
+  },
+  {
+    songTitle: "Weak 11",
+    artist: "SWV",
+    album: "It's About Time",
+    albumArtSrc: testAlbum,
+  },
+  {
+    songTitle: "Weak 12",
+    artist: "SWV",
+    album: "It's About Time",
+    albumArtSrc: testAlbum,
+  },
+  {
+    songTitle: "Weak 13",
+    artist: "SWV",
+    album: "It's About Time",
+    albumArtSrc: testAlbum,
+  },
+  {
+    songTitle: "Weak 10",
+    artist: "SWV",
+    album: "It's About Time",
+    albumArtSrc: testAlbum,
+  },
+  {
+    songTitle: "Weak 11",
+    artist: "SWV",
+    album: "It's About Time",
+    albumArtSrc: testAlbum,
+  },
+  {
+    songTitle: "Weak 12",
+    artist: "SWV",
+    album: "It's About Time",
+    albumArtSrc: testAlbum,
+  },
+  {
+    songTitle: "Weak 13",
+    artist: "SWV",
+    album: "It's About Time",
+    albumArtSrc: testAlbum,
+  },
 ];
 
 const getSongsToDisplay = (songList, currentPage, itemsPerPage) => {
@@ -58,11 +208,21 @@ const SongCardContainer = () => {
   };
 
   return (
-    <Grid container spacing={3}>
-      {pageContents.map((songData, index) => (
-        <SongCardItem key={index} songData={songData} />
-      ))}
-      <Grid item sm={12} sx={{ display: "flex", justifyContent: "center" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        height: "20rem",
+      }}
+    >
+      <SongCardGrid pageContents={pageContents} />
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
         <Pagination
           count={totalPages}
           page={currentPage}
@@ -70,7 +230,17 @@ const SongCardContainer = () => {
           size="large"
           onChange={handleChangePage}
         />
-      </Grid>
+      </Box>
+    </Box>
+  );
+};
+
+const SongCardGrid = ({ pageContents }) => {
+  return (
+    <Grid container spacing={3}>
+      {pageContents.map((songData, index) => (
+        <SongCardItem key={index} songData={songData} />
+      ))}
     </Grid>
   );
 };
