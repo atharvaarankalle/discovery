@@ -9,6 +9,9 @@ router.get("/", (req, res) => {
 });
 
 // Nested routes
+import { authenticateToken } from "./auth";
+router.use(authenticateToken);
+
 import auth from "./auth";
 router.use("/auth", auth);
 
