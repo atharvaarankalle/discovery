@@ -42,6 +42,11 @@ const MusicPlayerCard = styled(Card)(({ theme }) => ({
 
 /**
  * MusicPlayer Component
+ *
+ * Uses AppContextProvider/AppContext to access the currently selected song to preview using the useContext() hook.
+ *
+ * The preview song can be changed by using the setCurrentPreviewSong function which can be accessed through the
+ * AppContextProvider and passing through a songData object.
  */
 export const MusicPlayer = () => {
   const { currentPreviewSong } = useContext(AppContext);
@@ -63,6 +68,8 @@ export const MusicPlayer = () => {
 
 /**
  * IdleMusicPlayerContent Component
+ *
+ * Music player state where no song has been selected to preview (no songData in currentPreviewSong)
  */
 const IdleMusicPlayerContent = () => {
   return (
@@ -81,7 +88,10 @@ const IdleMusicPlayerContent = () => {
 };
 
 /**
- * IdleMusicPlayerContent Component
+ * UnavailableMusicPlayerContent Component
+ *
+ * Music player state where the song that has been selected has no preview URL available, and instead display a button
+ * link to the song on spotify
  */
 const UnavailableMusicPlayerContent = () => {
   const { currentPreviewSong } = useContext(AppContext);
@@ -134,6 +144,9 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
 
 /**
  * ActiveMusicPlayerContent Component
+ *
+ * Music player state where the song that has been selected has a preview URL available and will be able to listen to \
+ * the preview
  */
 const ActiveMusicPlayerContent = () => {
   const { currentPreviewSong } = useContext(AppContext);
