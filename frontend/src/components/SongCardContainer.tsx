@@ -1,4 +1,4 @@
-import { Box, Grid, styled } from "@mui/material";
+import { Box, Grid, styled, Typography } from "@mui/material";
 import SongCard from "./SongCard.tsx";
 import testAlbum from "../assets/It's_About_Time_(SWV_album).jpeg";
 import Pagination from "@mui/material/Pagination";
@@ -211,16 +211,44 @@ const getSongsToDisplay = (songList, currentPage, itemsPerPage) => {
   );
 };
 
-const SongCardContainer = () => {
+export const SavedSongsContainer = () => {
+  return (
+    <SongCardContainer
+      // songs={testSongData}
+      itemsPerPage={4}
+      songCardType="medium"
+      height="20rem"
+      noDataMessage="Like a song from your discovery feed to add it to your discovered songs!"
+    />
+  );
+};
+
+export const SongSelectionContainer = () => {
+  return (
+    <SongCardContainer
+      itemsPerPage={6}
+      songCardType="large"
+      height="35rem"
+      noDataMessage="Search for a track that best describes the prompt above!"
+    />
+  );
+};
+
+const SongCardContainer = ({
+  songs = undefined,
+  itemsPerPage,
+  songCardType,
+  height,
+  noDataMessage,
+}) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4;
-  const totalPages = Math.ceil(testSongData.length / itemsPerPage);
+  const totalPages = songs ? Math.ceil(songs.length / itemsPerPage) : 0;
   const [pageContents, setPageContents] = useState(
-    getSongsToDisplay(testSongData, currentPage, itemsPerPage),
+    songs ? getSongsToDisplay(songs, currentPage, itemsPerPage) : null,
   );
 
   const handleChangePage = (e: ChangeEvent<unknown>, pageNumber: number) => {
-    setPageContents(getSongsToDisplay(testSongData, pageNumber, itemsPerPage));
+    setPageContents(getSongsToDisplay(songs, pageNumber, itemsPerPage));
     setCurrentPage(pageNumber);
   };
 
@@ -230,47 +258,67 @@ const SongCardContainer = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        height: "20rem",
+        height: height,
       }}
     >
-      <SongCardGrid pageContents={pageContents} />
+      <SongCardGrid
+        pageContents={pageContents}
+        songCardType={songCardType}
+        noDataMessage={noDataMessage}
+      />
+      {songs && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <StyledPagination
+            count={totalPages}
+            page={currentPage}
+            color="secondary"
+            size="large"
+            onChange={handleChangePage}
+            showFirstButton
+            variant="outlined"
+            shape="rounded"
+          />
+        </Box>
+      )}
+    </Box>
+  );
+};
+
+const SongCardGrid = ({ pageContents, songCardType, noDataMessage }) => {
+  if (!pageContents) {
+    return (
       <Box
         sx={{
           display: "flex",
           justifyContent: "center",
         }}
       >
-        <StyledPagination
-          count={totalPages}
-          page={currentPage}
-          color="secondary"
-          size="large"
-          onChange={handleChangePage}
-          showFirstButton
-          variant="outlined"
-          shape="rounded"
-        />
+        <Typography variant="subtitle1">{noDataMessage}</Typography>
       </Box>
-    </Box>
-  );
-};
-
-const SongCardGrid = ({ pageContents }) => {
+    );
+  }
   return (
     <Grid container spacing={3}>
       {pageContents.map((songData, index) => (
-        <SongCardItem key={index} songData={songData} />
+        <SongCardItem
+          key={index}
+          songData={songData}
+          songCardType={songCardType}
+        />
       ))}
     </Grid>
   );
 };
 
-const SongCardItem = ({ songData }) => {
+const SongCardItem = ({ songData, songCardType }) => {
   return (
     <Grid item xs={12} md={6}>
-      <SongCard songData={songData} type="medium" />
+      <SongCard songData={songData} type={songCardType} />
     </Grid>
   );
 };
-
-export default SongCardContainer;
