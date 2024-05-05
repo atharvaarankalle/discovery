@@ -5,12 +5,12 @@ body {
 
 /* Changing the default text highlight colour */
 ::-moz-selection {
-  background: #FFD057;
+  background: #ffd057;
   color: #000000;
 }
 
 ::selection {
-  background: #FFD057;
+  background: #ffd057;
   color: #000000;
 }
 
@@ -22,7 +22,6 @@ body {
 /* Scrollbar track style */
 ::-webkit-scrollbar-track {
   background: transparent;
-  margin: 1rem;
 }
 
 /* Scrollbar handle style */
