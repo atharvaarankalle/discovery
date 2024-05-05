@@ -41,6 +41,12 @@ declare module "@mui/material/IconButton" {
   }
 }
 
+declare module "@mui/material/TextField" {
+  interface TextFieldPropsColorOverrides {
+    peach: true;
+  }
+}
+
 // commonly used styles
 export const baseShadow = "2px 2px 10px rgba(0, 0, 0, 0.25);";
 export const baseGlow = "0px 0px 15px 5px rgba(215, 130, 207, 0.38)";
