@@ -1,4 +1,4 @@
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, styled } from "@mui/material";
 import SongCard from "./SongCard.tsx";
 import testAlbum from "../assets/It's_About_Time_(SWV_album).jpeg";
 import Pagination from "@mui/material/Pagination";
@@ -187,6 +187,23 @@ const testSongData = [
   },
 ];
 
+const StyledPagination = styled(Pagination)(({ theme }) => ({
+  "& .MuiPaginationItem-root": {
+    color: `${theme.palette.secondary.main}`,
+    borderColor: `${theme.palette.peach.main}`,
+  },
+  "& .MuiPaginationItem-root.Mui-selected": {
+    backgroundColor: `${theme.palette.peach.main}33`,
+  },
+  "& .MuiPaginationItem-previousNext, .MuiPaginationItem-firstLast": {
+    backgroundColor: `${theme.palette.greyBlue.main}`,
+  },
+  "& .MuiPaginationItem-previousNext:hover, .MuiPaginationItem-firstLast:hover":
+    {
+      backgroundColor: `${theme.palette.primary.main}`,
+    },
+}));
+
 const getSongsToDisplay = (songList, currentPage, itemsPerPage) => {
   return songList.slice(
     (currentPage - 1) * itemsPerPage,
@@ -223,12 +240,15 @@ const SongCardContainer = () => {
           justifyContent: "center",
         }}
       >
-        <Pagination
+        <StyledPagination
           count={totalPages}
           page={currentPage}
           color="secondary"
           size="large"
           onChange={handleChangePage}
+          showFirstButton
+          variant="outlined"
+          shape="rounded"
         />
       </Box>
     </Box>
