@@ -1,32 +1,10 @@
 import { useState } from "react";
-import { Box, Link, styled, TextField } from "@mui/material";
+import { Box, Link, styled } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { colors } from "../theme";
+import CustomTextField from "./CustomTextField";
 
 // Styling for searchbar
-const StyledTextField = styled(TextField)(({ theme }) => ({
-  width: "100%",
-  "& .MuiFilledInput-underline::before": {
-    borderBottomColor: `${theme.palette.peach.main}`,
-  },
-  "& .MuiFilledInput-root": {
-    backgroundColor: `${theme.palette.peach.main}10`,
-    color: `${theme.palette.lightPeach.main}`,
-    ":hover:not(.Mui-focused)": {
-      "&:before": {
-        borderColor: `${theme.palette.peach.main}`,
-      },
-    },
-  },
-  "& .MuiFilledInput-root:after": {
-    backgroundColor: `${theme.palette.peach.main}10`,
-    color: `${theme.palette.lightPeach.main}`,
-  },
-
-  "& label.Mui-focused": {
-    color: `${theme.palette.peach.main}`,
-  },
-}));
 
 //Styling for clear search button
 const ClearSearchLink = styled(Link)({
@@ -71,7 +49,7 @@ export const Searchbar = () => {
         }}
       >
         <SearchIcon sx={{ color: colors.peach, fontSize: "2.5rem" }} />
-        <StyledTextField
+        <CustomTextField
           variant="filled"
           label="Search"
           color="peach"
