@@ -216,5 +216,8 @@ async function updateStreaks(
   ) {
     user.streakCount++;
     user.save();
+  } else {
+    user.streakCount = 0;
+    user.save();
   }
 }
