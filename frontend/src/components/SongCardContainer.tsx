@@ -1,191 +1,7 @@
 import { Box, Grid, styled, Typography } from "@mui/material";
 import SongCard from "./SongCard.tsx";
-import testAlbum from "../assets/It's_About_Time_(SWV_album).jpeg";
 import Pagination from "@mui/material/Pagination";
 import { ChangeEvent, useState } from "react";
-
-const testSongData = [
-  {
-    songTitle: "Weak 1",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 2",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 3",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 4",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 5",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 6",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 6",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 7",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 8",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 9",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 10",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 11",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 12",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 13",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 10",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 11",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 12",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 13",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 10",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 11",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 12",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 13",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 10",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 11",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 12",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 13",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 10",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 11",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 12",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-  {
-    songTitle: "Weak 13",
-    artist: "SWV",
-    album: "It's About Time",
-    albumArtSrc: testAlbum,
-  },
-];
 
 const StyledPagination = styled(Pagination)(({ theme }) => ({
   "& .MuiPaginationItem-root": {
@@ -204,17 +20,10 @@ const StyledPagination = styled(Pagination)(({ theme }) => ({
     },
 }));
 
-const getSongsToDisplay = (songList, currentPage, itemsPerPage) => {
-  return songList.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
-  );
-};
-
-export const SavedSongsContainer = () => {
+export const SavedSongsContainer = ({ songs }) => {
   return (
     <SongCardContainer
-      // songs={testSongData}
+      songs={songs}
       itemsPerPage={4}
       songCardType="medium"
       height="20rem"
@@ -223,9 +32,10 @@ export const SavedSongsContainer = () => {
   );
 };
 
-export const SongSelectionContainer = () => {
+export const SongSelectionContainer = ({ songs }) => {
   return (
     <SongCardContainer
+      songs={songs}
       itemsPerPage={6}
       songCardType="large"
       height="35rem"
@@ -235,7 +45,7 @@ export const SongSelectionContainer = () => {
 };
 
 const SongCardContainer = ({
-  songs = undefined,
+  songs = null,
   itemsPerPage,
   songCardType,
   height,
@@ -243,6 +53,14 @@ const SongCardContainer = ({
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = songs ? Math.ceil(songs.length / itemsPerPage) : 0;
+
+  const getSongsToDisplay = (songList, currentPage, itemsPerPage) => {
+    return songList.slice(
+      (currentPage - 1) * itemsPerPage,
+      currentPage * itemsPerPage,
+    );
+  };
+
   const [pageContents, setPageContents] = useState(
     songs ? getSongsToDisplay(songs, currentPage, itemsPerPage) : null,
   );
@@ -280,6 +98,7 @@ const SongCardContainer = ({
             size="large"
             onChange={handleChangePage}
             showFirstButton
+            showLastButton
             variant="outlined"
             shape="rounded"
           />
