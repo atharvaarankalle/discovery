@@ -7,6 +7,8 @@ import {
   CardMedia,
   styled,
   CardMediaProps,
+  Theme,
+  useTheme,
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import AlbumIcon from "@mui/icons-material/Album";
@@ -14,8 +16,9 @@ import CustomTypography from "./CustomTypography";
 import CdImage from "../assets/cd_image.png";
 import IconTextLabel from "./IconTextLabel";
 import LikeButton from "./LikeButton";
+import { useState } from "react";
 
-// // Custom styles applied to MUI CardMedia to be the Album used in  hover animation
+// Custom styles applied to MUI CardMedia to be the Album used in  hover animation
 const AlbumArt = styled(CardMedia)<CardMediaProps>({
   height: "100%",
   width: "auto",
@@ -36,12 +39,10 @@ const Cd = styled(CardMedia)<CardMediaProps>({
   transition: "transform 0.3s ease",
 });
 
-/* Custom styles applied to MUI card to be the main wrapper of SongCard */
+/* Custom styles applied to MUI card to be the main wrapper of SongCardBase */
 const StyledCard = styled(Card)(({ theme }) => ({
   display: "flex",
   justifyContent: "space-between",
-  width: "100%",
-  height: "7rem",
   position: "relative",
   backgroundColor: `${theme.palette.primary.main}80`, // adds 50% opacity to colour hexcode
   transition: "background-color 0.3s ease",
@@ -56,44 +57,82 @@ const StyledCard = styled(Card)(({ theme }) => ({
   },
 }));
 
-/* Prop types declaration for SongCard */
-interface SongCardPropTypes extends CardProps {
-  songTitle: string;
-  artist: string;
-  album: string;
-  albumArtSrc: string;
-  hasLikeButton?: boolean;
+/* Prop types declaration for SongCardBase */
+export interface SongCardBasePropTypes extends CardProps {
+  songData: {
+    songTitle: string;
+    artist: string;
+    album: string;
+    albumArtSrc: string;
+  };
+  type: "small" | "medium" | "large";
+  onCardClick?: () => void;
 }
 
 /** 
- * SongCard Component
+ * SongCardBase Component
  * 
-@prop songTitle: title of the song
-@prop artist: artist/s of the song
-@prop album: album the song is from
-@prop albumArtSrc: url link to the album art image url 
-@prop hasLikeButton: false by default, if true, will render a LikeButton on the right side of the card
+@prop songData: an object containing song data such as:
+      songTitle: title of the song
+      artist: artist/s of the song
+      album: album the song is from
+      albumArtSrc: url link to the album art image url 
+@prop type: required prop with value of "small", "medium" or "large", indicating what SongCard type to render
+@prop onCardClick: the onClick function for the card area. optional prop if type='small'
 
 **/
-const SongCard = ({
-  songTitle,
-  artist,
-  album,
-  albumArtSrc,
-  hasLikeButton = false,
-}: SongCardPropTypes) => {
+const SongCard = ({ songData, type, onCardClick }: SongCardBasePropTypes) => {
+  const { songTitle, artist, album, albumArtSrc } = songData;
+  const [isSelected, setIsSelected] = useState<boolean>(false);
+  const theme: Theme = useTheme(); // importing theme object to use in sx prop
+
+  // Logic to handle SongCard click
+  const handleSongCardClick = () => {
+    onCardClick?.();
+    setIsSelected(!isSelected);
+  };
+
+  // deciding card height based on what size (variant) it is
+  let cardHeight: string = "7rem";
+  switch (type) {
+    case "small":
+      cardHeight = "5rem";
+      break;
+    case "large":
+      cardHeight = "9rem";
+      break;
+    default:
+      cardHeight = "7rem";
+  }
+
   return (
-    <StyledCard square elevation={5}>
+    <StyledCard
+      square
+      elevation={5}
+      sx={{
+        height: `${cardHeight}`,
+        // adding styles to apply to overall card when selected or not selected
+        backgroundColor: isSelected ? theme.palette.primary.main : "auto",
+        borderRight: isSelected
+          ? `0.5rem solid ${theme.palette.secondary.main}`
+          : "none",
+        paddingRight: !isSelected ? `0.5rem` : "none",
+        transition: "border-right 0s ease",
+      }}
+    >
       <CardActionArea
         sx={{
           display: "flex",
         }}
+        disabled={type === "small"}
+        onClick={handleSongCardClick}
       >
         <AlbumArt
           className="firstImage"
           title="Album cover art"
           component="img"
           image={albumArtSrc}
+          sx={{ transform: isSelected ? "translateX(-50%)" : undefined }}
         />
 
         <Cd
@@ -101,6 +140,7 @@ const SongCard = ({
           title="CD"
           component="img"
           image={CdImage}
+          sx={{ transform: isSelected ? "translateX(0%)" : undefined }}
         />
 
         <CardContent
@@ -110,8 +150,9 @@ const SongCard = ({
         >
           <CustomTypography
             tooltip={songTitle}
-            variant="mdSongTitle"
-            num_lines={2}
+            variant={type === "small" ? "smSongTitle" : "mdSongTitle"}
+            color={"secondary.main"}
+            num_lines={type === "small" ? 1 : 2}
             mb={0.5}
           >
             {songTitle}
@@ -119,7 +160,8 @@ const SongCard = ({
 
           <IconTextLabel
             tooltip={artist}
-            variant="mdSongSubtitle"
+            variant={type === "small" ? "smSongSubtitle" : "mdSongSubtitle"}
+            color={"peach.main"}
             num_lines={1}
             icon={
               <PersonIcon sx={{ color: "secondary.main" }} fontSize="small" />
@@ -130,8 +172,9 @@ const SongCard = ({
 
           <IconTextLabel
             tooltip={album}
-            variant="mdSongSubtitle"
+            variant={type === "small" ? "smSongSubtitle" : "mdSongSubtitle"}
             num_lines={1}
+            color={"peach.main"}
             icon={
               <AlbumIcon sx={{ color: "secondary.main" }} fontSize="small" />
             }
@@ -141,7 +184,7 @@ const SongCard = ({
         </CardContent>
       </CardActionArea>
 
-      {hasLikeButton && (
+      {type === "medium" && (
         <CardActions>
           <LikeButton />
         </CardActions>

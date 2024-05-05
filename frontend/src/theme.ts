@@ -1,4 +1,5 @@
-import { createTheme, Theme } from "@mui/material/styles"; // adding more custom fields to the palette
+import { createTheme } from "@mui/material/styles";
+import React from "react";
 
 // adding more custom fields to the palette
 declare module "@mui/material/styles" {
@@ -39,6 +40,12 @@ declare module "@mui/material/Button" {
 declare module "@mui/material/IconButton" {
   interface IconButtonPropsColorOverrides {
     lightPeach: true;
+  }
+}
+
+declare module "@mui/material/TextField" {
+  interface TextFieldPropsColorOverrides {
+    peach: true;
   }
 }
 
