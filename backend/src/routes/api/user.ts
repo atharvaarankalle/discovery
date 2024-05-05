@@ -7,6 +7,7 @@ import {
 } from "../../schemas/SuggestedSongSchema";
 import { Schema } from "mongoose";
 import { IPrompt, Prompt } from "../../schemas/PromptSchema";
+import { compareDates } from "../../utils/DateUtils";
 
 const router: Router = express.Router();
 
@@ -203,17 +204,13 @@ async function updateStreaks(
 
   // Get the date for the prompt
   const lastPrompt = await Prompt.findById(lastSuggestedSong.prompt);
-  const lastSuggestedSongDate = lastPrompt?.date as Date | undefined;
+  const lastSuggestedSongDate = lastPrompt?.date as Date | Schema.Types.Date;
 
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
 
   // Check if the date of the last suggested song is yesterday
-  if (
-    lastSuggestedSongDate?.getFullYear === yesterday.getFullYear &&
-    lastSuggestedSongDate?.getMonth === yesterday.getMonth &&
-    lastSuggestedSongDate?.getDate === yesterday.getDate
-  ) {
+  if (compareDates({ date1: lastSuggestedSongDate, date2: yesterday })) {
     user.streakCount++;
     user.save();
   } else {
