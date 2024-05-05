@@ -65,7 +65,7 @@ export const Planet1 = ({ width, height, top, right, left }: PlanetProps) => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setIsGlow((prevIsGlow) => !prevIsGlow);
+      setIsGlow(!isGlow);
     }, 3000);
 
     return () => clearInterval(interval);
