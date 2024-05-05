@@ -1,6 +1,8 @@
 import { Grid } from "@mui/material";
 import SongCard from "./SongCard.tsx";
 import testAlbum from "../assets/It's_About_Time_(SWV_album).jpeg";
+import Pagination from "@mui/material/Pagination";
+import { ChangeEvent, useState } from "react";
 
 const testSongData = [
   {
@@ -35,12 +37,40 @@ const testSongData = [
   },
 ];
 
+const getSongsToDisplay = (songList, currentPage, itemsPerPage) => {
+  return songList.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage,
+  );
+};
+
 const SongCardContainer = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 4;
+  const totalPages = Math.ceil(testSongData.length / itemsPerPage);
+  const [pageContents, setPageContents] = useState(
+    getSongsToDisplay(testSongData, currentPage, itemsPerPage),
+  );
+
+  const handleChangePage = (e: ChangeEvent<unknown>, pageNumber: number) => {
+    setPageContents(getSongsToDisplay(testSongData, pageNumber, itemsPerPage));
+    setCurrentPage(pageNumber);
+  };
+
   return (
     <Grid container spacing={3}>
-      {testSongData.map((songData, index) => (
+      {pageContents.map((songData, index) => (
         <SongCardItem key={index} songData={songData} />
       ))}
+      <Grid item sm={12} sx={{ display: "flex", justifyContent: "center" }}>
+        <Pagination
+          count={totalPages}
+          page={currentPage}
+          color="secondary"
+          size="large"
+          onChange={handleChangePage}
+        />
+      </Grid>
     </Grid>
   );
 };
