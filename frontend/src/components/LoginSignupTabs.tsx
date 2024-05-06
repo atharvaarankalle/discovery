@@ -56,6 +56,7 @@ const LoginSignupTabs = ({ initialTab = "login" }: LoginSignupTabsProps) => {
 
   const handleTabChange = (event: SyntheticEvent, newValue: TabsTypes) => {
     setCurrentTabValue(newValue);
+    navigate(`/${newValue}`);
   };
 
   return (
