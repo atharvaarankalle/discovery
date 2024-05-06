@@ -4,7 +4,7 @@
 
 /**
  * @interface SongData
- * * `id`: required number, uniquely identifies the song
+ * * `id`: required string, uniquely identifies the song
  * * `songTitle`: required string, the title of the song
  * * `artists`: required string, the name/s of the artist/s of the song
  * * `album`: required string, the names of the album the song is from
