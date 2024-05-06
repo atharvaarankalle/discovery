@@ -1,8 +1,9 @@
-import { Box, Tab, Tabs, styled, Theme, useTheme } from "@mui/material";
+import { Box, Tab, Tabs, styled, Theme, useTheme, Button } from "@mui/material";
 import { ReactNode, SyntheticEvent, useState } from "react";
 import { baseGlow } from "../theme";
 import LoginTab from "./LoginTab";
 import SignupTab from "./SignupTab";
+import { West } from "@mui/icons-material";
 
 const StyledLoginSignup = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.darkGrey.main,
@@ -11,6 +12,7 @@ const StyledLoginSignup = styled(Box)(({ theme }) => ({
   width: "45%",
   borderRadius: 15,
   zIndex: 5,
+  position: "relative",
 }));
 
 const StyledTabGroup = styled(Tabs)(({ theme }) => ({
@@ -34,6 +36,12 @@ const StyledTabContent = styled(Box)({
   gap: "2em",
 });
 
+const StyledButton = styled(Button)({
+  position: "absolute",
+  top: -65,
+  left: 0,
+});
+
 type TabsTypes = "login" | "signup";
 
 type LoginSignupTabsProps = {
@@ -50,6 +58,14 @@ const LoginSignupTabs = ({ initialTab = "login" }: LoginSignupTabsProps) => {
 
   return (
     <StyledLoginSignup>
+      <StyledButton
+        variant="underlined"
+        color="pink"
+        startIcon={<West />}
+        sx={{ paddingLeft: 1, paddingRight: 1 }}
+      >
+        BACK TO HOME
+      </StyledButton>
       <StyledTabGroup
         value={currentTabValue}
         onChange={handleTabChange}
