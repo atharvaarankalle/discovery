@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Avatar, Divider, IconButton, Menu, MenuItem, styled } from "@mui/material";
+import { Avatar, Divider, IconButton, Menu, MenuItem, Typography, styled } from "@mui/material";
 import { Theme, useTheme } from "@mui/material/styles";
-import CustomTypography from "./CustomTypography";
 import IconTextLabel from "./IconTextLabel";
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from "react-router-dom";
@@ -9,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 /* Custom styles applied to MUI Menu */
 const StyledMenu = styled(Menu)(({ theme }) => ({
     "& .MuiPaper-root": {
+        width: "12.5rem",
         backgroundColor: theme.palette.navyBlue.main,
         borderRadius: "0.7rem"
     },
@@ -16,6 +16,7 @@ const StyledMenu = styled(Menu)(({ theme }) => ({
         "&:hover": {
             backgroundColor: theme.palette.greyBlue.main,
         },
+        justifyContent: "flex-end"
     },
 }));
 
@@ -68,7 +69,7 @@ const NavBarDropdownMenu = ({ username, profilePictureSrc }: NavBarDropdownMenuP
                 transformOrigin={{ vertical: "top", horizontal: "right" }}
             >
                 <MenuItem onClick={() => handleNavigation("/user")}>
-                    <CustomTypography>{username}</CustomTypography>
+                    <Typography>{username}</Typography>
                 </MenuItem>
                 <Divider sx={{ backgroundColor: `${theme.palette.pink.main}40` }} />
                 <MenuItem onClick={() => handleNavigation("/")}>
