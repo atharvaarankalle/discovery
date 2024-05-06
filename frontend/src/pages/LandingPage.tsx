@@ -10,6 +10,7 @@ import {
   Planet3,
   Planet4,
 } from "../components/Planets.tsx";
+import { useNavigate } from "react-router-dom";
 
 // Example prompts to loop through in the AnimatedPrompt component
 const homePrompts = [
@@ -94,6 +95,7 @@ const LandingPage = () => {
  * TopBar Component to display logo and LOG IN and SIGN IN buttons
  */
 const TopBar = () => {
+  const navigate = useNavigate();
   return (
     <AppBar
       position="fixed"
@@ -108,7 +110,11 @@ const TopBar = () => {
       <Box flexGrow={1}>
         <DiscoveryLogoWithtext width="200px" />
       </Box>
-      <StyledButton variant="contained" color="lightPeach">
+      <StyledButton
+        variant="contained"
+        color="lightPeach"
+        onClick={() => navigate("/login")}
+      >
         LOG IN
       </StyledButton>
       <StyledButton variant="contained" color="greyBlue">
@@ -131,7 +137,7 @@ const AnimatedPrompt = () => {
       setIsVisible(false);
       setTimeout(() => {
         setCurrentTextIndex(
-          (prevIndex) => (prevIndex + 1) % homePrompts.length,
+          (prevIndex) => (prevIndex + 1) % homePrompts.length
         );
         setIsVisible(true);
       }, 200); // Allow for 0.2 seconds between each transition

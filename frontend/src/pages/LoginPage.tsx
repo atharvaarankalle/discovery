@@ -1,5 +1,11 @@
+import LoginSignupTabs from "../components/LoginSignupTabs";
+
 const LoginPage = () => {
-  return <>Login Page</>;
+  return (
+    <>
+      <LoginSignupTabs />
+    </>
+  );
 };
 
 export default LoginPage;
