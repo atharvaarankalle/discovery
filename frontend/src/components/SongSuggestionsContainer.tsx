@@ -1,32 +1,18 @@
 import { Box } from "@mui/material";
 import SongSuggestionCard from "./SongSuggestionCard";
 import Masonry from "@mui/lab/Masonry";
+import { SongSuggestionData } from "../utils/interfaces";
 
 /* Prop types for this component */
 interface SuggestionContainerPropTypes {
-  songSuggestionList: Array<{
-    id: number;
-    songData: {
-      songTitle: string;
-      album: string;
-      artist: string;
-      albumArtSrc: string;
-    };
-    username: string;
-    caption: string;
-    profilePictureSrc: string;
-  }>;
+  songSuggestionList: Array<SongSuggestionData>;
 }
 
 /**
- * SONG SUGGESTIONS CONTAINER
+ * SONG SUGGESTIONS CONTAINER:
  *
- * Takes in a list of song suggestions as a list, with the following fields:
- * id: unique suggestion identifier (number)
- * songData: consisting of songTitle, album, artist/s and albumArtSrc (all required strings)
- * caption: caption from the associated user (optional string)
- * username: username of the associated user (string)
- * profilePictureSrc: src of the associated user's profile picture (optional string)
+ * Takes in a list of song suggestions ({@link SongSuggestionData}) and renders them in a
+ * scrollable container of a fixed height, using the MUI Masonry component.
  *
  */
 const SongSuggestionsContainer = ({
@@ -49,7 +35,7 @@ const SongSuggestionsContainer = ({
               songData={{
                 songTitle: songData.songTitle,
                 album: songData.album,
-                artist: songData.artist,
+                artists: songData.artists,
                 albumArtSrc: songData.albumArtSrc,
               }}
               username={username}
