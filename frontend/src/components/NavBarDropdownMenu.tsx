@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Avatar, Divider, IconButton, Menu, MenuItem, Typography, styled } from "@mui/material";
+import { Avatar, Divider, IconButton, Menu, MenuItem, styled } from "@mui/material";
 import { Theme, useTheme } from "@mui/material/styles";
 import IconTextLabel from "./IconTextLabel";
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -21,7 +21,6 @@ const StyledMenu = styled(Menu)(({ theme }) => ({
 
 /* Prop types declaration for NavBarDropdownMenu */
 interface NavBarDropdownMenuPropTypes {
-    username: string;
     profilePictureSrc?: string;
 }
 
@@ -31,7 +30,7 @@ interface NavBarDropdownMenuPropTypes {
  * @prop username: username of the user to display in the dropdown menu
  * @prop profilePictureSrc: optional prop for the source of the user's profile picture
  */
-const NavBarDropdownMenu = ({ username, profilePictureSrc }: NavBarDropdownMenuPropTypes) => {
+const NavBarDropdownMenu = ({ profilePictureSrc }: NavBarDropdownMenuPropTypes) => {
     const theme: Theme = useTheme();
     const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
     const navigate = useNavigate();
@@ -49,34 +48,41 @@ const NavBarDropdownMenu = ({ username, profilePictureSrc }: NavBarDropdownMenuP
     }
 
     return (
-        <>
-            <IconButton
-                onClick={handleProfilePictureClick}
-                aria-controls={anchorElement ? "profile-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={anchorElement ? "true" : undefined}
+      <>
+        <IconButton
+          onClick={handleProfilePictureClick}
+          aria-controls={anchorElement ? "profile-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={anchorElement ? "true" : undefined}
+        >
+          <Avatar src={profilePictureSrc ?? undefined} />
+        </IconButton>
+        <StyledMenu
+          anchorEl={anchorElement}
+          id="profile-menu"
+          open={anchorElement !== null}
+          onClose={handleMenuClose}
+          onClick={handleMenuClose}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          transformOrigin={{ vertical: "top", horizontal: "right" }}
+        >
+          <MenuItem onClick={() => handleNavigation("/user")}>
+            Profile
+          </MenuItem>
+          <Divider sx={{ backgroundColor: `${theme.palette.pink.main}40` }} />
+          <MenuItem onClick={() => handleNavigation("/")}>
+            <IconTextLabel
+              variant="body1"
+              icon={
+                <LogoutIcon sx={{ color: theme.palette.pink.main, mr: 1 }} />
+              }
             >
-                <Avatar src={profilePictureSrc ?? undefined} />
-            </IconButton>
-            <StyledMenu
-                anchorEl={anchorElement}
-                id="profile-menu"
-                open={anchorElement !== null}
-                onClose={handleMenuClose}
-                onClick={handleMenuClose}
-                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                transformOrigin={{ vertical: "top", horizontal: "right" }}
-            >
-                <MenuItem onClick={() => handleNavigation("/user")}>
-                    <Typography>{username}</Typography>
-                </MenuItem>
-                <Divider sx={{ backgroundColor: `${theme.palette.pink.main}40` }} />
-                <MenuItem onClick={() => handleNavigation("/")}>
-                    <IconTextLabel variant="body1" icon={<LogoutIcon sx={{ color: theme.palette.pink.main, mr: 1 }} />}>Sign out</IconTextLabel>
-                </MenuItem>
-            </StyledMenu>
-        </>
-    )
+              Sign out
+            </IconTextLabel>
+          </MenuItem>
+        </StyledMenu>
+      </>
+    );
 }
 
 export default NavBarDropdownMenu;
