@@ -63,4 +63,30 @@ router.post("/save", async (req: Request, res: Response) => {
     }
 });
 
+/**
+ * GET /find/:id - Retrieve a prompt by its _id on the MongolDB.
+ * Note that the ID only need to be on the path, this does not take in a request.
+ * @param {Response} res - The Json object containing details for the prompt
+ */
+router.get('/find/:id', async (req: Request, res: Response) => {
+    try {
+        const promptId = req.params.id;
+
+        const prompt = await Prompt.findById(promptId);
+
+        // Check if the prompt is found before responding, otherwise the database link crashes
+        if (!prompt) {
+            return res.status(404).json({ message: "Prompt not found" });
+        }
+
+        res.json(prompt);
+
+    } catch (error: any) {
+        console.error('Error retrieving the prompt:', error);
+        res.status(500).json({ message: error.message });
+    }
+    }
+);
+
+
 export default router;
