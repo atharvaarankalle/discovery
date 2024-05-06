@@ -15,8 +15,7 @@ const StyledMenu = styled(Menu)(({ theme }) => ({
     "& .MuiMenuItem-root": {
         "&:hover": {
             backgroundColor: theme.palette.greyBlue.main,
-        },
-        justifyContent: "flex-end"
+        }
     },
 }));
 
