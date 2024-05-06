@@ -17,7 +17,7 @@ import CdImage from "../assets/cd_image.png";
 import IconTextLabel from "./IconTextLabel";
 import LikeButton from "./LikeButton";
 import { useState } from "react";
-import { SongData } from "../utils/interfaces.ts";
+import { SongData } from "../utils/interfaces";
 
 // Custom styles applied to MUI CardMedia to be the Album used in  hover animation
 const AlbumArt = styled(CardMedia)<CardMediaProps>({
