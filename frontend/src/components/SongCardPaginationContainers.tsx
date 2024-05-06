@@ -192,8 +192,8 @@ const SongCardGrid = ({
   }
   return (
     <Grid container spacing={3}>
-      {pageContents.map((songData, index) => (
-        <Grid item xs={12} md={6} key={index}>
+      {pageContents.map((songData) => (
+        <Grid item xs={12} md={6} key={songData.id}>
           <SongCard songData={songData} type={songCardType} />
         </Grid>
       ))}

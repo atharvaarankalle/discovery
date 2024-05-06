@@ -68,7 +68,7 @@ export interface SongCardBasePropTypes extends CardProps {
 /**
  * SongCardBase Component
  *
- @prop songData: an object containing song data (see interfaces.ts for more information)
+ @prop songData: an object containing song data ({@link SongData})
  @prop type: required prop with value of "small", "medium" or "large", indicating what SongCard type to render
  @prop onCardClick: the onClick function for the card area. optional prop if type='small'
 
