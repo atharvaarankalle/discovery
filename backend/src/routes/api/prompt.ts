@@ -43,10 +43,10 @@ router.get('/find/:id', async (req: Request, res: Response) => {
 
         res.json(prompt);
 
-    } catch (error:any) {
+    } catch (error: any) {
         console.error('Error retrieving the prompt:', error);
-        res.status(error.response.data.error.status).json({ message: error.message });
-        }
+        res.status(500).json({ message: error.message });
+    }
     }
 );
 
