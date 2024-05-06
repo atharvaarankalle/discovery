@@ -14,7 +14,7 @@ export interface SongData {
 
 /**
  * @interface SongSuggestionData
- * * `id`: required number, uniquely identifies the song suggestion
+ * * `id`: required string, uniquely identifies the song suggestion
  * * `songData`: required {@link SongData} object, containing songTitle, artist/s, album name, album art, preview audio or open in spotify url if no preview audio
  * * `username`: required string, the display name of the user who posted the suggestion
  * * `caption`: optional string, contains the suggestion caption
@@ -22,7 +22,7 @@ export interface SongData {
  *
  * */
 export interface SongSuggestionData {
-  id: number;
+  id: string;
   songData: SongData;
   username: string;
   caption?: string;

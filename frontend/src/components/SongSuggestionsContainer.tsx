@@ -12,7 +12,7 @@ interface SuggestionContainerPropTypes {
  * SONG SUGGESTIONS CONTAINER:
  *
  * Takes in a list of song suggestions ({@link SongSuggestionData}) and renders them in a
- * scrollable container of a fixed height, using the MUI Masonry component.
+ * scrollable masonry style container that fills the height of its wrapper/parent component.
  *
  */
 const SongSuggestionsContainer = ({
@@ -20,9 +20,9 @@ const SongSuggestionsContainer = ({
 }: SuggestionContainerPropTypes) => (
   <Box
     sx={{
-      height: "90vh",
-      overflow: "scroll",
       width: "100%",
+      height: "100%",
+      overflow: "scroll",
       overflowX: "hidden",
     }}
   >
