@@ -10,6 +10,7 @@ const StyledLoginSignup = styled(Box)(({ theme }) => ({
   boxShadow: baseGlow,
   width: "45%",
   borderRadius: 15,
+  zIndex: 5,
 }));
 
 const StyledTabGroup = styled(Tabs)(({ theme }) => ({

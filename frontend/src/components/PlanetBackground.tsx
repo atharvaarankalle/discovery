@@ -34,7 +34,7 @@ const StarsBackground = styled("div")({
 });
 
 type PlanetBackgroundProps = {
-  children: ReactNode;
+  children?: ReactNode;
 };
 const PlanetBackground = ({ children }: PlanetBackgroundProps) => {
   return (

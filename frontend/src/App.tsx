@@ -2,7 +2,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import AppBase from "./AppBase.tsx";
 import DiscoverPage from "./pages/DiscoverPage.tsx";
 import LandingPage from "./pages/LandingPage.tsx";
-import LoginPage from "./pages/LoginPage.tsx";
+import LoginSignupPage from "./pages/LoginSignupPage.tsx";
 import PromptPage from "./pages/PromptPage.tsx";
 import ProfilePage from "./pages/ProfilePage.tsx";
 import UserAppBase from "./pages/UserAppBase.tsx";
@@ -13,7 +13,7 @@ function App() {
       {/* the landing and login page are only accessible if not logged in */}
       <Route path="/" element={<AppBase />}>
         <Route index element={<LandingPage />} />
-        <Route path="login" element={<LoginPage />} />
+        <Route path="login" element={<LoginSignupPage />} />
 
         {/* "user" will likely be replaced by the user ID or similar */}
         {/* the following routes are only accessible if logged in */}
