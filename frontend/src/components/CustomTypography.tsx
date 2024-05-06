@@ -1,24 +1,9 @@
 import {
-  Tooltip,
-  TooltipProps,
-  tooltipClasses,
   Typography,
   TypographyProps,
   styled,
 } from "@mui/material";
-
-const StyledToolTip = styled(({ className, ...props }: TooltipProps) => (
-  <Tooltip {...props} classes={{ popper: className }} />
-))(({ theme }) => ({
-  [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: theme.palette.primary.dark,
-    color: theme.palette.peach.main,
-    boxShadow: theme.shadows[1],
-  },
-  [`& .${tooltipClasses.arrow}`]: {
-    color: theme.palette.primary.dark,
-  },
-}));
+import StyledToolTip from "./StyledTooltip";
 
 // Adding custom styling to the MUI Typography to allow text to truncate after a specific number of lines
 const TruncatableTypography = styled(Typography)(
