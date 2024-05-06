@@ -59,9 +59,20 @@ router.post("/save", async (req: Request, res: Response) => {
 
         await newPrompt.save();
         res.status(201).json(newPrompt);
-    } catch (err) {
-        console.error('Error creating new prompt:', err);
-        res.status(500).json({ message: "Error while creating new prompt. Please read console log for specific error." });
+    } catch (error: any) {
+        switch (error.response.data.error.status) {
+            case 400:
+                res.status(400).json({ message: "Bad query or invalid MongoDB URL" });
+                break;
+            case 401:
+                res.status(422).json({ message: "Save data contain correct structure but is invalid" });
+                break;
+            case 404:
+                res.status(500).json({ message: "Sever error while trying to save" });
+                break;
+            default:
+                res.status(error.response.data.error.status).json({ message: error.message });
+        }
     }
 });
 
