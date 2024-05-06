@@ -36,8 +36,6 @@ router.get("/", async (req, res) => {
  * If no date is provided, it uses the current date.
  * @param {Request} req - The new prompt and date(?)
  * @param {Response} res -  201: Successfully saved new prompt
- *                          400: Bad request due to query issues
- *                          422: Something wrong with the parsed structured data
  *                          500: Sever error while trying to save
  */
 router.post("/save", async (req: Request, res: Response) => {
@@ -60,19 +58,8 @@ router.post("/save", async (req: Request, res: Response) => {
         await newPrompt.save();
         res.status(201).json(newPrompt);
     } catch (error: any) {
-        switch (error.response.data.error.status) {
-            case 400:
-                res.status(400).json({ message: "Bad query or invalid MongoDB URL" });
-                break;
-            case 401:
-                res.status(422).json({ message: "Save data contain correct structure but is invalid" });
-                break;
-            case 404:
-                res.status(500).json({ message: "Sever error while trying to save" });
-                break;
-            default:
-                res.status(error.response.data.error.status).json({ message: error.message });
-        }
+        console.error('Error retrieving the prompt:', error);
+        res.status(500).json({ message: error.message });
     }
 });
 
