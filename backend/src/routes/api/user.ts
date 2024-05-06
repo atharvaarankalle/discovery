@@ -5,7 +5,7 @@ import {
   ISuggestedSong,
   SuggestedSong,
 } from "../../schemas/SuggestedSongSchema";
-import { Schema } from "mongoose";
+import { Document, Schema, Types } from "mongoose";
 import { Prompt } from "../../schemas/PromptSchema";
 import { compareDates, getTodaysDate } from "../../utils/DateUtils";
 
@@ -18,7 +18,7 @@ router.post("/", async (req: Request, res: Response) => {
     const newUser = new User(userData);
 
     const savedUser = await newUser.save();
-    return res.status(201).json(savedUser);
+    return res.status(201).json(userDetailResponseData(savedUser));
   } catch (error) {
     return res
       .status(500)
@@ -38,7 +38,7 @@ router.get("/:id", async (req: Request, res: Response) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    return res.json(user);
+    return res.json(userDetailResponseData(user));
   } catch (error) {
     return res.status(500).json({ message: `Error fetching user: ${error}` });
   }
@@ -58,7 +58,7 @@ router.patch("/:id", async (req: Request, res: Response) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    return res.json(updatedUser);
+    return res.json(userDetailResponseData(updatedUser));
   } catch (error) {
     return res
       .status(500)
@@ -107,7 +107,7 @@ router.put("/:id/liked", async (req: Request, res: Response) => {
     user.likedSongs.push(songId);
     const updatedUser = await user.save();
 
-    return res.json(updatedUser);
+    return res.json(userDetailResponseData(updatedUser));
   } catch (error) {
     return res
       .status(500)
@@ -131,7 +131,7 @@ router.delete("/:id/liked/:songId", async (req: Request, res: Response) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    return res.json(updatedUser);
+    return res.json(userDetailResponseData(updatedUser));
   } catch (error) {
     return res.status(500).json({
       message: `Error deleting song from user's liked songs: ${error}`,
@@ -217,7 +217,7 @@ router.put("/:id/suggested", async (req: Request, res: Response) => {
     user.suggestedSongs.push(suggestedSong._id);
     const updatedUser = await user.save();
 
-    return res.json(updatedUser);
+    return res.json(userDetailResponseData(updatedUser));
   } catch (error) {
     return res.status(500).json({
       message: `Error adding song to suggested songs: ${error}`,
@@ -259,3 +259,26 @@ async function updateStreaks(user: IUser) {
   await user.save();
   return;
 }
+
+const userDetailResponseData = (user: any) => {
+  const {
+    _id,
+    email,
+    displayName,
+    accountCreationDate,
+    streakCount,
+    likedSongs,
+    suggestedSongs,
+    profilePic,
+  } = user;
+  return {
+    _id,
+    email,
+    displayName,
+    accountCreationDate,
+    streakCount,
+    likedSongs,
+    suggestedSongs,
+    profilePic,
+  };
+};
