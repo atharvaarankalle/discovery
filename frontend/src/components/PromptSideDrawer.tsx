@@ -2,6 +2,7 @@ import { Box, Button, Drawer, DrawerProps, TextField, styled } from "@mui/materi
 import CustomTypography from "./CustomTypography";
 import SongCard from "./SongCard";
 import SendIcon from '@mui/icons-material/Send';
+import { useState } from "react";
 
 /* Custom styles applied to MUI Drawer */
 const StyledDrawer = styled(Drawer)(() => ({
@@ -69,14 +70,25 @@ interface PromptSideDrawerPropTypes extends DrawerProps {
  * @prop songData: object containing song data such as song title, artist, album, and album art source
  */
 const PromptSideDrawer = ({ drawerOpen, toggleDrawer, songData }: PromptSideDrawerPropTypes) => {
+    const [caption, setCaption] = useState(undefined as string | undefined);
+
+    const handleCaptionChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        // If the input is empty, set caption to undefined
+        if (event.target.value === "") {
+            setCaption(undefined);
+        }
+
+        setCaption(event.target.value);
+    }
+
     return (
         <StyledDrawer open={drawerOpen} onClose={() => toggleDrawer(false)} variant="persistent" anchor="right">
             <StyledBox>
                 <CustomTypography variant="h4" textAlign="left">SELECTED TRACK:</CustomTypography>
                 <SongCard songData={songData} type="small" />
-                <StyledTextField variant="filled" label="Comment" multiline />
+                <StyledTextField variant="filled" label="Comment" multiline onChange={(event) => handleCaptionChange(event)} />
                 <Box sx={{ display: "flex", justifyContent: "flex-end", width: "100%" }}>
-                    <StyledButton variant="outlined" color="lightPeach" endIcon={<SendIcon />}>Post</StyledButton>
+                    <StyledButton variant="outlined" color="lightPeach" endIcon={<SendIcon />} onClick={() => console.log(caption)}>Post</StyledButton>
                 </Box>
             </StyledBox>
         </StyledDrawer>
