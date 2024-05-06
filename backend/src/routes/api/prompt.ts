@@ -6,12 +6,16 @@ import generate from "./openAI";
 
 const router: Router = express.Router();
 
+/**
+ * GET / - Call ChatGPT API to generate a new prompt.
+ */
 router.get("/", async (req, res) => {
     
     try {
         const prompt  = await generate();
 
         if (prompt) {
+            //'Access-Control-Allow-Origin' is enabled to bypass CORS of certain browsers.
             res.setHeader('Access-Control-Allow-Origin', '*');
             res.json(prompt)
         } else {
@@ -24,6 +28,40 @@ router.get("/", async (req, res) => {
     }
 
   });
+
+
+/**
+ * POST /save - Create a new prompt in the Mongol database.
+ * Takes a 'prompt' from the request body and an optional 'date' from the query.
+ * If no date is provided, it uses the current date.
+ * @param {Request} req - The new prompt and date(?)
+ * @param {Response} res -  201: Successfully saved new prompt
+ *                          500: Sever error while trying to save
+ */
+router.post("/save", async (req: Request, res: Response) => {
+    try {
+        // Retrieve the 'prompt' from request body
+        const { prompt, date } = req.body;
+
+        // Check for a date in the body, use getTodaysDate() if none provided
+        const dateInput = date ? new Date(date) : getTodaysDate();
+
+        if (!prompt) {
+            return res.status(400).json({ message: "Prompt is required" });
+        }
+
+        const newPrompt = new Prompt({
+            prompt,
+            date: dateInput
+        });
+
+        await newPrompt.save();
+        res.status(201).json(newPrompt);
+    } catch (error: any) {
+        console.error('Error saving the prompt');
+        res.status(500).json({ message: error.message });
+    }
+});
 
 /**
  * GET /find/:id - Retrieve a prompt by its _id on the MongolDB.
@@ -49,5 +87,6 @@ router.get('/find/:id', async (req: Request, res: Response) => {
     }
     }
 );
+
 
 export default router;
