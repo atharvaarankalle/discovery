@@ -4,6 +4,7 @@ import { Theme, useTheme } from "@mui/material/styles";
 import CustomTypography from "./CustomTypography";
 import IconTextLabel from "./IconTextLabel";
 import LogoutIcon from '@mui/icons-material/Logout';
+import { useNavigate } from "react-router-dom";
 
 /* Custom styles applied to MUI Menu */
 const StyledMenu = styled(Menu)(({ theme }) => ({
@@ -33,6 +34,7 @@ interface NavBarDropdownMenuPropTypes {
 const NavBarDropdownMenu = ({ username, profilePictureSrc }: NavBarDropdownMenuPropTypes) => {
     const theme: Theme = useTheme();
     const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
+    const navigate = useNavigate();
 
     const handleProfilePictureClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElement(event.currentTarget);
@@ -40,6 +42,10 @@ const NavBarDropdownMenu = ({ username, profilePictureSrc }: NavBarDropdownMenuP
 
     const handleMenuClose = () => {
         setAnchorElement(null);
+    }
+
+    const handleNavigation = (path: string) => {
+        navigate(path);
     }
 
     return (
@@ -61,11 +67,11 @@ const NavBarDropdownMenu = ({ username, profilePictureSrc }: NavBarDropdownMenuP
                 anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                 transformOrigin={{ vertical: "top", horizontal: "right" }}
             >
-                <MenuItem>
+                <MenuItem onClick={() => handleNavigation("/user")}>
                     <CustomTypography>{username}</CustomTypography>
                 </MenuItem>
                 <Divider sx={{ backgroundColor: `${theme.palette.pink.main}40` }} />
-                <MenuItem>
+                <MenuItem onClick={() => handleNavigation("/")}>
                     <IconTextLabel variant="body1" icon={<LogoutIcon sx={{ color: theme.palette.pink.main, mr: 1 }} />}>Sign out</IconTextLabel>
                 </MenuItem>
             </StyledMenu>
