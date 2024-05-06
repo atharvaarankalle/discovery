@@ -1,5 +1,5 @@
 import { Box, styled } from "@mui/material";
-import LoginSignupTabs from "../components/LoginSignupTabs";
+import LoginSignupTabs, { TabsTypes } from "../components/LoginSignupTabs";
 import PlanetBackground from "../components/PlanetBackground";
 import { DiscoveryLogoWithtext } from "../components/Logos";
 
@@ -18,14 +18,18 @@ const StyledLogo = styled(Box)({
   top: "30px", // to match landing page
 });
 
-const LoginSignupPage = () => {
+type LoginSignupPageProps = {
+  activeTab: TabsTypes;
+};
+
+const LoginSignupPage = ({ activeTab }: LoginSignupPageProps) => {
   return (
     <PlanetBackground>
       <LoginPageContent>
         <StyledLogo>
           <DiscoveryLogoWithtext width="200px" />
         </StyledLogo>
-        <LoginSignupTabs />
+        <LoginSignupTabs initialTab={activeTab} />
       </LoginPageContent>
     </PlanetBackground>
   );

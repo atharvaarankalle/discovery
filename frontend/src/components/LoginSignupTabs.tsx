@@ -4,6 +4,7 @@ import { baseGlow } from "../theme";
 import LoginTab from "./LoginTab";
 import SignupTab from "./SignupTab";
 import { West } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const StyledLoginSignup = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.darkGrey.main,
@@ -42,7 +43,7 @@ const StyledButton = styled(Button)({
   left: 0,
 });
 
-type TabsTypes = "login" | "signup";
+export type TabsTypes = "login" | "signup";
 
 type LoginSignupTabsProps = {
   initialTab?: TabsTypes;
@@ -51,6 +52,7 @@ type LoginSignupTabsProps = {
 const LoginSignupTabs = ({ initialTab = "login" }: LoginSignupTabsProps) => {
   const [currentTabValue, setCurrentTabValue] = useState<TabsTypes>(initialTab);
   const theme: Theme = useTheme();
+  const navigate = useNavigate();
 
   const handleTabChange = (event: SyntheticEvent, newValue: TabsTypes) => {
     setCurrentTabValue(newValue);
@@ -63,6 +65,7 @@ const LoginSignupTabs = ({ initialTab = "login" }: LoginSignupTabsProps) => {
         color="pink"
         startIcon={<West />}
         sx={{ paddingLeft: 1, paddingRight: 1 }}
+        onClick={() => navigate("/")}
       >
         BACK TO HOME
       </StyledButton>

@@ -81,7 +81,11 @@ const TopBar = () => {
       >
         LOG IN
       </StyledButton>
-      <StyledButton variant="contained" color="greyBlue">
+      <StyledButton
+        variant="contained"
+        color="greyBlue"
+        onClick={() => navigate("/signup")}
+      >
         SIGN UP
       </StyledButton>
     </AppBar>

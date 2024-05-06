@@ -13,7 +13,8 @@ function App() {
       {/* the landing and login page are only accessible if not logged in */}
       <Route path="/" element={<AppBase />}>
         <Route index element={<LandingPage />} />
-        <Route path="login" element={<LoginSignupPage />} />
+        <Route path="login" element={<LoginSignupPage activeTab="login" />} />
+        <Route path="signup" element={<LoginSignupPage activeTab="signup" />} />
 
         {/* "user" will likely be replaced by the user ID or similar */}
         {/* the following routes are only accessible if logged in */}
