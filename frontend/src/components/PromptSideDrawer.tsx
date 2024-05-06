@@ -70,7 +70,7 @@ interface PromptSideDrawerPropTypes extends DrawerProps {
  */
 const PromptSideDrawer = ({ drawerOpen, toggleDrawer, songData }: PromptSideDrawerPropTypes) => {
     return (
-        <StyledDrawer open={drawerOpen} onClose={() => toggleDrawer(false)} anchor="right" hideBackdrop>
+        <StyledDrawer open={drawerOpen} onClose={() => toggleDrawer(false)} variant="persistent" anchor="right">
             <StyledBox>
                 <CustomTypography variant="h4" textAlign="left">SELECTED TRACK:</CustomTypography>
                 <SongCard songData={songData} type="small" />
