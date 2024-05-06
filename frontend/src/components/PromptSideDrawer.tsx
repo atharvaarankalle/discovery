@@ -66,15 +66,20 @@ interface PromptSideDrawerPropTypes extends DrawerProps {
  * @prop songData: object containing song data such as song title, artist, album, and album art source
  */
 const PromptSideDrawer = ({ drawerOpen, toggleDrawer, songData }: PromptSideDrawerPropTypes) => {
-    const [caption, setCaption] = useState(undefined as string | undefined);
+    const [caption, setCaption] = useState("");
 
     const handleCaptionChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         // If the input is empty, set caption to undefined
         if (event.target.value === "") {
-            setCaption(undefined);
+            setCaption("");
         } else {
             setCaption(event.target.value);
         }
+    }
+
+    const handleSuggestionSubmit = () => {
+        console.log(caption);
+        setCaption("");
     }
 
     return (
@@ -82,9 +87,9 @@ const PromptSideDrawer = ({ drawerOpen, toggleDrawer, songData }: PromptSideDraw
             <StyledBox>
                 <CustomTypography variant="h4" textAlign="left">SELECTED TRACK:</CustomTypography>
                 <SongCard songData={songData} type="small" />
-                <StyledTextField variant="filled" label="Comment" multiline onChange={(event) => handleCaptionChange(event)} />
+                <StyledTextField variant="filled" label="Comment" value={caption} multiline onChange={(event) => handleCaptionChange(event)} />
                 <Box sx={{ display: "flex", justifyContent: "flex-end", width: "100%" }}>
-                    <StyledButton variant="outlined" color="lightPeach" endIcon={<SendIcon />} onClick={() => console.log(caption)}>Post</StyledButton>
+                    <StyledButton variant="outlined" color="lightPeach" endIcon={<SendIcon />} onClick={handleSuggestionSubmit}>Post</StyledButton>
                 </Box>
             </StyledBox>
         </StyledDrawer>
