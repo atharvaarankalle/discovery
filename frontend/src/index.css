@@ -5,11 +5,13 @@ body {
 
 /* Changing the default text highlight colour */
 ::-moz-selection {
-  background: #f1267b;
+  background: #FFD057;
+  color: #000000;
 }
 
 ::selection {
-  background: #f1267b;
+  background: #FFD057;
+  color: #000000;
 }
 
 /* Changing scrollbar default style for Webkit Browsers */
