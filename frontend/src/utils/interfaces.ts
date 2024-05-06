@@ -11,3 +11,12 @@ export interface SongData {
   songAudioSrc?: string;
   openInSpotifyUrl?: string;
 }
+
+export interface User {
+  displayName: string;
+  streakCount: number;
+  likedSongs: string[];
+  suggestedSongs: string[];
+  profilePic?: string;
+  hasSubmitted: boolean;
+}
