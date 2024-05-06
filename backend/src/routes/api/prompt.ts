@@ -41,10 +41,10 @@ router.get("/", async (req, res) => {
 router.post("/save", async (req: Request, res: Response) => {
     try {
         // Retrieve the 'prompt' from request body
-        const { prompt } = req.body;
-        
-        // Check for a date in the query, use getTodaysDate() if none provided
-        const dateInput = req.query.date ? new Date(req.query.date as string) : getTodaysDate();
+        const { prompt, date } = req.body;
+
+        // Check for a date in the body, use getTodaysDate() if none provided
+        const dateInput = date ? new Date(date) : getTodaysDate();
 
         if (!prompt) {
             return res.status(400).json({ message: "Prompt is required" });
@@ -58,7 +58,7 @@ router.post("/save", async (req: Request, res: Response) => {
         await newPrompt.save();
         res.status(201).json(newPrompt);
     } catch (error: any) {
-        console.error('Error retrieving the prompt:', error);
+        console.error('Error saving the prompt');
         res.status(500).json({ message: error.message });
     }
 });
