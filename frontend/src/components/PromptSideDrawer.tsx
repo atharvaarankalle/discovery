@@ -3,6 +3,7 @@ import CustomTypography from "./CustomTypography";
 import SongCard from "./SongCard";
 import SendIcon from '@mui/icons-material/Send';
 import { useState } from "react";
+import { SongData } from "../utils/interfaces";
 
 /* Custom styles applied to MUI Drawer */
 const StyledDrawer = styled(Drawer)(() => ({
@@ -54,12 +55,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
 interface PromptSideDrawerPropTypes extends DrawerProps {
     drawerOpen: boolean;
     toggleDrawer: (open: boolean) => void;
-    songData: {
-        songTitle: string;
-        artist: string;
-        album: string;
-        albumArtSrc: string;
-    };
+    songData: SongData;
 }
 
 /**
@@ -76,9 +72,9 @@ const PromptSideDrawer = ({ drawerOpen, toggleDrawer, songData }: PromptSideDraw
         // If the input is empty, set caption to undefined
         if (event.target.value === "") {
             setCaption(undefined);
+        } else {
+            setCaption(event.target.value);
         }
-
-        setCaption(event.target.value);
     }
 
     return (

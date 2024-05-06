@@ -17,6 +17,7 @@ import CdImage from "../assets/cd_image.png";
 import IconTextLabel from "./IconTextLabel";
 import LikeButton from "./LikeButton";
 import { useState } from "react";
+import { SongData } from "../utils/interfaces";
 
 // Custom styles applied to MUI CardMedia to be the Album used in  hover animation
 const AlbumArt = styled(CardMedia)<CardMediaProps>({
@@ -59,12 +60,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
 
 /* Prop types declaration for SongCardBase */
 export interface SongCardBasePropTypes extends CardProps {
-  songData: {
-    songTitle: string;
-    artist: string;
-    album: string;
-    albumArtSrc: string;
-  };
+  songData: SongData;
   type: "small" | "medium" | "large";
   onCardClick?: () => void;
 }
@@ -82,7 +78,7 @@ export interface SongCardBasePropTypes extends CardProps {
 
 **/
 const SongCard = ({ songData, type, onCardClick }: SongCardBasePropTypes) => {
-  const { songTitle, artist, album, albumArtSrc } = songData;
+  const { songTitle, artists, album, albumArtSrc } = songData;
   const [isSelected, setIsSelected] = useState<boolean>(false);
   const theme: Theme = useTheme(); // importing theme object to use in sx prop
 
@@ -159,7 +155,7 @@ const SongCard = ({ songData, type, onCardClick }: SongCardBasePropTypes) => {
           </CustomTypography>
 
           <IconTextLabel
-            tooltip={artist}
+            tooltip={artists}
             variant={type === "small" ? "smSongSubtitle" : "mdSongSubtitle"}
             color={"peach.main"}
             num_lines={1}
@@ -167,7 +163,7 @@ const SongCard = ({ songData, type, onCardClick }: SongCardBasePropTypes) => {
               <PersonIcon sx={{ color: "secondary.main" }} fontSize="small" />
             }
           >
-            {artist}
+            {artists}
           </IconTextLabel>
 
           <IconTextLabel
