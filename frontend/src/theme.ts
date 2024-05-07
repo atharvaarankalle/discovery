@@ -1,4 +1,5 @@
-import { createTheme } from "@mui/material/styles"; // adding more custom fields to the palette
+import { createTheme } from "@mui/material/styles";
+import React from "react";
 
 // adding more custom fields to the palette
 declare module "@mui/material/styles" {
@@ -10,6 +11,7 @@ declare module "@mui/material/styles" {
     purple: Palette["primary"];
     greyBlue: Palette["primary"];
     navyBlue: Palette["primary"];
+    darkGrey: Palette["primary"];
   }
 
   interface PaletteOptions {
@@ -20,6 +22,7 @@ declare module "@mui/material/styles" {
     purple?: PaletteOptions["primary"];
     greyBlue?: PaletteOptions["primary"];
     navyBlue?: PaletteOptions["primary"];
+    darkGrey?: PaletteOptions["primary"];
   }
 }
 
@@ -30,6 +33,7 @@ declare module "@mui/material/Button" {
 
   interface ButtonPropsColorOverrides {
     lightPeach: true;
+    peach: true;
     greyBlue: true;
     pink: true;
   }
@@ -41,13 +45,11 @@ declare module "@mui/material/IconButton" {
   }
 }
 
-// commonly used styles
-export const baseShadow = "2px 2px 10px rgba(0, 0, 0, 0.25);";
-export const baseGlow = "0px 0px 15px 5px rgba(215, 130, 207, 0.38)";
-export const landingBackground =
-  "linear-gradient(116.82deg, #272747 0%, #7E4DCD 100%)";
-export const loggedInBackground =
-  "linear-gradient(125.87deg, rgba(59, 59, 88, 0.75) 20.12%, rgba(156, 90, 166, 0.75) 85.54%), #3B3B58";
+declare module "@mui/material/TextField" {
+  interface TextFieldPropsColorOverrides {
+    peach: true;
+  }
+}
 
 export const colors = {
   lightPeach: "#FFE7DD",
@@ -59,6 +61,22 @@ export const colors = {
   navyBlue: "#272747",
   darkestBlue: "#121229",
   white: "#FFFFFF",
+  darkGrey: "#272727",
+};
+
+// commonly used styles
+export const baseShadow = "2px 2px 10px rgba(0, 0, 0, 0.25);";
+export const baseGlow = "0px 0px 15px 5px rgba(215, 130, 207, 0.38)";
+export const landingBackground =
+  "linear-gradient(116.82deg, #272747 0%, #7E4DCD 100%)";
+export const loggedInBackground =
+  "linear-gradient(125.87deg, rgba(59, 59, 88, 0.75) 20.12%, rgba(156, 90, 166, 0.75) 85.54%), #3B3B58";
+
+export const glowHoverStyle = {
+  "&:hover": {
+    backgroundColor: colors.lightPeach,
+    boxShadow: baseGlow,
+  },
 };
 
 declare module "@mui/material/styles" {
@@ -126,6 +144,10 @@ export const theme = createTheme({
     },
     navyBlue: {
       main: colors.navyBlue,
+      contrastText: colors.lightPeach,
+    },
+    darkGrey: {
+      main: colors.darkGrey,
       contrastText: colors.lightPeach,
     },
   },
@@ -277,6 +299,22 @@ export const theme = createTheme({
               color: colors.peach,
               background: "transparent",
               borderColor: colors.peach,
+            },
+          },
+        },
+        {
+          props: {
+            // ONLY FOR this button of this colour e.g. <StyledButton variant="contained" color="lightPeach">
+            variant: "contained",
+            color: "peach",
+          },
+          style: {
+            borderRadius: "40px",
+            fontSize: "1rem",
+            fontFamily: "Familjen Grotesk",
+            fontWeight: 600,
+            "&:hover": {
+              backgroundColor: colors.peach,
             },
           },
         },
