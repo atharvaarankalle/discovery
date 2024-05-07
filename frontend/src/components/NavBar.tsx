@@ -13,7 +13,7 @@ import StyledToolTip from "./StyledTooltip";
 const StyledAppBar = styled(AppBar)({
   backgroundColor: "transparent",
   boxShadow: "none",
-  padding: "1.5rem 4rem"
+  padding: "1.5rem 0.5rem"
 });
 
 /* Custom styles applied to MUI IconButton */
@@ -100,7 +100,7 @@ const NavBar = () => {
           <Typography variant="h4">TODAY'S DISCO:</Typography>
           <Typography variant="h2">prompt yay woohoo awesome</Typography>
         </Stack>
-        <Stack direction="row" gap={6} alignItems="center">
+        <Stack direction="row" gap={6} alignItems="center" sx={{ paddingRight: "0.5rem" }}>
           <Stack direction="row" alignItems="center">
             {currentUser?.hasSubmitted ? (
               <LocalFireDepartmentIcon
@@ -128,7 +128,7 @@ const NavBar = () => {
         </Stack>
       </Toolbar>
       {currentPage === "Prompt" && (
-        <Stack direction="column" sx={{ padding: "2.2rem 0 0 2.5rem" }}>
+        <Stack direction="column" sx={{ padding: "1rem 0 0 2.5rem" }}>
           <Typography variant="h4">TODAY'S DISCO:</Typography>
           <Typography variant="h1">prompt yay woohoo awesome</Typography>
         </Stack>

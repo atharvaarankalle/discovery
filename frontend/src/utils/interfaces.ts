@@ -40,6 +40,7 @@ export interface User {
   suggestedSongs: string[];
   profilePic?: string;
   hasSubmitted: boolean;
+}
 
 /**
  * @interface SongSuggestionData
