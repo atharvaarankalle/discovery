@@ -64,7 +64,7 @@ export const authenticateToken: RequestHandler = (
  * @param profilePic Optional string, will be empty string ("") if not provided.
  *
  * @returns
- * - 201 Created: Successfully created a User object, returned in response
+ * - 201 Created: Successful creation of User, returns user data and auth cookie in response
  * - 400 Bad Request: No email and/or password provided in request body
  * - 409 Conflict: A user with this email already exists
  * - 500 Server Error: Another issue has occurred, causing signup to fail
@@ -99,12 +99,12 @@ router.post("/signup", async (req: Request, res: Response) => {
       suggestedSongs: [],
     });
     const savedUser: IUser = await newUser.save(); // save user to DB
-    const token = getJWTAuthToken(savedUser._id); // get authToken
+    const token = getJWTAuthToken(savedUser._id); // get authToken and set as response cookie for client
+    res.cookie("authToken", token, { httpOnly: true, secure: true });
 
     res.status(201).json({
       message: "Successful sign up!",
       user: userDetailResponseData(savedUser),
-      token,
     });
   } catch (error) {
     res.status(500).json({ error: "Signup has failed" });
@@ -119,7 +119,7 @@ router.post("/signup", async (req: Request, res: Response) => {
  * @param password Required String
  *
  * @returns
- * - 200 OK: Successful login, JWT auth token returned in response body
+ * - 200 OK: Successful login, user data and auth cookie returned in response
  * - 401 Unauthorized: Invalid email and/or password provided
  * - 404 Not Found: A user with this email cannot be found
  * - 500 Server Error: Another issue has occurred, causing login to fail
@@ -139,12 +139,12 @@ router.post("/login", async (req: Request, res: Response) => {
       return res.status(401).json({ error: "Invalid email or password" });
     }
 
-    const token = getJWTAuthToken(user._id); // get authToken
+    const token = getJWTAuthToken(user._id); // get authToken and set as response cookie for client
+    res.cookie("authToken", token, { httpOnly: true, secure: true });
 
     res.status(200).json({
       message: "Successful login!",
       user: userDetailResponseData(user),
-      token,
     });
   } catch (error) {
     res.status(500).json({ error: "Login failed" });
