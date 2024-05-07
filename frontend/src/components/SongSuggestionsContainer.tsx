@@ -34,6 +34,7 @@ const SongSuggestionsContainer = ({
           <Box key={id}>
             <SongSuggestionCard
               songData={{
+                id: songData.id,
                 songTitle: songData.songTitle,
                 album: songData.album,
                 artists: songData.artists,
