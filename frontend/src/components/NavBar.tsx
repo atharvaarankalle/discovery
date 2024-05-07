@@ -8,6 +8,7 @@ import { useContext } from "react";
 import { AppContext } from "../AppContextProvider";
 import NavBarDropdownMenu from "./NavBarDropdownMenu";
 import StyledToolTip from "./StyledTooltip";
+import CustomTypography from "./CustomTypography";
 
 /* Custom styles applied to MUI AppBar */
 const StyledAppBar = styled(AppBar)({
@@ -72,22 +73,22 @@ const NavBar = () => {
           placement="right-end"
           disableInteractive
           sx={{
-            '& .MuiTooltip-tooltip': {
+            "& .MuiTooltip-tooltip": {
               backgroundColor: `${theme.palette.primary.main}75`,
               position: "relative",
-              top: "2rem",
-              right: "2.5rem",
+              top: "0.5rem",
+              right: "2rem",
               padding: "0.7rem 1rem",
               fontSize: "1.2rem",
               borderRadius: "0.5rem",
-            }
+            },
           }}
         >
-          <StyledIconButton size="large" onClick={() => handleLogoClick(currentPage)}>
-            <DiscoveryLogo
-              width={75}
-              height={75}
-            />
+          <StyledIconButton
+            size="large"
+            onClick={() => handleLogoClick(currentPage)}
+          >
+            <DiscoveryLogo width={75} height={75} />
           </StyledIconButton>
         </StyledToolTip>
         <Stack
@@ -98,9 +99,16 @@ const NavBar = () => {
           }}
         >
           <Typography variant="h4">TODAY'S DISCO:</Typography>
-          <Typography variant="h2">prompt yay woohoo awesome</Typography>
+          <CustomTypography variant="h2" num_lines={1}>
+            prompt yay woohoo awesome
+          </CustomTypography>
         </Stack>
-        <Stack direction="row" gap={6} alignItems="center" sx={{ paddingRight: "0.5rem" }}>
+        <Stack
+          direction="row"
+          gap={6}
+          alignItems="center"
+          sx={{ paddingRight: "0.5rem" }}
+        >
           <Stack direction="row" alignItems="center">
             {currentUser?.hasSubmitted ? (
               <LocalFireDepartmentIcon
@@ -130,7 +138,9 @@ const NavBar = () => {
       {currentPage === "Prompt" && (
         <Stack direction="column" sx={{ padding: "1rem 0 0 2.5rem" }}>
           <Typography variant="h4">TODAY'S DISCO:</Typography>
-          <Typography variant="h1">prompt yay woohoo awesome</Typography>
+          <CustomTypography variant="h1" num_lines={1}>
+            prompt yay woohoo awesome
+          </CustomTypography>
         </Stack>
       )}
     </StyledAppBar>
