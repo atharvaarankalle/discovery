@@ -16,10 +16,12 @@ dotenv.config();
 const AUTH_SECRET_KEY: string = process.env.AUTH_SECRET_KEY || "";
 const router: Router = express.Router();
 
+const TOKEN_EXPIRY_IN_HOURS: number = 1;
+
 /* This function creates and return a JWT token for authentication */
 const getJWTAuthToken = (userId: string) =>
   jwt.sign({ userId }, AUTH_SECRET_KEY, {
-    expiresIn: "1h", // how long the auth token is valid for
+    expiresIn: `${TOKEN_EXPIRY_IN_HOURS}h`, // how long the auth token is valid for
   });
 
 /**
@@ -100,7 +102,16 @@ router.post("/signup", async (req: Request, res: Response) => {
     });
     const savedUser: IUser = await newUser.save(); // save user to DB
     const token = getJWTAuthToken(savedUser._id); // get authToken and set as response cookie for client
-    res.cookie("authToken", token, { httpOnly: true, secure: true });
+    // get expiry time in milliseconds to add to cookie
+    const expiryDate = new Date();
+    expiryDate.setTime(
+      expiryDate.getTime() + TOKEN_EXPIRY_IN_HOURS * 60 * 60 * 1000
+    );
+    res.cookie("authToken", token, {
+      httpOnly: true,
+      secure: true,
+      expires: expiryDate,
+    });
 
     res.status(201).json({
       message: "Successful sign up!",
@@ -139,8 +150,18 @@ router.post("/login", async (req: Request, res: Response) => {
       return res.status(401).json({ error: "Invalid email or password" });
     }
 
-    const token = getJWTAuthToken(user._id); // get authToken and set as response cookie for client
-    res.cookie("authToken", token, { httpOnly: true, secure: true });
+    // get authToken and set as response cookie for client
+    const token = getJWTAuthToken(user._id);
+    // get expiry time in milliseconds to add to cookie
+    const expiryDate = new Date();
+    expiryDate.setTime(
+      expiryDate.getTime() + TOKEN_EXPIRY_IN_HOURS * 60 * 60 * 1000
+    );
+    res.cookie("authToken", token, {
+      httpOnly: true,
+      secure: true,
+      expires: expiryDate,
+    });
 
     res.status(200).json({
       message: "Successful login!",
