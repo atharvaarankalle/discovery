@@ -80,6 +80,7 @@ export interface SongCardBasePropTypes extends CardProps {
       albumArtSrc: url link to the album art image url 
 @prop type: required prop with value of "small", "medium" or "large", indicating what SongCard type to render
 @prop onCardClick: the onClick function for the card area. optional prop if type='small'
+@prop isLiked: boolean value to set the initial state of the like button
 
 **/
 const SongCard = ({
