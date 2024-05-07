@@ -72,7 +72,10 @@ const TopBar = () => {
       }}
     >
       <Box flexGrow={1}>
-        <DiscoveryLogoWithtext width="200px" />
+        <DiscoveryLogoWithtext
+          width="200px"
+          handleClick={() => window.location.reload()}
+        />
       </Box>
       <StyledButton
         variant="contained"

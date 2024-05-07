@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import AppBase from "./AppBase.tsx";
 import DiscoverPage from "./pages/DiscoverPage.tsx";
 import LandingPage from "./pages/LandingPage.tsx";
@@ -6,6 +6,9 @@ import LoginSignupPage from "./pages/LoginSignupPage.tsx";
 import PromptPage from "./pages/PromptPage.tsx";
 import ProfilePage from "./pages/ProfilePage.tsx";
 import UserAppBase from "./pages/UserAppBase.tsx";
+import NotFoundPage from "./pages/NotFoundPage.tsx";
+import { ThemeProvider } from "@mui/material";
+import { theme } from "./theme.ts";
 
 function App() {
   return (
@@ -26,7 +29,12 @@ function App() {
       </Route>
       <Route
         path="*"
-        element={<p>The page {useLocation().pathname} cannot be found!</p>}
+        // element={<p>The page {useLocation().pathname} cannot be found!</p>}
+        element={
+          <ThemeProvider theme={theme}>
+            <NotFoundPage />
+          </ThemeProvider>
+        }
       />
     </Routes>
   );

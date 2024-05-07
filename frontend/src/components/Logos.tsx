@@ -6,6 +6,7 @@ import { Box } from "@mui/material";
 interface LogoPropTypes extends React.ImgHTMLAttributes<HTMLImageElement> {
   width?: string | number;
   height?: string | number;
+  handleClick?: () => void;
 }
 
 /**
@@ -13,8 +14,13 @@ interface LogoPropTypes extends React.ImgHTMLAttributes<HTMLImageElement> {
  *
  * @param width: width of the logo
  * @param height: height of the logo
+ * @param handleClick: function to execute when clicked
  */
-export const DiscoveryLogoWithtext = ({ width, height }: LogoPropTypes) => {
+export const DiscoveryLogoWithtext = ({
+  width,
+  height,
+  handleClick,
+}: LogoPropTypes) => {
   return (
     <Box
       sx={{ "&:hover": { cursor: "pointer" } }}
@@ -23,7 +29,7 @@ export const DiscoveryLogoWithtext = ({ width, height }: LogoPropTypes) => {
       alt="Discovery Logo with Text"
       width={width}
       height={height}
-      onClick={() => window.location.reload()}
+      onClick={handleClick}
     />
   );
 };

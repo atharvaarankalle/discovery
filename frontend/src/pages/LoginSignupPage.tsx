@@ -12,7 +12,7 @@ const LoginPageContent = styled("div")({
   zIndex: 5,
 });
 
-const StyledLogo = styled(Box)({
+export const StyledLogo = styled(Box)({
   position: "absolute",
   left: "60px", // to match landing page
   top: "30px", // to match landing page
@@ -27,7 +27,10 @@ const LoginSignupPage = ({ activeTab }: LoginSignupPageProps) => {
     <PlanetBackground>
       <LoginPageContent>
         <StyledLogo>
-          <DiscoveryLogoWithtext width="200px" />
+          <DiscoveryLogoWithtext
+            width="200px"
+            handleClick={() => window.location.reload()}
+          />
         </StyledLogo>
         <LoginSignupTabs initialTab={activeTab} />
       </LoginPageContent>
