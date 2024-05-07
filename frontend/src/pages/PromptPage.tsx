@@ -1,26 +1,8 @@
 import { useState } from "react";
-import { styled, Box, Button, Typography, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
-import SkipNextIcon from '@mui/icons-material/SkipNext';
-import { colors, landingBackground  } from "../theme";
+import { Box, Button, Typography} from "@mui/material";
 import { Searchbar } from "../components/Searchbar"
 import { SkipButton } from "../components/SkipButton";
-
-const DialogBackground = styled('div')({
-  background: landingBackground,
-  backgroundColor: colors.navyBlue,
-});
-
-// const SkipButton = styled(Button)({
-//   position: 'fixed', 
-//   bottom: 20, 
-//   left: 20,
-//   color: colors.lightPeach,
-//   fontSize: "1.25rem",
-//   fontWeight: 400,
-//   fontFamily: "Sora",
-//   textTransform: 'none', 
-//   ':hover': { textDecoration: 'underline' }
-// });
+import { colors } from "../theme";
 
 export const PromptPage = () => {
   const [prompt, setPrompt] = useState("Press button for prompt");
