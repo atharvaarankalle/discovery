@@ -15,11 +15,18 @@ dotenv.config();
 const AUTH_SECRET_KEY: string = process.env.AUTH_SECRET_KEY || "";
 const router: Router = express.Router();
 
+// create and return JWT token for authentication
+const getJWTAuthToken = (userId: string) =>
+  jwt.sign({ userId }, AUTH_SECRET_KEY, {
+    expiresIn: "1h",
+  });
+
 /**
  * AUTHENTICATE TOKEN MIDDLEWARE
  *
  * This middleware runs on every endpoint apart from the login and signup.
- * It verifies the user is authenticated to interact with the application's API routes.
+ * It verifies the user is authenticated to interact with the application's API routes,
+ * using the cookie stored.
  *
  */
 export const authenticateToken: RequestHandler = (
@@ -33,13 +40,14 @@ export const authenticateToken: RequestHandler = (
   }
 
   // obtain auth token from authorization header of request
-  const token = req.headers["authorization"];
-  if (!token) {
+
+  if (!req.cookies?.authToken) {
     return res.status(401).json({ error: "Unauthorized" });
   }
+  const token = req.cookies.authToken;
 
   // verifying the auth token using secret key
-  jwt.verify(token, AUTH_SECRET_KEY, (err) => {
+  jwt.verify(token, AUTH_SECRET_KEY, (err: any) => {
     if (err) {
       return res.status(403).json({ error: "Authentication token is invalid" });
     }
@@ -92,10 +100,14 @@ router.post("/signup", async (req: Request, res: Response) => {
       suggestedSongs: [],
     });
     // save the user to the database
-    await newUser.save();
+    const savedUser: IUser = await newUser.save();
+
+    const token = getJWTAuthToken(savedUser._id);
 
     // respond with success message
-    res.status(201).json({ message: "Successful sign up!", user: newUser });
+    res
+      .status(201)
+      .json({ message: "Successful sign up!", user: newUser, token: token });
   } catch (error) {
     res.status(500).json({ error: "Signup has failed" });
   }
@@ -129,14 +141,26 @@ router.post("/login", async (req: Request, res: Response) => {
       return res.status(401).json({ error: "Invalid email or password" });
     }
 
-    // create and send JWT token for successful login
-    const token = jwt.sign({ userId: user._id }, AUTH_SECRET_KEY, {
-      expiresIn: "1h",
-    });
+    const token = getJWTAuthToken(user._id);
+
     res.status(200).json({ token });
   } catch (error) {
     res.status(500).json({ error: "Login failed" });
   }
+});
+
+/**
+ * LOGOUT ENDPOINT
+ *
+ * No request body, this endpoint simply clears cookies on logout
+ *
+ * @returns
+ * - 200 OK: Successful logout, JWT auth token cleared
+ *
+ */
+router.post("/logout", (req, res) => {
+  res.clearCookie("authToken");
+  res.status(200).json({ message: "Logout successful" });
 });
 
 export default router;

@@ -9,6 +9,9 @@ router.get("/", (req, res) => {
 });
 
 // Nested routes
+import cookieParser from "cookie-parser";
+router.use(cookieParser());
+
 import { authenticateToken } from "./auth";
 router.use(authenticateToken);
 
