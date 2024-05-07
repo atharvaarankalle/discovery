@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import NavBar from "../components/NavBar";
-import styled from "@emotion/styled";
+import { styled } from "@mui/material";
 import { loggedInBackground } from "../theme";
 import { Box } from "@mui/material";
 
