@@ -3,6 +3,7 @@ import { Typography, ThemeProvider, Grid, Button } from "@mui/material";
 import { theme } from "../theme";
 import SongCard from "../components/SongCard";
 import { useState } from "react";
+import PaginationButtons from "../components/PaginationButtons";
 
 const ProfilePage = () => {
   // Dummy user data
@@ -105,6 +106,12 @@ const ProfilePage = () => {
             </Grid>
           ))}
         </Grid>
+
+        <PaginationButtons
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        ></PaginationButtons>
       </ThemeProvider>
     </>
   );
