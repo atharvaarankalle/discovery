@@ -26,6 +26,8 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
   },
 }));
 
+type LoggedInUserPages = "Discover" | "Prompt" | "Profile";
+
 /**
  * NavBar Component
  * 
@@ -38,7 +40,7 @@ const NavBar = () => {
   const navigate = useNavigate();
 
   // Determine the current page based on the URL path
-  let currentPage;
+  let currentPage: LoggedInUserPages;
   switch (location.pathname) {
     case "/user/discover":
       currentPage = "Discover";
@@ -57,7 +59,7 @@ const NavBar = () => {
    * 
    * @param currentPage - the current page the user is on
    */
-  const handleLogoClick = (currentPage: string) => {
+  const handleLogoClick = () => {
     if (currentPage === "Discover") {
       window.location.reload();
     } else {
@@ -86,7 +88,7 @@ const NavBar = () => {
         >
           <StyledIconButton
             size="large"
-            onClick={() => handleLogoClick(currentPage)}
+            onClick={() => handleLogoClick()}
           >
             <DiscoveryLogo width={75} height={75} />
           </StyledIconButton>
