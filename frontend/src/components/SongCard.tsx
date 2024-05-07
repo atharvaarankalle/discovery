@@ -81,7 +81,7 @@ const SongCard = ({
   onCardClick,
   isLiked,
 }: SongCardBasePropTypes) => {
-  const { songTitle, artist, album, albumArtSrc } = songData;
+  const { songTitle, artists, album, albumArtSrc } = songData;
   const [isSelected, setIsSelected] = useState<boolean>(false);
   const theme: Theme = useTheme(); // importing theme object to use in sx prop
 
