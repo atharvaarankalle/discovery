@@ -2,7 +2,7 @@ import { Button, styled } from "@mui/material";
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import { colors } from "../theme";
 
-// Styling for underlined button with a fixed position at the bottom left
+// Styling for underlined button with a fixed position at the bottom left.
 const UnderlinedButton = styled(Button)({
     position: 'fixed', 
     bottom: 20, 
