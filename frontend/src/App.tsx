@@ -6,15 +6,19 @@ import LoginSignupPage from "./pages/LoginSignupPage.tsx";
 import PromptPage from "./pages/PromptPage.tsx";
 import ProfilePage from "./pages/ProfilePage.tsx";
 import UserAppBase from "./pages/UserAppBase.tsx";
-import { useMediaQuery } from "@mui/material";
+import { ThemeProvider, useMediaQuery } from "@mui/material";
 import { theme } from "./theme.ts";
 import MobileDefaultPage from "./pages/MobileDefaultPage.tsx";
 
 function App() {
-  const isMobileScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobileScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   if (isMobileScreen) {
-    return <MobileDefaultPage />;
+    return (
+      <ThemeProvider theme={theme}>
+        <MobileDefaultPage />
+      </ThemeProvider>
+    );
   }
 
   return (
