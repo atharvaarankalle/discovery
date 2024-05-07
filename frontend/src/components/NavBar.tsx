@@ -35,7 +35,7 @@ type LoggedInUserPages = "Discover" | "Prompt" | "Profile";
  */
 const NavBar = () => {
   const location = useLocation();
-  const { currentUser } = useContext(AppContext);
+  const { currentUser, promptOfTheDay } = useContext(AppContext);
   const theme: Theme = useTheme();
   const navigate = useNavigate();
 
@@ -102,7 +102,7 @@ const NavBar = () => {
         >
           <Typography variant="h4">TODAY'S DISCO:</Typography>
           <CustomTypography variant="h2" num_lines={1}>
-            prompt yay woohoo awesome
+            {promptOfTheDay}
           </CustomTypography>
         </Stack>
         <Stack
@@ -141,7 +141,7 @@ const NavBar = () => {
         <Stack direction="column" sx={{ padding: "1rem 0 0 2.5rem" }}>
           <Typography variant="h4">TODAY'S DISCO:</Typography>
           <CustomTypography variant="h1" num_lines={1}>
-            prompt yay woohoo awesome
+            {promptOfTheDay}
           </CustomTypography>
         </Stack>
       )}

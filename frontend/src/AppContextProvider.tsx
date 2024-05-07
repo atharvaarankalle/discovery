@@ -7,6 +7,8 @@ interface AppContextType {
   setCurrentPreviewSong: (song: SongData | null) => void;
   currentUser: User | null;
   setCurrentUser: (user: User | null) => void;
+  promptOfTheDay: string | undefined;
+  setPromptOfTheDay: (prompt: string | undefined) => void;
 }
 
 export const AppContext = createContext<AppContextType>({
@@ -14,6 +16,8 @@ export const AppContext = createContext<AppContextType>({
   setCurrentPreviewSong: () => {},
   currentUser: null,
   setCurrentUser: () => {},
+  promptOfTheDay: undefined,
+  setPromptOfTheDay: () => {},
 });
 
 interface AppContextProviderProps {
@@ -31,11 +35,15 @@ export function AppContextProvider({ children }: AppContextProviderProps) {
 
   const [currentUser, setCurrentUser] = useLocalStorage("currentUser", null);
 
+  const [promptOfTheDay, setPromptOfTheDay] = useState<string | undefined>(undefined);
+
   const context = {
     currentPreviewSong,
     setCurrentPreviewSong,
     currentUser,
     setCurrentUser,
+    promptOfTheDay,
+    setPromptOfTheDay,
   };
 
   return <AppContext.Provider value={context}>{children}</AppContext.Provider>;
