@@ -18,7 +18,6 @@ const UserAppBase = () => {
   return (
     <AppContextProvider>
       <LoggedInBackground>
-        {/* TODO in future issue: NavBar */}
         <NavBar />
         {/* adding spacing around all child elements */}
         <Box m={"3rem"}>
