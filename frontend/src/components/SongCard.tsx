@@ -1,12 +1,12 @@
 import {
   Card,
-  CardProps,
   CardActionArea,
   CardActions,
   CardContent,
   CardMedia,
-  styled,
   CardMediaProps,
+  CardProps,
+  styled,
   Theme,
   useTheme,
 } from "@mui/material";
@@ -65,18 +65,14 @@ export interface SongCardBasePropTypes extends CardProps {
   onCardClick?: () => void;
 }
 
-/** 
+/**
  * SongCardBase Component
- * 
-@prop songData: an object containing song data such as:
-      songTitle: title of the song
-      artist: artist/s of the song
-      album: album the song is from
-      albumArtSrc: url link to the album art image url 
-@prop type: required prop with value of "small", "medium" or "large", indicating what SongCard type to render
-@prop onCardClick: the onClick function for the card area. optional prop if type='small'
+ *
+ @prop songData: an object containing song data ({@link SongData})
+ @prop type: required prop with value of "small", "medium" or "large", indicating what SongCard type to render
+ @prop onCardClick: the onClick function for the card area. optional prop if type='small'
 
-**/
+ **/
 const SongCard = ({ songData, type, onCardClick }: SongCardBasePropTypes) => {
   const { songTitle, artists, album, albumArtSrc } = songData;
   const [isSelected, setIsSelected] = useState<boolean>(false);
@@ -89,7 +85,7 @@ const SongCard = ({ songData, type, onCardClick }: SongCardBasePropTypes) => {
   };
 
   // deciding card height based on what size (variant) it is
-  let cardHeight: string = "7rem";
+  let cardHeight: string;
   switch (type) {
     case "small":
       cardHeight = "5rem";
