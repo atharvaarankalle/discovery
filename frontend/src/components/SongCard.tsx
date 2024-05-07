@@ -67,6 +67,7 @@ export interface SongCardBasePropTypes extends CardProps {
   };
   type: "small" | "medium" | "large";
   onCardClick?: () => void;
+  isLiked: boolean;
 }
 
 /** 
@@ -81,7 +82,12 @@ export interface SongCardBasePropTypes extends CardProps {
 @prop onCardClick: the onClick function for the card area. optional prop if type='small'
 
 **/
-const SongCard = ({ songData, type, onCardClick }: SongCardBasePropTypes) => {
+const SongCard = ({
+  songData,
+  type,
+  onCardClick,
+  isLiked,
+}: SongCardBasePropTypes) => {
   const { songTitle, artist, album, albumArtSrc } = songData;
   const [isSelected, setIsSelected] = useState<boolean>(false);
   const theme: Theme = useTheme(); // importing theme object to use in sx prop
@@ -186,7 +192,7 @@ const SongCard = ({ songData, type, onCardClick }: SongCardBasePropTypes) => {
 
       {type === "medium" && (
         <CardActions>
-          <LikeButton />
+          <LikeButton isLikedInitial={isLiked} />
         </CardActions>
       )}
     </StyledCard>
