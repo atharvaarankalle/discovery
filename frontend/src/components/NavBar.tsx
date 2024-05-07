@@ -1,4 +1,4 @@
-import { AppBar, IconButton, Stack, Theme, Toolbar, Typography, styled, useTheme } from "@mui/material";
+import { AppBar, IconButton, Stack, Theme, Toolbar, Typography, styled, tooltipClasses, useTheme } from "@mui/material";
 import { DiscoveryLogo } from "./Logos";
 import LocalFireDepartmentTwoToneIcon from '@mui/icons-material/LocalFireDepartmentTwoTone';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
@@ -7,6 +7,7 @@ import { useLocation } from "react-router-dom";
 import { useContext } from "react";
 import { AppContext } from "../AppContextProvider";
 import NavBarDropdownMenu from "./NavBarDropdownMenu";
+import StyledToolTip from "./StyledTooltip";
 
 const StyledAppBar = styled(AppBar)({
   backgroundColor: "transparent",
@@ -42,12 +43,27 @@ const NavBar = () => {
   return (
     <StyledAppBar position="static">
       <Toolbar>
-        <StyledIconButton size="large">
-          <DiscoveryLogo
-            width={75}
-            height={75}
-          />
-        </StyledIconButton>
+        <StyledToolTip
+          title={currentPage === "Discover" ? "Refresh" : "Back to Discovery"}
+          placement="right-end"
+          disableInteractive
+          sx={{
+            '& .MuiTooltip-tooltip': {
+              backgroundColor: `${theme.palette.primary.main}75`,
+              position: "absolute",
+              padding: "0.7rem 1rem",
+              fontSize: "1.2rem",
+              borderRadius: "0.5rem",
+            }
+          }}
+        >
+          <StyledIconButton size="large">
+            <DiscoveryLogo
+              width={75}
+              height={75}
+            />
+          </StyledIconButton>
+        </StyledToolTip>
         <Stack
           direction="column"
           sx={{
