@@ -260,7 +260,7 @@ async function updateStreaks(user: IUser) {
   return;
 }
 
-const userDetailResponseData = (user: any) => {
+export const userDetailResponseData = (user: IUser) => {
   const {
     _id,
     email,
