@@ -3,9 +3,19 @@ import { Box, Button, Typography} from "@mui/material";
 import { Searchbar } from "../components/Searchbar"
 import { SkipButton } from "../components/SkipButton";
 import { colors } from "../theme";
+import { ConfirmationDialog } from "../components/ConfirmDialog";
 
 export const PromptPage = () => {
   const [prompt, setPrompt] = useState("Press button for prompt");
+  const [open, setOpen] = useState<boolean>(false);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const handleConfirmQuit = () => {
+      console.log("User confirmed to quit");
+      handleClose();
+      // Additional actions to quit goes here
+  };
   
   const handlePrompt = async () => {
     try {
@@ -33,7 +43,12 @@ export const PromptPage = () => {
           </Typography>
         </Box>
       </Box>
-      <SkipButton/>
+      <SkipButton onOpen={handleOpen}/>
+      <ConfirmationDialog
+                open={open}
+                onClose={handleClose}
+                onConfirm={handleConfirmQuit}
+            />
     </Box>
   );
 };
