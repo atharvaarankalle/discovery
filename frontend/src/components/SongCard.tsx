@@ -60,16 +60,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
 
 /* Prop types declaration for SongCardBase */
 export interface SongCardBasePropTypes extends CardProps {
-<<<<<<< HEAD
-  songData: {
-    songTitle: string;
-    artists: string;
-    album: string;
-    albumArtSrc: string;
-  };
-=======
   songData: SongData;
->>>>>>> main
   type: "small" | "medium" | "large";
   onCardClick?: () => void;
   isLiked: boolean;
@@ -84,16 +75,12 @@ export interface SongCardBasePropTypes extends CardProps {
 @prop isLiked: boolean value to set the initial state of the like button
 
 **/
-<<<<<<< HEAD
-const SongCard = ({ songData, type, onCardClick }: SongCardBasePropTypes) => {
-=======
 const SongCard = ({
   songData,
   type,
   onCardClick,
   isLiked,
 }: SongCardBasePropTypes) => {
->>>>>>> main
   const { songTitle, artists, album, albumArtSrc } = songData;
   const [isSelected, setIsSelected] = useState<boolean>(false);
   const theme: Theme = useTheme(); // importing theme object to use in sx prop
