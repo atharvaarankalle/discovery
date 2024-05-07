@@ -11,20 +11,19 @@ import { useNavigate } from "react-router-dom";
 
 /* Custom styles applied to MUI Box to be the main wrapper of this component */
 const StyledBox = styled(Box)(({ theme }) => ({
-  backgroundColor: theme.palette.greyBlue.main,
+  backgroundColor: `${theme.palette.primary.dark}75`, // 75 at the end adds 46% opacity to colour hexcode
   borderRadius: "1.25rem",
 }));
 
 /* Custom styles applied to MUI Box to be the background image of the component */
-const StarsBackground = styled(Box)({
+const StarsBackground = styled("div")({
   backgroundImage: `url(${starsBackground})`,
   backgroundPosition: "top",
-
-  mixBlendMode: "plus-lighter",
+  mixBlendMode: "color-dodge",
 });
 
 /* Custom styles applied to MUI Box to position/overlay the planet3 image */
-const Planet3 = styled(Box)({
+const Planet3 = styled("div")({
   backgroundImage: `url(${planet3})`,
   backgroundRepeat: "no-repeat",
   backgroundPositionX: "90rem",
@@ -34,7 +33,7 @@ const Planet3 = styled(Box)({
 });
 
 /* Custom styles applied to MUI Box to position/overlay the planet4 image */
-const Planet4 = styled(Box)({
+const Planet4 = styled("div")({
   backgroundImage: `url(${planet4})`,
   backgroundRepeat: "no-repeat",
   backgroundPositionX: "3rem",
@@ -62,9 +61,9 @@ const DiscoverPageHeader = ({
 
   return (
     <StyledBox>
-      <StarsBackground>
+      <Planet4>
         <Planet3>
-          <Planet4>
+          <StarsBackground>
             <Stack
               spacing={3}
               p="1.25rem"
@@ -101,9 +100,9 @@ const DiscoverPageHeader = ({
                 </Button>
               )}
             </Stack>
-          </Planet4>
+          </StarsBackground>
         </Planet3>
-      </StarsBackground>
+      </Planet4>
     </StyledBox>
   );
 };
