@@ -3,7 +3,6 @@ import NavBar from "../components/NavBar";
 import styled from "@emotion/styled";
 import { loggedInBackground } from "../theme";
 import { Box } from "@mui/material";
-import { AppContextProvider } from "../AppContextProvider";
 
 // Background container for the whole logged in user experience
 const LoggedInBackground = styled("div")({
@@ -16,15 +15,13 @@ const LoggedInBackground = styled("div")({
 
 const UserAppBase = () => {
   return (
-    <AppContextProvider>
-      <LoggedInBackground>
-        <NavBar />
-        {/* adding spacing around all child elements */}
-        <Box m={"3rem"}>
-          <Outlet />
-        </Box>
-      </LoggedInBackground>
-    </AppContextProvider>
+    <LoggedInBackground>
+      <NavBar />
+      {/* adding spacing around all child elements */}
+      <Box m={"3rem"}>
+        <Outlet />
+      </Box>
+    </LoggedInBackground>
   );
 };
 
