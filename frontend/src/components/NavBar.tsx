@@ -3,7 +3,7 @@ import { DiscoveryLogo } from "./Logos";
 import LocalFireDepartmentTwoToneIcon from '@mui/icons-material/LocalFireDepartmentTwoTone';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 import PriorityHighTwoToneIcon from '@mui/icons-material/PriorityHighTwoTone';
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AppContext } from "../AppContextProvider";
 import NavBarDropdownMenu from "./NavBarDropdownMenu";
@@ -27,6 +27,7 @@ const NavBar = () => {
   const location = useLocation();
   const { currentUser } = useContext(AppContext);
   const theme: Theme = useTheme();
+  const navigate = useNavigate();
 
   let currentPage;
   switch (location.pathname) {
@@ -38,6 +39,14 @@ const NavBar = () => {
       break;
     default:
       currentPage = "Profile";
+  }
+
+  const handleLogoClick = (currentPage: string) => {
+    if (currentPage === "Discover") {
+      window.location.reload();
+    } else {
+      navigate("/user/discover");
+    }
   }
   
   return (
@@ -59,7 +68,7 @@ const NavBar = () => {
             }
           }}
         >
-          <StyledIconButton size="large">
+          <StyledIconButton size="large" onClick={() => handleLogoClick(currentPage)}>
             <DiscoveryLogo
               width={75}
               height={75}
