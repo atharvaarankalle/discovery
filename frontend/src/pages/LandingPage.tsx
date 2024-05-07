@@ -105,7 +105,7 @@ const AnimatedPrompt = () => {
       setIsVisible(false);
       setTimeout(() => {
         setCurrentTextIndex(
-          (prevIndex) => (prevIndex + 1) % homePrompts.length
+          (prevIndex) => (prevIndex + 1) % homePrompts.length,
         );
         setIsVisible(true);
       }, 200); // Allow for 0.2 seconds between each transition
