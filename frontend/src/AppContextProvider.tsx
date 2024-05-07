@@ -29,14 +29,7 @@ export function AppContextProvider({ children }: AppContextProviderProps) {
     null
   );
 
-  const [currentUser, setCurrentUser] = useLocalStorage("currentUser", {
-    displayName: "Silly User",
-    streakCount: 6,
-    likedSongs: [],
-    suggestedSongs: [],
-    profilePic: "",
-    hasSubmitted: true,
-  });
+  const [currentUser, setCurrentUser] = useLocalStorage("currentUser", null);
 
   const context = {
     currentPreviewSong,
