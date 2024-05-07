@@ -1,4 +1,4 @@
-import { AppBar, IconButton, Stack, Theme, Toolbar, Typography, styled, tooltipClasses, useTheme } from "@mui/material";
+import { AppBar, IconButton, Stack, Theme, Toolbar, Typography, styled, useTheme } from "@mui/material";
 import { DiscoveryLogo } from "./Logos";
 import LocalFireDepartmentTwoToneIcon from '@mui/icons-material/LocalFireDepartmentTwoTone';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
@@ -44,13 +44,15 @@ const NavBar = () => {
     <StyledAppBar position="static">
       <Toolbar>
         <StyledToolTip
-          title={currentPage === "Discover" ? "Refresh" : "Back to Discovery"}
+          title={currentPage === "Discover" ? "Refresh" : "Back to discovery"}
           placement="right-end"
           disableInteractive
           sx={{
             '& .MuiTooltip-tooltip': {
               backgroundColor: `${theme.palette.primary.main}75`,
-              position: "absolute",
+              position: "relative",
+              top: "2rem",
+              right: "2.5rem",
               padding: "0.7rem 1rem",
               fontSize: "1.2rem",
               borderRadius: "0.5rem",
@@ -102,7 +104,7 @@ const NavBar = () => {
         </Stack>
       </Toolbar>
       {currentPage === "Prompt" && (
-        <Stack direction="column" sx={{ padding: "1.5rem 0 0 2.5rem" }}>
+        <Stack direction="column" sx={{ padding: "2.2rem 0 0 2.5rem" }}>
           <Typography variant="h4">TODAY'S DISCO:</Typography>
           <Typography variant="h1">prompt yay woohoo awesome</Typography>
         </Stack>
