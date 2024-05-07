@@ -1,12 +1,12 @@
 import {
   Card,
-  CardProps,
   CardActionArea,
   CardActions,
   CardContent,
   CardMedia,
-  styled,
   CardMediaProps,
+  CardProps,
+  styled,
   Theme,
   useTheme,
 } from "@mui/material";
@@ -17,6 +17,7 @@ import CdImage from "../assets/cd_image.png";
 import IconTextLabel from "./IconTextLabel";
 import LikeButton from "./LikeButton";
 import { useState } from "react";
+import { SongData } from "../utils/interfaces";
 
 // Custom styles applied to MUI CardMedia to be the Album used in  hover animation
 const AlbumArt = styled(CardMedia)<CardMediaProps>({
@@ -59,29 +60,40 @@ const StyledCard = styled(Card)(({ theme }) => ({
 
 /* Prop types declaration for SongCardBase */
 export interface SongCardBasePropTypes extends CardProps {
+<<<<<<< HEAD
   songData: {
     songTitle: string;
     artists: string;
     album: string;
     albumArtSrc: string;
   };
+=======
+  songData: SongData;
+>>>>>>> main
   type: "small" | "medium" | "large";
   onCardClick?: () => void;
+  isLiked: boolean;
 }
 
-/** 
+/**
  * SongCardBase Component
  * 
-@prop songData: an object containing song data such as:
-      songTitle: title of the song
-      artist: artist/s of the song
-      album: album the song is from
-      albumArtSrc: url link to the album art image url 
+@prop songData: an object containing song data ({@link SongData})
 @prop type: required prop with value of "small", "medium" or "large", indicating what SongCard type to render
 @prop onCardClick: the onClick function for the card area. optional prop if type='small'
+@prop isLiked: boolean value to set the initial state of the like button
 
 **/
+<<<<<<< HEAD
 const SongCard = ({ songData, type, onCardClick }: SongCardBasePropTypes) => {
+=======
+const SongCard = ({
+  songData,
+  type,
+  onCardClick,
+  isLiked,
+}: SongCardBasePropTypes) => {
+>>>>>>> main
   const { songTitle, artists, album, albumArtSrc } = songData;
   const [isSelected, setIsSelected] = useState<boolean>(false);
   const theme: Theme = useTheme(); // importing theme object to use in sx prop
@@ -93,7 +105,7 @@ const SongCard = ({ songData, type, onCardClick }: SongCardBasePropTypes) => {
   };
 
   // deciding card height based on what size (variant) it is
-  let cardHeight: string = "7rem";
+  let cardHeight: string;
   switch (type) {
     case "small":
       cardHeight = "5rem";
@@ -186,7 +198,7 @@ const SongCard = ({ songData, type, onCardClick }: SongCardBasePropTypes) => {
 
       {type === "medium" && (
         <CardActions>
-          <LikeButton />
+          <LikeButton isLikedInitial={isLiked} />
         </CardActions>
       )}
     </StyledCard>

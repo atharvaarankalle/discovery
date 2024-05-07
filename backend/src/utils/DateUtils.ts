@@ -28,4 +28,8 @@ export const compareDates = ({ date1, date2 }: compareDatesProps) => {
  * Get today's date
  * @returns Today's Date with time set to 0000.
  */
-export const getTodaysDate = () => new Date().setUTCHours(0, 0, 0, 0);
+export const getTodaysDate = () => {
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
+  return today;
+};
