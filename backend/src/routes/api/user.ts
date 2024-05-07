@@ -11,7 +11,11 @@ import { compareDates, getTodaysDate } from "../../utils/DateUtils";
 
 const router: Router = express.Router();
 
-// POST a new user's profile info
+/**
+ * POST a new user's profile info.
+ *
+ * @returns JSON object of the saved user profile.
+ */
 router.post("/", async (req: Request, res: Response) => {
   try {
     const userData: IUser = req.body;
@@ -26,7 +30,11 @@ router.post("/", async (req: Request, res: Response) => {
   }
 });
 
-// GET user's profile info
+/**
+ * GET user's profile info.
+ *
+ * @returns JSON object of the found user's profile.
+ */
 router.get("/:id", async (req: Request, res: Response) => {
   try {
     const userId = req.params.id;
@@ -44,7 +52,11 @@ router.get("/:id", async (req: Request, res: Response) => {
   }
 });
 
-// PATCH/Update user's profile info
+/**
+ * PATCH Update user's profile info
+ *
+ * @returns JSON object of the updated user's profile data
+ */
 router.patch("/:id", async (req: Request, res: Response) => {
   try {
     const userId = req.params.id;
@@ -66,7 +78,11 @@ router.patch("/:id", async (req: Request, res: Response) => {
   }
 });
 
-// GET list of user's liked songs
+/**
+ * GET list of user's liked songs
+ *
+ * @returns List of liked songs as JSON object
+ */
 router.get("/:id/liked", async (req: Request, res: Response) => {
   try {
     const userId = req.params.id;
@@ -87,7 +103,11 @@ router.get("/:id/liked", async (req: Request, res: Response) => {
   }
 });
 
-// PUT add a song to a user's list of liked songs
+/**
+ * PUT add a song to a user's list of liked songs
+ *
+ * @returns JSON object of the updated user's profile data
+ */
 router.put("/:id/liked", async (req: Request, res: Response) => {
   try {
     const userId = req.params.id;
@@ -115,7 +135,11 @@ router.put("/:id/liked", async (req: Request, res: Response) => {
   }
 });
 
-// DELETE a song from a user's list of liked songs
+/**
+ * DELETE a song from a user's list of liked songs
+ *
+ * @returns JSON object of the updated user's profile data
+ */
 router.delete("/:id/liked/:songId", async (req: Request, res: Response) => {
   try {
     const userId = req.params.id;
@@ -139,7 +163,11 @@ router.delete("/:id/liked/:songId", async (req: Request, res: Response) => {
   }
 });
 
-// GET today's suggested song from a user
+/**
+ * GET today's suggested song from a user
+ *
+ * @returns JSON object for the suggested song entry
+ */
 router.get("/:id/suggested/today", async (req: Request, res: Response) => {
   try {
     const userId = req.params.id;
@@ -182,7 +210,11 @@ router.get("/:id/suggested/today", async (req: Request, res: Response) => {
   }
 });
 
-// PUT add a song to a user's suggested songs, and add new suggested song entry
+/**
+ * PUT add a song to a user's suggested songs, and add new suggested song entry
+ *
+ * @returns JSON object of the updated user's profile data
+ */
 router.put("/:id/suggested", async (req: Request, res: Response) => {
   try {
     const userId = req.params.id;
@@ -227,7 +259,10 @@ router.put("/:id/suggested", async (req: Request, res: Response) => {
 
 export default router;
 
-// Updates the streak count if the last suggested song date is yesterday
+/**
+ * Updates the streak count if the last suggested song date is yesterday
+ * @param user User object
+ */
 async function updateStreaks(user: IUser) {
   // User has never suggested a song
   if (user.suggestedSongs.length == 0) {
