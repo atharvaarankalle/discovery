@@ -9,12 +9,14 @@ import { AppContext } from "../AppContextProvider";
 import NavBarDropdownMenu from "./NavBarDropdownMenu";
 import StyledToolTip from "./StyledTooltip";
 
+/* Custom styles applied to MUI AppBar */
 const StyledAppBar = styled(AppBar)({
   backgroundColor: "transparent",
   boxShadow: "none",
   padding: "1.5rem 4rem"
 });
 
+/* Custom styles applied to MUI IconButton */
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   marginRight: "3rem",
   padding: "1rem 1.2rem 1.2rem 1rem",
@@ -23,12 +25,18 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
   },
 }));
 
+/**
+ * NavBar Component
+ * 
+ * Renders the navigation bar at the top of the user pages, using context to get the currently logged in user. 
+ */
 const NavBar = () => {
   const location = useLocation();
   const { currentUser } = useContext(AppContext);
   const theme: Theme = useTheme();
   const navigate = useNavigate();
 
+  // Determine the current page based on the URL path
   let currentPage;
   switch (location.pathname) {
     case "/user/discover":
@@ -41,6 +49,13 @@ const NavBar = () => {
       currentPage = "Profile";
   }
 
+  /**
+   * Handles the click event when the user clicks on the Discovery logo.
+   * If the user is on the Discover page, the page will refresh.
+   * If the user is on any other page, they will be navigated back to the Discover page.
+   * 
+   * @param currentPage - the current page the user is on
+   */
   const handleLogoClick = (currentPage: string) => {
     if (currentPage === "Discover") {
       window.location.reload();
