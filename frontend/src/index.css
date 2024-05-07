@@ -22,7 +22,6 @@ body {
 /* Scrollbar track style */
 ::-webkit-scrollbar-track {
   background: transparent;
-  margin: 1rem;
 }
 
 /* Scrollbar handle style */
