@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import { styled } from "@mui/material";
 import { ReactNode } from "react";
 import { landingBackground } from "../theme";
 import {
@@ -13,7 +13,7 @@ import starsBackground from "../assets/stars_background.jpg";
 // Background container for the whole landing page
 const LandingPageBackground = styled("div")(({ theme }) => ({
   background: landingBackground,
-  backgroundColor: `${theme.palette.primary.main}`,
+  backgroundColor: theme.palette.primary.main,
   height: "100vh",
   width: "100%",
   position: "relative",
