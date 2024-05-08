@@ -20,7 +20,7 @@ const prompts = [
         prompt: "Daydreaming scenario song",
         date: new Date("2024-05-02T00:00:00.000+00:00")
     }
-]
+];
 
 beforeAll(async () => {
     mongod = await MongoMemoryServer.create();
@@ -34,6 +34,10 @@ beforeEach(async () => {
 
     const collection = await mongoose.connection.db.createCollection("prompts");
     await collection.insertMany(prompts);
+});
+
+afterEach(async () => {
+    await mongoose.connection.db.dropCollection("prompts");
 });
 
 afterAll(async () => {
