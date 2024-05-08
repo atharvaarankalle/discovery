@@ -119,11 +119,19 @@ export const PromptPage = () => {
   //Retrieve the prompt using axios
   const handlePrompt = async () => {
     try {
-        const response = await axios.get('http://localhost:3000/api/prompt');
-        if (response.status !== 200) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        setPrompt(response.data);
+      const baseURL = import.meta.env.VITE_API_BASE_URL;
+      const existingResponse = await axios.get(`${baseURL}/prompt/latest`);
+
+      if(!existingResponse) {
+        setPrompt(existingResponse);
+      } else {
+        const response = await axios.get(`${baseURL}/prompt`);
+          if (response.status !== 200) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          setPrompt(response.data);
+      }
+
     } catch (error) {
         console.error('There was a problem fetching the message:', error);
     }
