@@ -25,6 +25,7 @@ const StyledPagination = styled(Pagination)(({ theme }) => ({
 /* Prop types for SavedSongsContainer and SongSelectionContainer */
 interface SongContainerProps {
   songs?: SongData[];
+  onSongCardClick?: (songData: SongData | null) => void;
 }
 
 /**
@@ -32,7 +33,10 @@ interface SongContainerProps {
  *
  * @param songs: list of the user's saved songs
  */
-export const SavedSongsContainer = ({ songs }: SongContainerProps) => {
+export const SavedSongsContainer = ({
+  songs,
+  onSongCardClick,
+}: SongContainerProps) => {
   return (
     <SongCardContainer
       songs={songs}
@@ -40,6 +44,7 @@ export const SavedSongsContainer = ({ songs }: SongContainerProps) => {
       songCardType="medium"
       height="20rem"
       noDataMessage="Like a song from your discovery feed to add it to your discovered songs!"
+      onSongCardClick={onSongCardClick}
     />
   );
 };
@@ -49,8 +54,10 @@ export const SavedSongsContainer = ({ songs }: SongContainerProps) => {
  *
  * @param songs: list of songs based on the user's search term
  */
-export const SongSelectionContainer = ({ songs }: SongContainerProps) => {
-
+export const SongSelectionContainer = ({
+  songs,
+  onSongCardClick,
+}: SongContainerProps) => {
   return (
     <SongCardContainer
       songs={songs}
@@ -58,6 +65,7 @@ export const SongSelectionContainer = ({ songs }: SongContainerProps) => {
       songCardType="large"
       height="35rem"
       noDataMessage="Search for a track that best describes the prompt above!"
+      onSongCardClick={onSongCardClick}
     />
   );
 };
@@ -69,6 +77,7 @@ interface SongCardContainerProps {
   songCardType: "small" | "medium" | "large";
   height: string | number;
   noDataMessage: string;
+  onSongCardClick?: (songData: SongData | null) => void;
 }
 
 /**
@@ -86,6 +95,7 @@ const SongCardContainer = ({
   songCardType,
   height,
   noDataMessage,
+  onSongCardClick,
 }: SongCardContainerProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = songs ? Math.ceil(songs.length / songsPerPage) : 0;
@@ -137,6 +147,7 @@ const SongCardContainer = ({
         pageContents={pageContents}
         songCardType={songCardType}
         noDataMessage={noDataMessage}
+        onSongCardClick={onSongCardClick}
       />
       {songs && ( // Show pagination if there is data to display
         <Box
@@ -167,6 +178,7 @@ interface SongCardGridProps {
   pageContents?: SongData[];
   songCardType: "small" | "medium" | "large";
   noDataMessage: string;
+  onSongCardClick?: (songData: SongData | null) => void;
 }
 
 /**
@@ -180,7 +192,23 @@ const SongCardGrid = ({
   pageContents,
   songCardType,
   noDataMessage,
+  onSongCardClick,
 }: SongCardGridProps) => {
+  const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
+
+  const handleCardClick = (songData: SongData) => {
+    // call onClick function IF provided by higher level component
+    if (onSongCardClick) {
+      /* check if the selected card is different to this newly clicked one and set the new data if true, 
+      or clear data if they are toggling the same card (i.e. unselection) */
+      selectedCardId !== songData.id
+        ? onSongCardClick(songData)
+        : onSongCardClick(null);
+    }
+    // set selected status for this newly clicked card
+    setSelectedCardId(songData.id === selectedCardId ? null : songData.id);
+  };
+
   // Display no data message if there is no data to display
   if (!pageContents) {
     return (
@@ -198,7 +226,13 @@ const SongCardGrid = ({
     <Grid container spacing={3}>
       {pageContents.map((songData) => (
         <Grid item xs={12} md={6} key={songData.id}>
-          <SongCard songData={songData} isLiked={true} type={songCardType} />
+          <SongCard
+            songData={songData}
+            type={songCardType}
+            isSelected={songData.id === selectedCardId}
+            onCardClick={() => handleCardClick(songData)}
+            isLiked
+          />
         </Grid>
       ))}
     </Grid>
