@@ -1,10 +1,13 @@
 # COMPSCI 732 / SOFTENG 750 project - Team Amber Antelopes
 
+## ♫•*✧¨ discOvery *•¸✧.¸♪
+
 Welcome to the project! I look forward to seeing your progress and your final results this semester!
 
 Your team members are:
+
 - Michelle Lie
-- Lia Arroyo
+- Lia Arroyos
 - Tuan Le
 - Ariel Wang
 - Amisha Singh
