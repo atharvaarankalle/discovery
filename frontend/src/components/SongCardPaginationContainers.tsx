@@ -1,7 +1,7 @@
 import { Box, Grid, styled, Typography } from "@mui/material";
 import SongCard from "./SongCard.tsx";
 import Pagination from "@mui/material/Pagination";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { SongData } from "../utils/interfaces.ts";
 
 // Custom styling for the MUI pagination component
@@ -25,6 +25,7 @@ const StyledPagination = styled(Pagination)(({ theme }) => ({
 /* Prop types for SavedSongsContainer and SongSelectionContainer */
 interface SongContainerProps {
   songs?: SongData[];
+  onSongCardClick?: (songData: SongData | null) => void;
 }
 
 /**
@@ -32,7 +33,10 @@ interface SongContainerProps {
  *
  * @param songs: list of the user's saved songs
  */
-export const SavedSongsContainer = ({ songs }: SongContainerProps) => {
+export const SavedSongsContainer = ({
+  songs,
+  onSongCardClick,
+}: SongContainerProps) => {
   return (
     <SongCardContainer
       songs={songs}
@@ -40,6 +44,7 @@ export const SavedSongsContainer = ({ songs }: SongContainerProps) => {
       songCardType="medium"
       height="20rem"
       noDataMessage="Like a song from your discovery feed to add it to your discovered songs!"
+      onSongCardClick={onSongCardClick}
     />
   );
 };
@@ -49,7 +54,10 @@ export const SavedSongsContainer = ({ songs }: SongContainerProps) => {
  *
  * @param songs: list of songs based on the user's search term
  */
-export const SongSelectionContainer = ({ songs }: SongContainerProps) => {
+export const SongSelectionContainer = ({
+  songs,
+  onSongCardClick,
+}: SongContainerProps) => {
   return (
     <SongCardContainer
       songs={songs}
@@ -57,6 +65,7 @@ export const SongSelectionContainer = ({ songs }: SongContainerProps) => {
       songCardType="large"
       height="35rem"
       noDataMessage="Search for a track that best describes the prompt above!"
+      onSongCardClick={onSongCardClick}
     />
   );
 };
@@ -68,6 +77,7 @@ interface SongCardContainerProps {
   songCardType: "small" | "medium" | "large";
   height: string | number;
   noDataMessage: string;
+  onSongCardClick?: (songData: SongData | null) => void;
 }
 
 /**
@@ -85,9 +95,15 @@ const SongCardContainer = ({
   songCardType,
   height,
   noDataMessage,
+  onSongCardClick,
 }: SongCardContainerProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = songs ? Math.ceil(songs.length / songsPerPage) : 0;
+  const songsIsNotEmpty = songs && songs?.length > 0;
+
+  useEffect(() => {
+    setPageContents(getSongsToDisplay(currentPage));
+  }, [songs]);
 
   /**
    * Gets a subset of the songs in the list to display in the current page
@@ -133,8 +149,9 @@ const SongCardContainer = ({
         pageContents={pageContents}
         songCardType={songCardType}
         noDataMessage={noDataMessage}
+        onSongCardClick={onSongCardClick}
       />
-      {songs && ( // Show pagination if there is data to display
+      {songsIsNotEmpty && ( // Show pagination if there is data to display
         <Box
           sx={{
             display: "flex",
@@ -163,6 +180,7 @@ interface SongCardGridProps {
   pageContents?: SongData[];
   songCardType: "small" | "medium" | "large";
   noDataMessage: string;
+  onSongCardClick?: (songData: SongData | null) => void;
 }
 
 /**
@@ -176,9 +194,25 @@ const SongCardGrid = ({
   pageContents,
   songCardType,
   noDataMessage,
+  onSongCardClick,
 }: SongCardGridProps) => {
+  const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
+
+  const handleCardClick = (songData: SongData) => {
+    // call onClick function IF provided by higher level component
+    if (onSongCardClick) {
+      /* check if the selected card is different to this newly clicked one and set the new data if true, 
+      or clear data if they are toggling the same card (i.e. unselection) */
+      selectedCardId !== songData.id
+        ? onSongCardClick(songData)
+        : onSongCardClick(null);
+    }
+    // set selected status for this newly clicked card
+    setSelectedCardId(songData.id === selectedCardId ? null : songData.id);
+  };
+
   // Display no data message if there is no data to display
-  if (!pageContents) {
+  if (!pageContents || pageContents.length === 0) {
     return (
       <Box
         sx={{
@@ -194,7 +228,13 @@ const SongCardGrid = ({
     <Grid container spacing={3}>
       {pageContents.map((songData) => (
         <Grid item xs={12} md={6} key={songData.id}>
-          <SongCard songData={songData} type={songCardType} />
+          <SongCard
+            songData={songData}
+            type={songCardType}
+            isSelected={songData.id === selectedCardId}
+            onCardClick={() => handleCardClick(songData)}
+            isLiked
+          />
         </Grid>
       ))}
     </Grid>
