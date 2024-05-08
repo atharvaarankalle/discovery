@@ -26,7 +26,7 @@ const DiscoverPage = () => {
       username: "username",
     },
     {
-      id: "id",
+      id: "id2",
       songData: {
         id: "song-id",
         songTitle: "Song title bruh",
@@ -38,7 +38,7 @@ const DiscoverPage = () => {
       username: "username",
     },
     {
-      id: "id",
+      id: "id3",
       songData: {
         id: "song-id",
         songTitle: "Song title bruh",
@@ -50,7 +50,7 @@ const DiscoverPage = () => {
       username: "username",
     },
     {
-      id: "id",
+      id: "id4",
       songData: {
         id: "song-id",
         songTitle: "Song title bruh",
@@ -63,7 +63,7 @@ const DiscoverPage = () => {
       caption: "This is a caption. A caption? A caption.",
     },
     {
-      id: "id",
+      id: "id5",
       songData: {
         id: "song-id",
         songTitle: "Song title bruh",
@@ -75,7 +75,7 @@ const DiscoverPage = () => {
       username: "username",
     },
     {
-      id: "id",
+      id: "id6",
       songData: {
         id: "song-id",
         songTitle: "Song title bruh",
