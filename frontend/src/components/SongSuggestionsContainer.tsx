@@ -22,7 +22,7 @@ const SongSuggestionsContainer = ({
     sx={{
       width: "100%",
       height: "100%",
-      maxHeight: "69vh",
+      maxHeight: "53vh",
       overflow: "scroll",
       overflowX: "hidden",
     }}
