@@ -105,12 +105,15 @@ export const PromptPage = () => {
       setOpenDrawer(false);
     }
   };
+
+  //Confirm quit and takees the user to another page
   const handleConfirmQuit = () => {
       console.log("User confirmed to quit");
       handleCloseDialog();
       // Additional actions to quit goes here
   };
   
+  //Retrieve the prompt using axios
   const handlePrompt = async () => {
     try {
         const response = await axios.get('http://localhost:3000/api/prompt');
