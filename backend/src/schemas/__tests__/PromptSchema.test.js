@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
-import Prompt from "../PromptSchema";
+import { Prompt } from "../PromptSchema";
 
 let mongod;
 
@@ -8,7 +8,7 @@ const prompts = [
     {
         _id: new mongoose.Types.ObjectId("000000000000000000000001"),
         prompt: "Happy Daytime Song",
-        date: new Date("2024-05-02T00:00:00.000+00:00")
+        date: new Date("2024-05-03T00:00:00.000+00:00")
     },
     {
         _id: new mongoose.Types.ObjectId("000000000000000000000002"),
@@ -18,7 +18,7 @@ const prompts = [
     {
         _id: new mongoose.Types.ObjectId("000000000000000000000003"),
         prompt: "Daydreaming scenario song",
-        date: new Date("2024-05-02T00:00:00.000+00:00")
+        date: new Date("2024-05-01T00:00:00.000+00:00")
     }
 ];
 
@@ -43,4 +43,19 @@ afterEach(async () => {
 afterAll(async () => {
     await mongoose.disconnect();
     await mongod.stop();
+});
+
+it("gets all prompts", async () => {
+    const promptsFromDb = await Prompt.find();
+    expect(promptsFromDb).toBeTruthy();
+    expect(promptsFromDb.length).toBe(3);
+
+    expect(promptsFromDb[0].prompt).toBe("Happy Daytime Song");
+    expect(promptsFromDb[0].date).toEqual(new Date("2024-05-03T00:00:00.000+00:00"));
+
+    expect(promptsFromDb[1].prompt).toBe("Sad Nighttime Song");
+    expect(promptsFromDb[1].date).toEqual(new Date("2024-05-02T00:00:00.000+00:00"));
+
+    expect(promptsFromDb[2].prompt).toBe("Daydreaming scenario song");
+    expect(promptsFromDb[2].date).toEqual(new Date("2024-05-01T00:00:00.000+00:00"));
 });
