@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Box, Button, Typography} from "@mui/material";
 import { Searchbar } from "../components/Searchbar"
 import { SkipButton } from "../components/SkipButton";
-import { colors } from "../theme";
 import { ConfirmationDialog } from "../components/ConfirmDialog";
 import PromptSideDrawer from "../components/PromptSideDrawer";
 import { SongSelectionContainer } from "../components/SongCardPaginationContainers";
@@ -46,6 +45,7 @@ export const PromptPage = () => {
   const [songs, setSongs] = useState([]);
   const [debouncedValue, setDebouncedValue] = useState("");
 
+  //Using debounce to limit the amount of API calls
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedValue(currentInput);
@@ -60,7 +60,7 @@ export const PromptPage = () => {
     if (debouncedValue) {
       const fetchSongs = async () => {
         try {
-          const fetchedSongs = await searchSongs(debouncedValue, 6, 5);
+          const fetchedSongs = await searchSongs(debouncedValue, 8, 1);
           setSongs(fetchedSongs);
           console.log(songs[0])
         } catch (error) {

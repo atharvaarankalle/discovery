@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Box, Link, styled } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { colors } from "../theme";
 import CustomTextField from "./CustomTextField";
-import axios from "axios";
-import { SongSelectionContainer } from "./SongCardPaginationContainers";
 
 interface SearchbarProps {
   onInputChange: (input: string) => void;  // Define the callback type
@@ -24,24 +22,6 @@ const ClearSearchLink = styled(Link)({
     cursor: "pointer",
   },
 });
-
-async function searchSongs(query: string, numSongs: number, page: number): Promise<any> {
-  try {
-      const response = await axios.get("http://localhost:3000/api/songs/search", {
-          params: {
-              searchQuery: query,
-              numSongs: numSongs,
-              page: page
-          }
-      });
-      // If the response is successful, return the data
-      return response.data; // Make sure to return the actual data property if that's what you're interested in
-  } catch (error) {
-      console.error('Failed to fetch songs with axios:', error);
-      // Return a default value in case of an error to keep the function's return type consistent
-      return [];
-  }
-}
 
 /**
  * Search bar component. No set width, therefore width should be set upon call.

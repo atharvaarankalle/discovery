@@ -1,7 +1,7 @@
 import { Box, Grid, styled, Typography } from "@mui/material";
 import SongCard from "./SongCard.tsx";
 import Pagination from "@mui/material/Pagination";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { SongData } from "../utils/interfaces.ts";
 
 // Custom styling for the MUI pagination component
@@ -50,6 +50,7 @@ export const SavedSongsContainer = ({ songs }: SongContainerProps) => {
  * @param songs: list of songs based on the user's search term
  */
 export const SongSelectionContainer = ({ songs }: SongContainerProps) => {
+
   return (
     <SongCardContainer
       songs={songs}
@@ -88,6 +89,9 @@ const SongCardContainer = ({
 }: SongCardContainerProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = songs ? Math.ceil(songs.length / songsPerPage) : 0;
+
+  useEffect(()=>{
+    setPageContents(getSongsToDisplay(currentPage))},[songs]);
 
   /**
    * Gets a subset of the songs in the list to display in the current page
