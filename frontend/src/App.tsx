@@ -10,9 +10,14 @@ import { ThemeProvider, useMediaQuery } from "@mui/material";
 import { theme } from "./theme.ts";
 import MobileDefaultPage from "./pages/MobileDefaultPage.tsx";
 import { AppContextProvider } from "./AppContextProvider.tsx";
+import axios from "axios";
+import useAxiosInterceptor from "./utils/useAxiosInterceptor.ts";
 
 function App() {
   const isMobileScreen = useMediaQuery(theme.breakpoints.down("md"));
+
+  axios.defaults.withCredentials = true;
+  useAxiosInterceptor();
 
   if (isMobileScreen) {
     return (

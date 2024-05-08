@@ -1,23 +1,19 @@
 import { useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 export const PromptPage = () => {
   const [prompt, setPrompt] = useState("Press button for prompt");
 
   const handlePrompt = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:3000/api/prompt",
-
-        {
-          withCredentials: true,
-        }
+      const response: AxiosResponse = await axios.get(
+        "http://localhost:3000/api/prompt"
       );
       const data = response.data;
       setPrompt(data);
     } catch (error) {
-      console.error("There was a problem fetching the message:", error);
+      // axios interceptor will log error message
     }
   };
 
