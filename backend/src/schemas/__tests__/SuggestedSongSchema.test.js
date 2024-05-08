@@ -113,3 +113,33 @@ it("successfully inserts a suggested song with an empty caption field", async ()
     expect(newSuggestedSongFromDb.spotifySongId).toBe("songId4");
     expect(newSuggestedSongFromDb.user).toEqual(new mongoose.Types.ObjectId("000000000000000000000004"));
 });
+
+it("fails to insert a suggested song with missing prompt field", async () => {
+    const newSuggestedSong = new SuggestedSong({
+        caption: "This song is so happy",
+        spotifySongId: "songId4",
+        user: new mongoose.Types.ObjectId("000000000000000000000004")
+    });
+
+    await expect(newSuggestedSong.save()).rejects.toThrow();
+});
+
+it("fails to insert a suggested song with missing spotifySongId field", async () => {
+    const newSuggestedSong = new SuggestedSong({
+        caption: "This song is so happy",
+        prompt: new mongoose.Types.ObjectId("000000000000000000000001"),
+        user: new mongoose.Types.ObjectId("000000000000000000000004")
+    });
+
+    await expect(newSuggestedSong.save()).rejects.toThrow();
+});
+
+it("fails to insert a suggested song with missing user field", async () => {
+    const newSuggestedSong = new SuggestedSong({
+        caption: "This song is so sad",
+        prompt: new mongoose.Types.ObjectId("000000000000000000000002"),
+        spotifySongId: "songId4"
+    });
+
+    await expect(newSuggestedSong.save()).rejects.toThrow();
+});
