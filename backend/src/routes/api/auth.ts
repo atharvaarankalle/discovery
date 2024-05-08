@@ -16,7 +16,7 @@ dotenv.config();
 const AUTH_SECRET_KEY: string = process.env.AUTH_SECRET_KEY || "";
 const router: Router = express.Router();
 
-const TOKEN_EXPIRY_IN_HOURS: number = 1;
+const TOKEN_EXPIRY_IN_HOURS: number = 0.02;
 
 /* This function creates and return a JWT token for authentication */
 const getJWTAuthToken = (userId: string) =>
@@ -109,10 +109,9 @@ router.post("/signup", async (req: Request, res: Response) => {
     );
     res.cookie("authToken", token, {
       httpOnly: true,
-      secure: true,
       expires: expiryDate,
+      secure: true,
     });
-
     res.status(201).json({
       message: "Successful sign up!",
       user: userDetailResponseData(savedUser),
@@ -159,8 +158,8 @@ router.post("/login", async (req: Request, res: Response) => {
     );
     res.cookie("authToken", token, {
       httpOnly: true,
-      secure: true,
       expires: expiryDate,
+      secure: true,
     });
 
     res.status(200).json({
