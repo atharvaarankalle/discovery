@@ -1,20 +1,30 @@
-import { AppBar, IconButton, Stack, Theme, Toolbar, Typography, styled, useTheme } from "@mui/material";
+import {
+  AppBar,
+  IconButton,
+  Stack,
+  Theme,
+  Toolbar,
+  Typography,
+  styled,
+  useTheme,
+} from "@mui/material";
 import { DiscoveryLogo } from "./Logos";
-import LocalFireDepartmentTwoToneIcon from '@mui/icons-material/LocalFireDepartmentTwoTone';
-import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
-import PriorityHighTwoToneIcon from '@mui/icons-material/PriorityHighTwoTone';
+import LocalFireDepartmentTwoToneIcon from "@mui/icons-material/LocalFireDepartmentTwoTone";
+import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
+import PriorityHighTwoToneIcon from "@mui/icons-material/PriorityHighTwoTone";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AppContext } from "../AppContextProvider";
 import NavBarDropdownMenu from "./NavBarDropdownMenu";
 import StyledToolTip from "./StyledTooltip";
 import CustomTypography from "./CustomTypography";
+import { User } from "../utils/interfaces";
 
 /* Custom styles applied to MUI AppBar */
 const StyledAppBar = styled(AppBar)({
   backgroundColor: "transparent",
   boxShadow: "none",
-  padding: "1.5rem 0.5rem"
+  padding: "1.5rem 0.5rem",
 });
 
 /* Custom styles applied to MUI IconButton */
@@ -30,12 +40,15 @@ type LoggedInUserPages = "Discover" | "Prompt" | "Profile";
 
 /**
  * NavBar Component
- * 
- * Renders the navigation bar at the top of the user pages, using context to get the currently logged in user. 
+ *
+ * Renders the navigation bar at the top of the user pages, using context to get the currently logged in user.
  */
 const NavBar = () => {
   const location = useLocation();
-  const { currentUser, promptOfTheDay } = useContext(AppContext);
+  const currentUser = {
+    // TODO: retrieve the currentUserID from context and make a call to backend to get the relevant details to populate the navbar
+  };
+  const { promptOfTheDay } = useContext(AppContext);
   const theme: Theme = useTheme();
   const navigate = useNavigate();
 
@@ -56,7 +69,7 @@ const NavBar = () => {
    * Handles the click event when the user clicks on the Discovery logo.
    * If the user is on the Discover page, the page will refresh.
    * If the user is on any other page, they will be navigated back to the Discover page.
-   * 
+   *
    * @param currentPage - the current page the user is on
    */
   const handleLogoClick = () => {
@@ -65,8 +78,8 @@ const NavBar = () => {
     } else {
       navigate("/user/discover");
     }
-  }
-  
+  };
+
   return (
     <StyledAppBar position="static">
       <Toolbar>
@@ -86,10 +99,7 @@ const NavBar = () => {
             },
           }}
         >
-          <StyledIconButton
-            size="large"
-            onClick={() => handleLogoClick()}
-          >
+          <StyledIconButton size="large" onClick={() => handleLogoClick()}>
             <DiscoveryLogo width={75} height={75} />
           </StyledIconButton>
         </StyledToolTip>
