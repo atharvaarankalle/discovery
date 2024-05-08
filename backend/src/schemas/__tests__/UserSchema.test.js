@@ -4,6 +4,7 @@ import { User } from "../UserSchema";
 
 let mongod;
 
+/* Define the users to be used in the tests */
 const users = [
     {
         _id: new mongoose.Types.ObjectId("000000000000000000000001"),
@@ -37,27 +38,34 @@ const users = [
     }
 ];
 
+/* Create an in-memory database before all tests */
 beforeAll(async () => {
     mongod = await MongoMemoryServer.create();
     const connectionString = mongod.getUri();
     await mongoose.connect(connectionString);
 });
 
+/* Insert the users into the in-memory database before each test */
 beforeEach(async () => {
     const collection = await mongoose.connection.db.collection("users");
     await collection.deleteMany({});
     await collection.insertMany(users);
 });
 
+/* Clear the database after each test */
 afterEach(async () => {
     await mongoose.connection.db.dropCollection("users");
 });
 
+/* Stop the in-memory database after all tests */
 afterAll(async () => {
     await mongoose.disconnect();
     await mongod.stop();
 });
 
+/**
+ * This test checks if all users can be retrieved from the database
+ */
 it("gets all users", async () => {
     const usersFromDb = await User.find();
     expect(usersFromDb).toBeTruthy();
@@ -88,6 +96,9 @@ it("gets all users", async () => {
     expect(usersFromDb[2].profilePic).toBe("profilePic3Source");
 });
 
+/**
+ * This test checks if a single user can be retrieved from the database
+ */
 it("gets a single user", async () => {
     const userFromDb = await User.findById("000000000000000000000003");
 
@@ -100,6 +111,9 @@ it("gets a single user", async () => {
     expect(userFromDb.profilePic).toBe("profilePic3Source");
 });
 
+/**
+ * This test checks if a user entry can be created in the database
+ */
 it("creates a user", async () => {
     const newUser = new User({
         email: "user4@test.com",
@@ -124,6 +138,9 @@ it("creates a user", async () => {
     expect(newUserFromDb.profilePic).toBe("profilePic4Source");
 });
 
+/**
+ * This test verifies that a new user can be inserted into the database with an empty displayName field
+ */
 it("successfully inserts a user with an empty displayName field", async () => {
     const newUser = new User({
         email: "user4@test.com",
@@ -147,6 +164,10 @@ it("successfully inserts a user with an empty displayName field", async () => {
     expect(newUserFromDb.profilePic).toBe("profilePic4Source");
 });
 
+/**
+ * This test verifies that a new user can be inserted into the database with an empty profilePicture field
+
+ */
 it("successfully inserts a user with an empty profilePic field", async () => {
     const newUser = new User({
         email: "user4@test.com",

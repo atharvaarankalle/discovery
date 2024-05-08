@@ -4,6 +4,7 @@ import { SuggestedSong } from "../SuggestedSongSchema";
 
 let mongod;
 
+/* Define the suggested songs to be used in the tests */
 const suggestedSongs = [
     {
         _id: new mongoose.Types.ObjectId("000000000000000000000001"),
@@ -28,27 +29,34 @@ const suggestedSongs = [
     }
 ];
 
+/* Create an in-memory database before all tests */
 beforeAll(async () => {
     mongod = await MongoMemoryServer.create();
     const connectionString = mongod.getUri();
     await mongoose.connect(connectionString);
 });
 
+/* Insert the suggested songs into the in-memory database before each test */
 beforeEach(async () => {
     const collection = await mongoose.connection.db.collection("suggestedsongs");
     await collection.deleteMany({});
     await collection.insertMany(suggestedSongs);
 });
 
+/* Clear the database after each test */
 afterEach(async () => {
     await mongoose.connection.db.dropCollection("suggestedsongs");
 });
 
+/* Stop the in-memory database after all tests */
 afterAll(async () => {
     await mongoose.disconnect();
     await mongod.stop();
 });
 
+/**
+ * This test checks if all suggested songs can be retrieved from the database
+ */
 it("gets all suggested songs", async () => {
     const suggestedSongsFromDb = await SuggestedSong.find();
     expect(suggestedSongsFromDb).toBeTruthy();
@@ -70,6 +78,9 @@ it("gets all suggested songs", async () => {
     expect(suggestedSongsFromDb[2].user).toEqual(new mongoose.Types.ObjectId("000000000000000000000003"));
 });
 
+/**
+ * This test checks if a single suggested song can be retrieved from the database
+ */
 it("gets a single suggested song", async () => {
     const suggestedSongFromDb = await SuggestedSong.findById("000000000000000000000002");
 
@@ -79,6 +90,9 @@ it("gets a single suggested song", async () => {
     expect(suggestedSongFromDb.user).toEqual(new mongoose.Types.ObjectId("000000000000000000000002"));
 });
 
+/**
+ * This test checks if a suggested song entry can be created in the database
+ */
 it("creates a suggested song", async () => {
     const newSuggestedSong = new SuggestedSong({
         caption: "This song is so happy",
@@ -97,6 +111,9 @@ it("creates a suggested song", async () => {
     expect(newSuggestedSongFromDb.user).toEqual(new mongoose.Types.ObjectId("000000000000000000000004"));
 });
 
+/**
+ * This test verifies that a suggested song can be successfully inserted with an empty caption field
+ */
 it("successfully inserts a suggested song with an empty caption field", async () => {
     const newSuggestedSong = new SuggestedSong({
         prompt: new mongoose.Types.ObjectId("000000000000000000000001"),
@@ -114,6 +131,9 @@ it("successfully inserts a suggested song with an empty caption field", async ()
     expect(newSuggestedSongFromDb.user).toEqual(new mongoose.Types.ObjectId("000000000000000000000004"));
 });
 
+/**
+ * This test verifies that a suggested song cannot be inserted with an empty prompt field
+ */
 it("fails to insert a suggested song with missing prompt field", async () => {
     const newSuggestedSong = new SuggestedSong({
         caption: "This song is so happy",
@@ -124,6 +144,9 @@ it("fails to insert a suggested song with missing prompt field", async () => {
     await expect(newSuggestedSong.save()).rejects.toThrow();
 });
 
+/**
+ * This test verifies that a suggested song cannot be inserted with an empty spotifySongId field
+ */
 it("fails to insert a suggested song with missing spotifySongId field", async () => {
     const newSuggestedSong = new SuggestedSong({
         caption: "This song is so happy",
@@ -134,6 +157,9 @@ it("fails to insert a suggested song with missing spotifySongId field", async ()
     await expect(newSuggestedSong.save()).rejects.toThrow();
 });
 
+/**
+ * This test verifies that a suggested song cannot be inserted with an empty user field
+ */
 it("fails to insert a suggested song with missing user field", async () => {
     const newSuggestedSong = new SuggestedSong({
         caption: "This song is so sad",
