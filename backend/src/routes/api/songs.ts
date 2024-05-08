@@ -86,6 +86,8 @@ router.get("/search", tokenMiddleware, async (req: Request, res: Response) => {
     const numSongs: number = Number(req.query.numSongs) || 6;
     const page: number | undefined = req.query.page ? Number(req.query.page) : undefined;
 
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
     // If no song title or page number is provided, send a 400 Bad Request response
     if (!searchQuery || !page) {
         res.status(400).json({ error: "Please provide a song title and page number" });
