@@ -25,4 +25,9 @@
 
 ## Image Credits:
 
-Photo by Aleksandar Pasaric from Pexels: https://www.pexels.com/photo/dark-starry-sky-1694000/
+- [Stars background overlay](frontend/src/assets/stars_background.jpg) also used in
+  the [discover page header](frontend/src/assets/discover_page_header.png): Free for use photo by Aleksandar Pasaric
+  from [Pexels](https://www.pexels.com/photo/dark-starry-sky-1694000/)
+- [CD image](frontend/src/assets/cd_image.png): Free for use image by JJuni
+  from [Pixabay](https://pixabay.com/vectors/cd-computer-disk-saved-electronic-1169624/)
+- All other files in assets are created by the Amber Antelopes Team
