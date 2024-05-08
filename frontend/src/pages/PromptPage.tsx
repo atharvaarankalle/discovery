@@ -37,7 +37,8 @@ async function searchSongs(query: string, numSongs: number, page: number): Promi
 /**
  * This prompt page ultilises the GPT API and the Spotify API to give a prompt
  * to the user. The user then answer with a song by searching through the Spotify
- * library. A song can then be choosen and added to their personal list.
+ * library. A song can then be choosen and added to their personal list along with a comment.
+ * The side drawer will pop in and out and shows the currently selected song.
  * @returns The prompt page to be rendered
  */
 export const PromptPage = () => {
@@ -95,6 +96,7 @@ export const PromptPage = () => {
   const handleOpenDialog = () => setOpenDialog(true);
   const handleCloseDialog = () => setOpenDialog(false);
   const handleDrawer = () => setOpenDrawer(!openDrawer);
+  //Data type handling between song cards and drawer
   const handleSongCardClick = (songData: SongData | null) => {
     if (songData !== null) {
       setDisplayedSong(songData);
@@ -111,14 +113,13 @@ export const PromptPage = () => {
   
   const handlePrompt = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/prompt');
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      setPrompt(data);
+        const response = await axios.get('http://localhost:3000/api/prompt');
+        if (response.status !== 200) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        setPrompt(response.data);
     } catch (error) {
-      console.error('There was a problem fetching the message:', error);
+        console.error('There was a problem fetching the message:', error);
     }
   };
 
