@@ -8,6 +8,9 @@ router.get("/", (req, res) => {
   res.send("Hello from API :)");
 });
 
+import cors from "cors";
+router.use(cors());
+
 // Nested routes
 import auth from "./auth";
 router.use("/auth", auth);
