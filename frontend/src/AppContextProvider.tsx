@@ -54,10 +54,7 @@ export function AppContextProvider({ children }: AppContextProviderProps) {
   return <AppContext.Provider value={context}>{children}</AppContext.Provider>;
 }
 
-export function useLocalStorage(
-  key: string,
-  initialValue: SongData | User | null = null
-) {
+export function useLocalStorage(key: string, initialValue: null = null) {
   const [value, setValue] = useState(() => {
     try {
       const data = window.localStorage.getItem(key);
