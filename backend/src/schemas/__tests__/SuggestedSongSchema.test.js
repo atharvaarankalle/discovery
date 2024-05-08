@@ -69,3 +69,12 @@ it("gets all suggested songs", async () => {
     expect(suggestedSongsFromDb[2].spotifySongId).toBe("songId3");
     expect(suggestedSongsFromDb[2].user).toEqual(new mongoose.Types.ObjectId("000000000000000000000003"));
 });
+
+it("gets a single suggested song", async () => {
+    const suggestedSongFromDb = await SuggestedSong.findById("000000000000000000000002");
+
+    expect(suggestedSongFromDb.caption).toBe("This song is so cool");
+    expect(suggestedSongFromDb.prompt).toEqual(new mongoose.Types.ObjectId("000000000000000000000001"));
+    expect(suggestedSongFromDb.spotifySongId).toBe("songId2");
+    expect(suggestedSongFromDb.user).toEqual(new mongoose.Types.ObjectId("000000000000000000000002"));
+});
