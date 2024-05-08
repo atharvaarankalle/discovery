@@ -2,6 +2,7 @@ import { Box, styled } from "@mui/material";
 import LoginSignupTabs, { TabsTypes } from "../components/LoginSignupTabs";
 import PlanetBackground from "../components/PlanetBackground";
 import { DiscoveryLogoWithtext } from "../components/Logos";
+import { useNavigate } from "react-router-dom";
 
 const LoginPageContent = styled("div")({
   position: "relative",
@@ -23,13 +24,15 @@ type LoginSignupPageProps = {
 };
 
 const LoginSignupPage = ({ activeTab }: LoginSignupPageProps) => {
+  const navigate = useNavigate();
+
   return (
     <PlanetBackground>
       <LoginPageContent>
         <StyledLogo>
           <DiscoveryLogoWithtext
             width="200px"
-            handleClick={() => window.location.reload()}
+            handleClick={() => navigate("/")}
           />
         </StyledLogo>
         <LoginSignupTabs initialTab={activeTab} />
