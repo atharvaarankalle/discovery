@@ -119,7 +119,9 @@ export const PromptPage = () => {
   //Retrieve the prompt using axios
   const handlePrompt = async () => {
     try {
-        const response = await axios.get('http://localhost:3000/api/prompt');
+      const baseURL = import.meta.env.VITE_API_BASE_URL;
+
+      const response = await axios.get(`${baseURL}/prompt`)
         if (response.status !== 200) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
