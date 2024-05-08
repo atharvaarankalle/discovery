@@ -23,7 +23,5 @@ export const formatDate = (dateString: Date) => {
     `$1${daySuffix}`
   );
 
-  console.log(formattedWithSuffix);
-
   return formattedWithSuffix;
 };
