@@ -69,6 +69,7 @@ export const Searchbar = () => {
         try {
           const fetchedSongs = await searchSongs(debouncedValue, 6, 5);
           setSongs(fetchedSongs);
+          console.log(songs[0])
         } catch (error) {
           console.error('Error fetching songs:', error);
           setSongs([]);
