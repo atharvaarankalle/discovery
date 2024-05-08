@@ -4,6 +4,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { colors } from "../theme";
 import CustomTextField from "./CustomTextField";
 import axios from "axios";
+import { SongSelectionContainer } from "./SongCardPaginationContainers";
 
 // Styling for searchbar
 
@@ -50,29 +51,48 @@ async function searchSongs(query: string, numSongs: number, page: number): Promi
 export const Searchbar = () => {
   const [inputValue, setInputValue] = useState("");
   const [songs, setSongs] = useState([]);
+  const [debouncedValue, setDebouncedValue] = useState("");
 
-  const handleInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setInputValue(value);
-    if (value) {
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(inputValue);
+    }, 300); 
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [inputValue]);
+
+  useEffect(() => {
+    if (debouncedValue) {
+      const fetchSongs = async () => {
         try {
-            const fetchedSongs = await searchSongs(value, 6, 1);
-            setSongs(fetchedSongs); // Update the state with the fetched songs
-            console.log(songs[0])
+          const fetchedSongs = await searchSongs(debouncedValue, 6, 5);
+          setSongs(fetchedSongs);
         } catch (error) {
-            console.error('Error fetching songs:', error);
-            setSongs([]); // Handle errors, clearing the song list
+          console.error('Error fetching songs:', error);
+          setSongs([]);
         }
+      };
+
+      fetchSongs();
     } else {
-        setSongs([]); // Clear songs if input is cleared
+      setSongs([]);
     }
+  }, [debouncedValue]);
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
   };
 
   const clearInput = () => {
     setInputValue("");
+    setSongs([]);
+    setDebouncedValue("");
   };
+
   return (
-    <Box>
+    <Box sx={{m:3}}>
       <Box
         sx={{
           display: "flex",
@@ -88,7 +108,7 @@ export const Searchbar = () => {
           onChange={handleInputChange}
         />
       </Box>
-      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+      <Box sx={{ display: "flex", justifyContent: "flex-end", paddingY:3}}>
         <ClearSearchLink
           onClick={clearInput}
           underline="always"
@@ -97,6 +117,9 @@ export const Searchbar = () => {
           Clear search
         </ClearSearchLink>
       </Box>
+      <SongSelectionContainer
+        songs={songs}
+        />
     </Box>
   );
 };

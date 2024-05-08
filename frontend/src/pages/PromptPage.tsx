@@ -7,15 +7,20 @@ import { ConfirmationDialog } from "../components/ConfirmDialog";
 
 export const PromptPage = () => {
   const [prompt, setPrompt] = useState("Press button for prompt");
-  const [open, setOpen] = useState<boolean>(false);
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
 
-  const handleOpen = () => setOpen(true);
+  const handleOpenDialog = () => setOpenDialog(true);
 
-  const handleClose = () => setOpen(false);
+  const handleCloseDialog = () => setOpenDialog(false);
+
+  const handleOpenDrawer = () => setOpenDrawer(true);
+
+  const handleCloseDrawer = () => setOpenDrawer(false);
   
   const handleConfirmQuit = () => {
       console.log("User confirmed to quit");
-      handleClose();
+      handleCloseDialog();
       // Additional actions to quit goes here
   };
   
@@ -37,7 +42,7 @@ export const PromptPage = () => {
       <Typography variant="h4">TODAY'S DISCO: </Typography>
       <Typography variant="h2">{prompt}</Typography>
       <Button variant="contained" sx={{marginY: 3}} onClick={handlePrompt}>Generate</Button>
-      <Box sx={{marginY: 5, width: '80%'}}>
+      <Box sx={{marginY: 5, width: '70%'}}>
         <Searchbar/>
         <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
           <Typography variant="body2" sx={{color: colors.peach}}>
@@ -45,10 +50,10 @@ export const PromptPage = () => {
           </Typography>
         </Box>
       </Box>
-      <SkipButton onOpen={handleOpen}/>
+      <SkipButton onOpen={handleOpenDialog}/>
       <ConfirmationDialog
-                open={open}
-                onClose={handleClose}
+                open={openDialog}
+                onClose={handleCloseDialog}
                 onConfirm={handleConfirmQuit}
             />
     </Box>
