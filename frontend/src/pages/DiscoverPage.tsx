@@ -4,6 +4,8 @@ import { styled } from "@mui/material";
 import useGet from "../utils/useGet";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { SongData, SongSuggestionData } from "../utils/interfaces";
+import { useContext } from "react";
+import { AppContext } from "../AppContextProvider";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
 
@@ -21,10 +23,10 @@ const DiscoverPage = () => {
   });
   const songs = feedData === null ? [] : feedData;
 
-  // TODO: Replace with user ID from app context.
-  const userId = "663858af99e6720bfd8f96fb";
+  const { currentUserId, setCurrentUserId } = useContext(AppContext);
+  setCurrentUserId("663858af99e6720bfd8f96fb"); // TODO: REMOVE
   const { data: todaysSongSuggestionData } = useGet<SongData>({
-    url: `${API_BASE_URL}/user/${userId}/suggested/today`,
+    url: `${API_BASE_URL}/user/${currentUserId}/suggested/today`,
   });
   const todaysSongSuggestion =
     todaysSongSuggestionData === null ? undefined : todaysSongSuggestionData;
