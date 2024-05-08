@@ -1,4 +1,4 @@
-import { Dialog, DialogActions, DialogContent, DialogTitle, Typography, Button, Box, styled } from "@mui/material";
+import { Dialog, DialogActions, DialogContent, DialogTitle, Typography, Button, Box} from "@mui/material";
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import { colors, loggedInBackground } from "../theme"; // Ensure these are correctly typed and exported
 

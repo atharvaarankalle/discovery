@@ -1,7 +1,7 @@
 import { Box, Grid, styled, Typography } from "@mui/material";
 import SongCard from "./SongCard.tsx";
 import Pagination from "@mui/material/Pagination";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { SongData } from "../utils/interfaces.ts";
 
 // Custom styling for the MUI pagination component
@@ -99,6 +99,12 @@ const SongCardContainer = ({
 }: SongCardContainerProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = songs ? Math.ceil(songs.length / songsPerPage) : 0;
+  const songsIsNotEmpty = songs && songs?.length > 0;
+
+  useEffect(() => {
+    setPageContents(getSongsToDisplay(currentPage));
+  }, [songs]);
+
   /**
    * Gets a subset of the songs in the list to display in the current page
    *
@@ -108,13 +114,13 @@ const SongCardContainer = ({
     return songs
       ? songs.slice(
           (currentPage - 1) * songsPerPage,
-          currentPage * songsPerPage
+          currentPage * songsPerPage,
         )
       : undefined;
   };
 
   const [pageContents, setPageContents] = useState(
-    songs ? getSongsToDisplay(currentPage) : undefined
+    songs ? getSongsToDisplay(currentPage) : undefined,
   );
 
   /**
@@ -145,7 +151,7 @@ const SongCardContainer = ({
         noDataMessage={noDataMessage}
         onSongCardClick={onSongCardClick}
       />
-      {songs && ( // Show pagination if there is data to display
+      {songsIsNotEmpty && ( // Show pagination if there is data to display
         <Box
           sx={{
             display: "flex",
@@ -206,7 +212,7 @@ const SongCardGrid = ({
   };
 
   // Display no data message if there is no data to display
-  if (!pageContents) {
+  if (!pageContents || pageContents.length === 0) {
     return (
       <Box
         sx={{

@@ -4,7 +4,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import { colors } from "../theme";
 import CustomTextField from "./CustomTextField";
 
-// Styling for searchbar
+interface SearchbarProps {
+  onInputChange: (input: string) => void;  // Define the callback type
+}
 
 //Styling for clear search button
 const ClearSearchLink = styled(Link)({
@@ -28,16 +30,25 @@ const ClearSearchLink = styled(Link)({
  * @returns Searchbar
  */
 
-export const Searchbar = () => {
+export const Searchbar = ( { onInputChange }: SearchbarProps ) => {
   const [inputValue, setInputValue] = useState("");
 
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
-    //TO DO: Link with Spotify Search
+    const value = event.target.value;
+    setInputValue(value);
+    if (onInputChange) { 
+      onInputChange(value);
+    }
   };
+
   const clearInput = () => {
     setInputValue("");
+    if (onInputChange) {
+      onInputChange(""); 
+    }
   };
+
   return (
     <Box>
       <Box
@@ -55,7 +66,7 @@ export const Searchbar = () => {
           onChange={handleInputChange}
         />
       </Box>
-      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+      <Box sx={{ display: "flex", justifyContent: "flex-end", paddingY:3}}>
         <ClearSearchLink
           onClick={clearInput}
           underline="always"
