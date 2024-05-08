@@ -4,6 +4,7 @@ import useGet from "../utils/useGet";
 import { SongData, User } from "../utils/interfaces";
 import { formatDate } from "../utils/dateFormatter";
 import { SavedSongsContainer } from "../components/SongCardPaginationContainers";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
 
@@ -20,6 +21,13 @@ const ProfilePage = () => {
     ? formatDate(user.accountCreationDate)
     : "";
 
+  const { isLoading: isLikedLoading, data: likedSongsData } = useGet<
+    SongData[]
+  >({
+    url: `${API_BASE_URL}/user/${userId}/liked`,
+  });
+
+  const likedSongs = likedSongsData === null ? [] : likedSongsData;
 
   return (
     <>
@@ -68,7 +76,11 @@ const ProfilePage = () => {
           >
             DISCOVERED SONGS
           </Typography>
-          {/* <SavedSongsContainer songs={likedSongs} /> */}
+          {isLikedLoading ? (
+            <LoadingSpinner />
+          ) : (
+            <SavedSongsContainer songs={likedSongs} />
+          )}
           <MusicPlayer />
         </div>
       </div>
