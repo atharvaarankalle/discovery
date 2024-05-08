@@ -12,8 +12,7 @@ import dotenv from "dotenv";
 import { FeedEndpointResult } from "../../utils/interfaces";
 
 dotenv.config();
-const API_BASE_URL =
-  process.env.VITE_API_BASE_URL ?? "https://localhost:3000/api";
+const API_BASE_URL = process.env.API_BASE_URL ?? "https://localhost:3000/api";
 
 const router: Router = express.Router();
 

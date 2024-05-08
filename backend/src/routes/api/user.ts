@@ -5,15 +5,14 @@ import {
   ISuggestedSong,
   SuggestedSong,
 } from "../../schemas/SuggestedSongSchema";
-import { Document, Schema, Types } from "mongoose";
+import { Schema } from "mongoose";
 import { Prompt } from "../../schemas/PromptSchema";
 import { compareDates, getTodaysDate } from "../../utils/DateUtils";
 import axios from "axios";
 import dotenv from "dotenv";
 
 dotenv.config();
-const API_BASE_URL =
-  process.env.VITE_API_BASE_URL ?? "https://localhost:3000/api";
+const API_BASE_URL = process.env.API_BASE_URL ?? "https://localhost:3000/api";
 
 const router: Router = express.Router();
 
