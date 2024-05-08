@@ -8,7 +8,7 @@ feeling, you can also share what song makes you feel a certain way as well. ☆ 
 
 ### Overview
 
-Our upcoming app, _discOvery_, combines elements of a music streaming service interface and collaborative web apps. Our
+Our web app, _discOvery_, combines elements of a music streaming service interface and collaborative web apps. Our
 app prompts users on a daily basis to share songs that they think best describe these prompts. Other users will be able
 to see suggestions in their feeds while using the app.
 
