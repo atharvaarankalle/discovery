@@ -66,3 +66,18 @@ it("gets a single prompt", async () => {
     expect(promptFromDb.prompt).toBe("Daydreaming scenario song");
     expect(promptFromDb.date).toEqual(new Date("2024-05-01T00:00:00.000+00:00"));
 });
+
+it("inserts a new prompt", async() => {
+    const newPrompt = new Prompt({
+        prompt: "A song that makes you feel like you're in a movie",
+        date: new Date("2024-05-04T00:00:00.000+00:00")
+    });
+
+    await newPrompt.save();
+
+    const newPromptFromDb = await mongoose.connection.db.collection("prompts").findOne({ _id: newPrompt._id });
+
+    expect(newPromptFromDb).toBeTruthy();
+    expect(newPromptFromDb.prompt).toBe("A song that makes you feel like you're in a movie");
+    expect(newPromptFromDb.date).toEqual(new Date("2024-05-04T00:00:00.000+00:00"));
+});
