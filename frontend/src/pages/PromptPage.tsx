@@ -7,6 +7,7 @@ import PromptSideDrawer from "../components/PromptSideDrawer";
 import { SongSelectionContainer } from "../components/SongCardPaginationContainers";
 import axios from "axios";
 import { colors } from "../theme";
+import { SongData } from "../utils/interfaces";
 
 /**
  * This function searches the Spotify library for songs that matches the string given.
@@ -58,6 +59,7 @@ export const PromptPage = () => {
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [songs, setSongs] = useState([]);
   const [debouncedValue, setDebouncedValue] = useState("");
+  const [displayedSong, setDisplayedSong] = useState<SongData>(mockTrackData);
 
   //Using debounce to limit the amount of API calls
   useEffect(() => {
@@ -93,7 +95,14 @@ export const PromptPage = () => {
   const handleOpenDialog = () => setOpenDialog(true);
   const handleCloseDialog = () => setOpenDialog(false);
   const handleDrawer = () => setOpenDrawer(!openDrawer);
-  
+  const handleSongCardClick = (songData: SongData | null) => {
+    if (songData !== null) {
+      setDisplayedSong(songData);
+      setOpenDrawer(true);
+    } else {
+      setOpenDrawer(false);
+    }
+  };
   const handleConfirmQuit = () => {
       console.log("User confirmed to quit");
       handleCloseDialog();
@@ -130,18 +139,18 @@ export const PromptPage = () => {
             <Box sx={{marginX: 3}}>
               <SongSelectionContainer
                 songs={songs}
+                onSongCardClick={handleSongCardClick}
                 />
             </Box>}
         </Box>
       </Box>
       <SkipButton onOpen={handleOpenDialog}/>
-      <Button onClick={handleDrawer}>drawer</Button>
       <ConfirmationDialog
                 open={openDialog}
                 onClose={handleCloseDialog}
                 onConfirm={handleConfirmQuit}
             />
-      <PromptSideDrawer drawerOpen={openDrawer} toggleDrawer={handleDrawer} songData={mockTrackData}/>
+      <PromptSideDrawer drawerOpen={openDrawer} toggleDrawer={handleDrawer} songData={displayedSong}/>
     </Box>
   );
 };
