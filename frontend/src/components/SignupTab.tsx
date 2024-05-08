@@ -62,6 +62,7 @@ const SignupTab = () => {
             postSignup({ email, password, displayName });
             setEmail("");
             setPassword("");
+            setDisplayName("");
           }
         }}
       >
