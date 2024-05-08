@@ -8,6 +8,9 @@ router.get("/", (req, res) => {
   res.send("Hello from API :)");
 });
 
+import cors from "cors";
+router.use(cors());
+
 // Nested routes
 import cookieParser from "cookie-parser";
 router.use(cookieParser());

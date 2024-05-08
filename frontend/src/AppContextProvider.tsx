@@ -1,15 +1,23 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { SongData } from "./utils/interfaces.ts";
+import { SongData, User } from "./utils/interfaces.ts";
 
 /* AppContext prop types */
 interface AppContextType {
   currentPreviewSong: SongData | null;
   setCurrentPreviewSong: (song: SongData | null) => void;
+  currentUser: User | null;
+  setCurrentUser: (user: User | null) => void;
+  promptOfTheDay: string | undefined;
+  setPromptOfTheDay: (prompt: string | undefined) => void;
 }
 
 export const AppContext = createContext<AppContextType>({
   currentPreviewSong: null,
   setCurrentPreviewSong: () => {},
+  currentUser: null,
+  setCurrentUser: () => {},
+  promptOfTheDay: undefined,
+  setPromptOfTheDay: () => {},
 });
 
 interface AppContextProviderProps {
@@ -22,18 +30,29 @@ export function AppContextProvider({ children }: AppContextProviderProps) {
   // For storing the song that the user has selected to preview as a state over the discovery feed and user profile
   const [currentPreviewSong, setCurrentPreviewSong] = useLocalStorage(
     "currentPreviewSong",
-    undefined,
+    null
   );
+
+  const [currentUser, setCurrentUser] = useLocalStorage("currentUser", null);
+
+  const [promptOfTheDay, setPromptOfTheDay] = useState<string | undefined>(undefined);
 
   const context = {
     currentPreviewSong,
     setCurrentPreviewSong,
+    currentUser,
+    setCurrentUser,
+    promptOfTheDay,
+    setPromptOfTheDay,
   };
 
   return <AppContext.Provider value={context}>{children}</AppContext.Provider>;
 }
 
-export function useLocalStorage(key: string, initialValue = null) {
+export function useLocalStorage(
+  key: string,
+  initialValue: SongData | User | null = null
+) {
   const [value, setValue] = useState(() => {
     try {
       const data = window.localStorage.getItem(key);
