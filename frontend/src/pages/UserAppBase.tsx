@@ -1,11 +1,10 @@
 import { Outlet } from "react-router-dom";
 import NavBar from "../components/NavBar";
-import { styled } from "@mui/material";
+import { Box, styled } from "@mui/material";
 import { loggedInBackground } from "../theme";
-import { Box } from "@mui/material";
 
 // Background container for the whole logged in user experience
-const LoggedInBackground = styled("div")({
+export const LoggedInBackground = styled("div")({
   background: loggedInBackground,
   height: "100vh",
   width: "100%",
