@@ -8,6 +8,13 @@ import { SongSelectionContainer } from "../components/SongCardPaginationContaine
 import axios from "axios";
 import { colors } from "../theme";
 
+/**
+ * This function searches the Spotify library for songs that matches the string given.
+ * @param query The search string for Spotify API search
+ * @param numSongs The number of songs to return
+ * @param page The page number to display
+ * @returns A list of song objects
+ */
 async function searchSongs(query: string, numSongs: number, page: number): Promise<any> {
   try {
       const response = await axios.get("http://localhost:3000/api/songs/search", {
@@ -18,7 +25,7 @@ async function searchSongs(query: string, numSongs: number, page: number): Promi
           }
       });
       // If the response is successful, return the data
-      return response.data; // Make sure to return the actual data property if that's what you're interested in
+      return response.data; 
   } catch (error) {
       console.error('Failed to fetch songs with axios:', error);
       // Return a default value in case of an error to keep the function's return type consistent
@@ -26,6 +33,12 @@ async function searchSongs(query: string, numSongs: number, page: number): Promi
   }
 }
 
+/**
+ * This prompt page ultilises the GPT API and the Spotify API to give a prompt
+ * to the user. The user then answer with a song by searching through the Spotify
+ * library. A song can then be choosen and added to their personal list.
+ * @returns The prompt page to be rendered
+ */
 export const PromptPage = () => {
 
   const mockTrackData = {
@@ -57,6 +70,7 @@ export const PromptPage = () => {
     };
   }, [currentInput]);
 
+  //Uses the debounced value to search for results in the Spotify library
   useEffect(() => {
     if (debouncedValue) {
       const fetchSongs = async () => {
@@ -76,11 +90,8 @@ export const PromptPage = () => {
     }
   }, [debouncedValue]);
 
-
   const handleOpenDialog = () => setOpenDialog(true);
-
   const handleCloseDialog = () => setOpenDialog(false);
-
   const handleDrawer = () => setOpenDrawer(!openDrawer);
   
   const handleConfirmQuit = () => {
