@@ -40,7 +40,7 @@ README [here](backend/README.md)!
 
 __________________________________________________________________
 
-_We hope to unite music enthusiasts and allow users to broaden their listening-music horizons!_
+_United by our love for music, we want to bring fellow music lovers a web app to share their favourite tunes! ♫_
 
 _- From Team Amber Antelopes ♫✧♪_
 
