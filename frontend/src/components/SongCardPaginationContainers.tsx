@@ -98,13 +98,13 @@ const SongCardContainer = ({
     return songs
       ? songs.slice(
           (currentPage - 1) * songsPerPage,
-          currentPage * songsPerPage,
+          currentPage * songsPerPage
         )
       : undefined;
   };
 
   const [pageContents, setPageContents] = useState(
-    songs ? getSongsToDisplay(currentPage) : undefined,
+    songs ? getSongsToDisplay(currentPage) : undefined
   );
 
   /**
@@ -194,7 +194,7 @@ const SongCardGrid = ({
     <Grid container spacing={3}>
       {pageContents.map((songData) => (
         <Grid item xs={12} md={6} key={songData.id}>
-          <SongCard songData={songData} type={songCardType} />
+          <SongCard songData={songData} isLiked={true} type={songCardType} />
         </Grid>
       ))}
     </Grid>
