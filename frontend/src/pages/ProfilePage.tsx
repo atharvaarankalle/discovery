@@ -1,4 +1,3 @@
-import NavBar from "../components/NavBar";
 import { Typography, ThemeProvider } from "@mui/material";
 import { theme } from "../theme";
 import { SavedSongsContainer } from "../components/SongCardPaginationContainers";
@@ -57,49 +56,53 @@ const ProfilePage = () => {
   return (
     <>
       <div style={{ height: "calc(100vh - 64px)", overflowY: "auto" }}>
-        <ThemeProvider theme={theme}>
-          <Typography variant="h3" style={{ marginBottom: "20px" }}>
-            PROFILE
-          </Typography>
-          <div
+        <Typography
+          variant="h3"
+          style={{ marginBottom: "20px", letterSpacing: "0.14em" }}
+        >
+          PROFILE
+        </Typography>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "40px",
+          }}
+        >
+          <img
+            src={dummyUser.profilePic}
             style={{
-              display: "flex",
-              alignItems: "center",
-              marginBottom: "40px",
+              width: "200px",
+              height: "200px",
+              objectFit: "cover",
+              borderRadius: "50%",
+              marginRight: "60px",
             }}
-          >
-            <img
-              src={dummyUser.profilePic}
-              style={{
-                width: "200px",
-                height: "200px",
-                objectFit: "cover",
-                borderRadius: "50%",
-                marginRight: "60px",
-              }}
-            />
-            <div>
-              <Typography variant="h1">{dummyUser.name}</Typography>
-              <Typography variant="subtitle1">
-                Discovering since {dummyUser.discoveryDate}
-              </Typography>
-            </div>
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              marginBottom: "350px",
-            }}
-          >
-            <Typography variant="h3" style={{ marginBottom: "20px" }}>
-              DISCOVERED SONGS
+          />
+          <div>
+            <Typography variant="h1">{dummyUser.name}</Typography>
+            <Typography variant="subtitle1">
+              Discovering since {dummyUser.discoveryDate}
             </Typography>
-            <SavedSongsContainer songs={dummySongs} />
-            <MusicPlayer />
           </div>
-        </ThemeProvider>
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            marginBottom: "350px",
+          }}
+        >
+          <Typography
+            variant="h3"
+            style={{ marginBottom: "20px", letterSpacing: "0.14em" }}
+          >
+            DISCOVERED SONGS
+          </Typography>
+          <SavedSongsContainer songs={dummySongs} />
+          <MusicPlayer />
+        </div>
       </div>
     </>
   );
