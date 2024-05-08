@@ -24,15 +24,13 @@ const prompts = [
 
 beforeAll(async () => {
     mongod = await MongoMemoryServer.create();
-
     const connectionString = mongod.getUri();
     await mongoose.connect(connectionString);
 });
 
 beforeEach(async () => {
-    await mongoose.connection.db.dropDatabase();
-
-    const collection = await mongoose.connection.db.createCollection("prompts");
+    const collection = await mongoose.connection.db.collection("prompts");
+    await collection.deleteMany({});
     await collection.insertMany(prompts);
 });
 
@@ -67,7 +65,7 @@ it("gets a single prompt", async () => {
     expect(promptFromDb.date).toEqual(new Date("2024-05-01T00:00:00.000+00:00"));
 });
 
-it("inserts a new prompt", async() => {
+it("inserts a new prompt", async () => {
     const newPrompt = new Prompt({
         prompt: "A song that makes you feel like you're in a movie",
         date: new Date("2024-05-04T00:00:00.000+00:00")
@@ -80,4 +78,20 @@ it("inserts a new prompt", async() => {
     expect(newPromptFromDb).toBeTruthy();
     expect(newPromptFromDb.prompt).toBe("A song that makes you feel like you're in a movie");
     expect(newPromptFromDb.date).toEqual(new Date("2024-05-04T00:00:00.000+00:00"));
+});
+
+it("fails to insert a new prompt with missing prompt field", () => {
+    const newPrompt = new Prompt({
+        date: new Date("2024-05-04T00:00:00.000+00:00")
+    });
+
+    expect(newPrompt.save()).rejects.toThrow();
+});
+
+it("fails to insert a new prompt with missing date field", () => {
+    const newPrompt = new Prompt({
+        prompt: "A song that makes you feel like you're floating"
+    });
+
+    expect(newPrompt.save()).rejects.toThrow();
 });
