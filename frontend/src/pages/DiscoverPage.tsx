@@ -1,8 +1,11 @@
 import DiscoverPageHeader from "../components/DiscoverPageHeader";
 import SongSuggestionsContainer from "../components/SongSuggestionsContainer";
-import albumart from "../assets/TheCompleteConfectionCover.png";
-import song from "../assets/spongebob-boowomp.mp3";
 import { styled } from "@mui/material";
+import useGet from "../utils/useGet";
+import LoadingSpinner from "../components/LoadingSpinner";
+import { SongSuggestionData } from "../utils/interfaces";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
 
 const StyledDiscoverContainer = styled("div")({
   display: "flex",
@@ -11,87 +14,20 @@ const StyledDiscoverContainer = styled("div")({
 });
 
 const DiscoverPage = () => {
-  // TEMPORARY!!!
-  const songs = [
-    {
-      id: "id",
-      songData: {
-        id: "song-id",
-        songTitle: "Song title bruh",
-        artists: "me, myself, i",
-        album: "dis album",
-        albumArtSrc: albumart,
-        songAudioSrc: song,
-      },
-      username: "username",
-    },
-    {
-      id: "id2",
-      songData: {
-        id: "song-id",
-        songTitle: "Song title bruh",
-        artists: "me, myself, i",
-        album: "dis album",
-        albumArtSrc: albumart,
-        songAudioSrc: song,
-      },
-      username: "username",
-    },
-    {
-      id: "id3",
-      songData: {
-        id: "song-id",
-        songTitle: "Song title bruh",
-        artists: "me, myself, i",
-        album: "dis album",
-        albumArtSrc: albumart,
-        songAudioSrc: song,
-      },
-      username: "username",
-    },
-    {
-      id: "id4",
-      songData: {
-        id: "song-id",
-        songTitle: "Song title bruh",
-        artists: "me, myself, i",
-        album: "dis album",
-        albumArtSrc: albumart,
-        songAudioSrc: song,
-      },
-      username: "username",
-      caption: "This is a caption. A caption? A caption.",
-    },
-    {
-      id: "id5",
-      songData: {
-        id: "song-id",
-        songTitle: "Song title bruh",
-        artists: "me, myself, i",
-        album: "dis album",
-        albumArtSrc: albumart,
-        songAudioSrc: song,
-      },
-      username: "username",
-    },
-    {
-      id: "id6",
-      songData: {
-        id: "song-id",
-        songTitle: "Song title bruh",
-        artists: "me, myself, i",
-        album: "dis album",
-        albumArtSrc: albumart,
-        songAudioSrc: song,
-      },
-      username: "username",
-    },
-  ];
+  const { isLoading, data } = useGet<SongSuggestionData[]>({
+    url: `${API_BASE_URL}/feed`,
+  });
+
+  const songs = data === null ? [] : data;
 
   return (
     <StyledDiscoverContainer>
       <DiscoverPageHeader />
-      <SongSuggestionsContainer songSuggestionList={songs} />
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <SongSuggestionsContainer songSuggestionList={songs} />
+      )}
     </StyledDiscoverContainer>
   );
 };
