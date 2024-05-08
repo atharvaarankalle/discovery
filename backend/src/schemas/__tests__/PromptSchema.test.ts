@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { Prompt } from "../PromptSchema";
 
-let mongod;
+let mongod: MongoMemoryServer;
 
 /* Define the prompts to be used in the tests */
 const prompts = [
@@ -72,8 +72,8 @@ it("gets all prompts", async () => {
 it("gets a single prompt", async () => {
     const promptFromDb = await Prompt.findById("000000000000000000000003");
 
-    expect(promptFromDb.prompt).toBe("Daydreaming scenario song");
-    expect(promptFromDb.date).toEqual(new Date("2024-05-01T00:00:00.000+00:00"));
+    expect(promptFromDb!.prompt).toBe("Daydreaming scenario song");
+    expect(promptFromDb!.date).toEqual(new Date("2024-05-01T00:00:00.000+00:00"));
 });
 
 /**
@@ -90,8 +90,8 @@ it("inserts a new prompt", async () => {
     const newPromptFromDb = await mongoose.connection.db.collection("prompts").findOne({ _id: newPrompt._id });
 
     expect(newPromptFromDb).toBeTruthy();
-    expect(newPromptFromDb.prompt).toBe("A song that makes you feel like you're in a movie");
-    expect(newPromptFromDb.date).toEqual(new Date("2024-05-04T00:00:00.000+00:00"));
+    expect(newPromptFromDb!.prompt).toBe("A song that makes you feel like you're in a movie");
+    expect(newPromptFromDb!.date).toEqual(new Date("2024-05-04T00:00:00.000+00:00"));
 });
 
 /**

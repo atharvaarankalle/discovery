@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { User } from "../UserSchema";
 
-let mongod;
+let mongod: MongoMemoryServer;
 
 /* Define the users to be used in the tests */
 const users = [
@@ -102,13 +102,13 @@ it("gets all users", async () => {
 it("gets a single user", async () => {
     const userFromDb = await User.findById("000000000000000000000003");
 
-    expect(userFromDb.email).toBe("user3@test.com");
-    expect(userFromDb.displayName).toBe("User 3");
-    expect(userFromDb.accountCreationDate).toEqual(new Date("2024-05-07T00:00:00.000+00:00"));
-    expect(userFromDb.streakCount).toBe(0);
-    expect(userFromDb.likedSongs).toEqual([]);
-    expect(userFromDb.suggestedSongs).toEqual([]);
-    expect(userFromDb.profilePic).toBe("profilePic3Source");
+    expect(userFromDb!.email).toBe("user3@test.com");
+    expect(userFromDb!.displayName).toBe("User 3");
+    expect(userFromDb!.accountCreationDate).toEqual(new Date("2024-05-07T00:00:00.000+00:00"));
+    expect(userFromDb!.streakCount).toBe(0);
+    expect(userFromDb!.likedSongs).toEqual([]);
+    expect(userFromDb!.suggestedSongs).toEqual([]);
+    expect(userFromDb!.profilePic).toBe("profilePic3Source");
 });
 
 /**
@@ -129,13 +129,13 @@ it("creates a user", async () => {
 
     const newUserFromDb = await mongoose.connection.db.collection("users").findOne({ _id: newUser._id });
 
-    expect(newUserFromDb.email).toBe("user4@test.com");
-    expect(newUserFromDb.displayName).toBe("User 4");
-    expect(newUserFromDb.accountCreationDate).toEqual(new Date("2024-05-08T00:00:00.000+00:00"));
-    expect(newUserFromDb.streakCount).toBe(0);
-    expect(newUserFromDb.likedSongs).toEqual([]);
-    expect(newUserFromDb.suggestedSongs).toEqual([]);
-    expect(newUserFromDb.profilePic).toBe("profilePic4Source");
+    expect(newUserFromDb!.email).toBe("user4@test.com");
+    expect(newUserFromDb!.displayName).toBe("User 4");
+    expect(newUserFromDb!.accountCreationDate).toEqual(new Date("2024-05-08T00:00:00.000+00:00"));
+    expect(newUserFromDb!.streakCount).toBe(0);
+    expect(newUserFromDb!.likedSongs).toEqual([]);
+    expect(newUserFromDb!.suggestedSongs).toEqual([]);
+    expect(newUserFromDb!.profilePic).toBe("profilePic4Source");
 });
 
 /**
@@ -155,13 +155,13 @@ it("successfully inserts a user with an empty displayName field", async () => {
 
     const newUserFromDb = await mongoose.connection.db.collection("users").findOne({ _id: newUser._id });
 
-    expect(newUserFromDb.email).toBe("user4@test.com");
-    expect(newUserFromDb.displayName).toBeUndefined();
-    expect(newUserFromDb.accountCreationDate).toEqual(new Date("2024-05-08T00:00:00.000+00:00"));
-    expect(newUserFromDb.streakCount).toBe(0);
-    expect(newUserFromDb.likedSongs).toEqual([]);
-    expect(newUserFromDb.suggestedSongs).toEqual([]);
-    expect(newUserFromDb.profilePic).toBe("profilePic4Source");
+    expect(newUserFromDb!.email).toBe("user4@test.com");
+    expect(newUserFromDb!.displayName).toBeUndefined();
+    expect(newUserFromDb!.accountCreationDate).toEqual(new Date("2024-05-08T00:00:00.000+00:00"));
+    expect(newUserFromDb!.streakCount).toBe(0);
+    expect(newUserFromDb!.likedSongs).toEqual([]);
+    expect(newUserFromDb!.suggestedSongs).toEqual([]);
+    expect(newUserFromDb!.profilePic).toBe("profilePic4Source");
 });
 
 /**
@@ -182,11 +182,11 @@ it("successfully inserts a user with an empty profilePic field", async () => {
 
     const newUserFromDb = await mongoose.connection.db.collection("users").findOne({ _id: newUser._id });
 
-    expect(newUserFromDb.email).toBe("user4@test.com");
-    expect(newUserFromDb.displayName).toBe("User 4");
-    expect(newUserFromDb.accountCreationDate).toEqual(new Date("2024-05-08T00:00:00.000+00:00"));
-    expect(newUserFromDb.streakCount).toBe(0);
-    expect(newUserFromDb.likedSongs).toEqual([]);
-    expect(newUserFromDb.suggestedSongs).toEqual([]);
-    expect(newUserFromDb.profilePic).toBeUndefined();
+    expect(newUserFromDb!.email).toBe("user4@test.com");
+    expect(newUserFromDb!.displayName).toBe("User 4");
+    expect(newUserFromDb!.accountCreationDate).toEqual(new Date("2024-05-08T00:00:00.000+00:00"));
+    expect(newUserFromDb!.streakCount).toBe(0);
+    expect(newUserFromDb!.likedSongs).toEqual([]);
+    expect(newUserFromDb!.suggestedSongs).toEqual([]);
+    expect(newUserFromDb!.profilePic).toBeUndefined();
 });

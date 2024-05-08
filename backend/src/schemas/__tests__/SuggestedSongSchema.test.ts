@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { SuggestedSong } from "../SuggestedSongSchema";
 
-let mongod;
+let mongod: MongoMemoryServer;
 
 /* Define the suggested songs to be used in the tests */
 const suggestedSongs = [
@@ -84,10 +84,10 @@ it("gets all suggested songs", async () => {
 it("gets a single suggested song", async () => {
     const suggestedSongFromDb = await SuggestedSong.findById("000000000000000000000002");
 
-    expect(suggestedSongFromDb.caption).toBe("This song is so cool");
-    expect(suggestedSongFromDb.prompt).toEqual(new mongoose.Types.ObjectId("000000000000000000000001"));
-    expect(suggestedSongFromDb.spotifySongId).toBe("songId2");
-    expect(suggestedSongFromDb.user).toEqual(new mongoose.Types.ObjectId("000000000000000000000002"));
+    expect(suggestedSongFromDb!.caption).toBe("This song is so cool");
+    expect(suggestedSongFromDb!.prompt).toEqual(new mongoose.Types.ObjectId("000000000000000000000001"));
+    expect(suggestedSongFromDb!.spotifySongId).toBe("songId2");
+    expect(suggestedSongFromDb!.user).toEqual(new mongoose.Types.ObjectId("000000000000000000000002"));
 });
 
 /**
@@ -105,10 +105,10 @@ it("creates a suggested song", async () => {
 
     const newSuggestedSongFromDb = await mongoose.connection.db.collection("suggestedsongs").findOne({ _id: newSuggestedSong._id });
 
-    expect(newSuggestedSongFromDb.caption).toBe("This song is so happy");
-    expect(newSuggestedSongFromDb.prompt).toEqual(new mongoose.Types.ObjectId("000000000000000000000001"));
-    expect(newSuggestedSongFromDb.spotifySongId).toBe("songId4");
-    expect(newSuggestedSongFromDb.user).toEqual(new mongoose.Types.ObjectId("000000000000000000000004"));
+    expect(newSuggestedSongFromDb!.caption).toBe("This song is so happy");
+    expect(newSuggestedSongFromDb!.prompt).toEqual(new mongoose.Types.ObjectId("000000000000000000000001"));
+    expect(newSuggestedSongFromDb!.spotifySongId).toBe("songId4");
+    expect(newSuggestedSongFromDb!.user).toEqual(new mongoose.Types.ObjectId("000000000000000000000004"));
 });
 
 /**
@@ -125,10 +125,10 @@ it("successfully inserts a suggested song with an empty caption field", async ()
 
     const newSuggestedSongFromDb = await mongoose.connection.db.collection("suggestedsongs").findOne({ _id: newSuggestedSong._id });
 
-    expect(newSuggestedSongFromDb.caption).toBeUndefined();
-    expect(newSuggestedSongFromDb.prompt).toEqual(new mongoose.Types.ObjectId("000000000000000000000001"));
-    expect(newSuggestedSongFromDb.spotifySongId).toBe("songId4");
-    expect(newSuggestedSongFromDb.user).toEqual(new mongoose.Types.ObjectId("000000000000000000000004"));
+    expect(newSuggestedSongFromDb!.caption).toBeUndefined();
+    expect(newSuggestedSongFromDb!.prompt).toEqual(new mongoose.Types.ObjectId("000000000000000000000001"));
+    expect(newSuggestedSongFromDb!.spotifySongId).toBe("songId4");
+    expect(newSuggestedSongFromDb!.user).toEqual(new mongoose.Types.ObjectId("000000000000000000000004"));
 });
 
 /**
