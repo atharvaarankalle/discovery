@@ -16,7 +16,6 @@ import CustomTypography from "./CustomTypography";
 import CdImage from "../assets/cd_image.png";
 import IconTextLabel from "./IconTextLabel";
 import LikeButton from "./LikeButton";
-import { useState } from "react";
 import { SongData } from "../utils/interfaces";
 
 // Custom styles applied to MUI CardMedia to be the Album used in  hover animation
@@ -64,6 +63,7 @@ export interface SongCardBasePropTypes extends CardProps {
   type: "small" | "medium" | "large";
   onCardClick?: () => void;
   isLiked?: boolean;
+  isSelected?: boolean;
 }
 
 /**
@@ -73,22 +73,21 @@ export interface SongCardBasePropTypes extends CardProps {
 @prop type: required prop with value of "small", "medium" or "large", indicating what SongCard type to render
 @prop onCardClick: the onClick function for the card area. optional prop if type='small'
 @prop isLiked: boolean value to set the initial state of the like button, false by default unless specified true
-
+@prop isSelected: boolean value to set the selected state of the card, false by default
 **/
 const SongCard = ({
   songData,
   type,
   onCardClick,
   isLiked = false,
+  isSelected = false,
 }: SongCardBasePropTypes) => {
   const { songTitle, artists, album, albumArtSrc } = songData;
-  const [isSelected, setIsSelected] = useState<boolean>(false);
   const theme: Theme = useTheme(); // importing theme object to use in sx prop
 
   // Logic to handle SongCard click
   const handleSongCardClick = () => {
     onCardClick?.();
-    setIsSelected(!isSelected);
   };
 
   // deciding card height based on what size (variant) it is
