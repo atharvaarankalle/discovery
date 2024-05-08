@@ -1,6 +1,6 @@
-import { Avatar, Box, BoxProps, styled } from "@mui/material";
+import { Avatar, Box, styled } from "@mui/material";
 import IconTextLabel from "./IconTextLabel";
-import SongCard from "./SongCard";
+import SongCard, { SongCardBasePropTypes } from "./SongCard";
 import CustomTypography from "./CustomTypography";
 import { SongData } from "../utils/interfaces";
 
@@ -15,7 +15,7 @@ const StyledBox = styled(Box)(({ theme }) => ({
 }));
 
 /* Prop types declaration for SongSuggestionCard */
-interface SongSuggestionCardPropTypes extends BoxProps {
+interface SongSuggestionCardPropTypes extends SongCardBasePropTypes {
   username: string;
   profilePictureSrc?: string;
   caption?: string;
@@ -28,12 +28,14 @@ interface SongSuggestionCardPropTypes extends BoxProps {
  * @prop username: username of the user who suggested the song
  * @prop caption: optional prop for the caption the user writes to go along with their song suggestion
  * @prop songData: object containing song data such as song title, artist, album, and album art source
+ * @prop All other valid props of the SongCard component
  */
 const SongSuggestionCard = ({
   username,
   profilePictureSrc,
   caption,
   songData,
+  ...props
 }: SongSuggestionCardPropTypes) => {
   return (
     <StyledBox>
@@ -45,7 +47,7 @@ const SongSuggestionCard = ({
       {caption && (
         <CustomTypography fontStyle="italic">{caption}</CustomTypography>
       )}
-      <SongCard songData={songData} type="medium" />
+      <SongCard songData={songData} {...props} />
     </StyledBox>
   );
 };

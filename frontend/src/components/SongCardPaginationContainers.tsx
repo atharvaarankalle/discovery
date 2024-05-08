@@ -88,7 +88,6 @@ const SongCardContainer = ({
 }: SongCardContainerProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = songs ? Math.ceil(songs.length / songsPerPage) : 0;
-
   /**
    * Gets a subset of the songs in the list to display in the current page
    *
@@ -98,13 +97,13 @@ const SongCardContainer = ({
     return songs
       ? songs.slice(
           (currentPage - 1) * songsPerPage,
-          currentPage * songsPerPage,
+          currentPage * songsPerPage
         )
       : undefined;
   };
 
   const [pageContents, setPageContents] = useState(
-    songs ? getSongsToDisplay(currentPage) : undefined,
+    songs ? getSongsToDisplay(currentPage) : undefined
   );
 
   /**
@@ -177,6 +176,12 @@ const SongCardGrid = ({
   songCardType,
   noDataMessage,
 }: SongCardGridProps) => {
+  const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
+
+  const handleCardClick = (cardId: string) => {
+    setSelectedCardId(cardId === selectedCardId ? null : cardId);
+  };
+
   // Display no data message if there is no data to display
   if (!pageContents) {
     return (
@@ -194,7 +199,12 @@ const SongCardGrid = ({
     <Grid container spacing={3}>
       {pageContents.map((songData) => (
         <Grid item xs={12} md={6} key={songData.id}>
-          <SongCard songData={songData} type={songCardType} />
+          <SongCard
+            songData={songData}
+            type={songCardType}
+            isSelected={songData.id === selectedCardId}
+            onCardClick={() => handleCardClick(songData.id)}
+          />
         </Grid>
       ))}
     </Grid>
