@@ -1,10 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Button, Typography} from "@mui/material";
 import { Searchbar } from "../components/Searchbar"
 import { SkipButton } from "../components/SkipButton";
 import { colors } from "../theme";
 import { ConfirmationDialog } from "../components/ConfirmDialog";
 import PromptSideDrawer from "../components/PromptSideDrawer";
+import { SongSelectionContainer } from "../components/SongCardPaginationContainers";
+import axios from "axios";
+
+async function searchSongs(query: string, numSongs: number, page: number): Promise<any> {
+  try {
+      const response = await axios.get("http://localhost:3000/api/songs/search", {
+          params: {
+              searchQuery: query,
+              numSongs: numSongs,
+              page: page
+          }
+      });
+      // If the response is successful, return the data
+      return response.data; // Make sure to return the actual data property if that's what you're interested in
+  } catch (error) {
+      console.error('Failed to fetch songs with axios:', error);
+      // Return a default value in case of an error to keep the function's return type consistent
+      return [];
+  }
+}
 
 export const PromptPage = () => {
 
@@ -20,8 +40,41 @@ export const PromptPage = () => {
   
 
   const [prompt, setPrompt] = useState("Press button for prompt");
+  const [currentInput, setCurrentInput] = useState('');
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
+  const [songs, setSongs] = useState([]);
+  const [debouncedValue, setDebouncedValue] = useState("");
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(currentInput);
+    }, 300); 
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [currentInput]);
+
+  useEffect(() => {
+    if (debouncedValue) {
+      const fetchSongs = async () => {
+        try {
+          const fetchedSongs = await searchSongs(debouncedValue, 6, 5);
+          setSongs(fetchedSongs);
+          console.log(songs[0])
+        } catch (error) {
+          console.error('Error fetching songs:', error);
+          setSongs([]);
+        }
+      };
+
+      fetchSongs();
+    } else {
+      setSongs([]);
+    }
+  }, [debouncedValue]);
+
 
   const handleOpenDialog = () => setOpenDialog(true);
 
@@ -51,20 +104,17 @@ export const PromptPage = () => {
   return (
     <Box>
       <Typography variant="h4">TODAY'S DISCO: </Typography>
-      <Typography variant="h2">{prompt}</Typography>
+      <Typography variant="h2" sx={{width: `calc(100vw - 37rem)`}}>{prompt}</Typography>
       <Button variant="contained" sx={{marginY: 3}} onClick={handlePrompt}>Generate</Button>
       <Box>
-        <Box sx={{marginY: 5, width: '70%', height: '80%'}}>
-          <Searchbar/>
-          <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-            <Typography variant="body2" sx={{color: colors.peach}}>
-              Search for a track that best describes the prompt above
-            </Typography>
+        <Box sx={{marginY: 5, width: `calc(100vw - 37rem)`, height: '80%', overflowY: 'auto'}}>
+          <Searchbar onInputChange={setCurrentInput}/>
+          <Box sx={{marginX: 3}}>
+            <SongSelectionContainer
+              songs={songs}
+              />
           </Box>
         </Box>
-
-        <PromptSideDrawer sx={{width: '200px'}} drawerOpen={openDrawer} toggleDrawer={handleDrawer} songData={mockTrackData}/>
-
       </Box>
       <SkipButton onOpen={handleOpenDialog}/>
       <Button onClick={handleDrawer}>drawer</Button>
@@ -73,6 +123,7 @@ export const PromptPage = () => {
                 onClose={handleCloseDialog}
                 onConfirm={handleConfirmQuit}
             />
+      <PromptSideDrawer drawerOpen={openDrawer} toggleDrawer={handleDrawer} songData={mockTrackData}/>
     </Box>
   );
 };

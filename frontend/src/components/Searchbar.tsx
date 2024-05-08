@@ -6,7 +6,9 @@ import CustomTextField from "./CustomTextField";
 import axios from "axios";
 import { SongSelectionContainer } from "./SongCardPaginationContainers";
 
-// Styling for searchbar
+interface SearchbarProps {
+  onInputChange: (input: string) => void;  // Define the callback type
+}
 
 //Styling for clear search button
 const ClearSearchLink = styled(Link)({
@@ -48,48 +50,23 @@ async function searchSongs(query: string, numSongs: number, page: number): Promi
  * @returns Searchbar
  */
 
-export const Searchbar = () => {
+export const Searchbar = ( { onInputChange }: SearchbarProps ) => {
   const [inputValue, setInputValue] = useState("");
-  const [songs, setSongs] = useState([]);
-  const [debouncedValue, setDebouncedValue] = useState("");
 
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(inputValue);
-    }, 300); 
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [inputValue]);
-
-  useEffect(() => {
-    if (debouncedValue) {
-      const fetchSongs = async () => {
-        try {
-          const fetchedSongs = await searchSongs(debouncedValue, 6, 5);
-          setSongs(fetchedSongs);
-          console.log(songs[0])
-        } catch (error) {
-          console.error('Error fetching songs:', error);
-          setSongs([]);
-        }
-      };
-
-      fetchSongs();
-    } else {
-      setSongs([]);
-    }
-  }, [debouncedValue]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
+    const value = event.target.value;
+    setInputValue(value);
+    if (onInputChange) { 
+      onInputChange(value);
+    }
   };
 
   const clearInput = () => {
     setInputValue("");
-    setSongs([]);
-    setDebouncedValue("");
+    if (onInputChange) {
+      onInputChange(""); 
+    }
   };
 
   return (
@@ -118,9 +95,6 @@ export const Searchbar = () => {
           Clear search
         </ClearSearchLink>
       </Box>
-      <SongSelectionContainer
-        songs={songs}
-        />
     </Box>
   );
 };
