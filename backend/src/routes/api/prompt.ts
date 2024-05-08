@@ -6,6 +6,15 @@ import generate from "./openAI";
 
 const router: Router = express.Router();
 
+interface DataObject {
+    _id: string;
+    prompt: string;
+    date: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+  }
+
 /**
  * GET / - Call ChatGPT API to generate a new prompt.
  */
@@ -90,16 +99,15 @@ router.get('/find/:id', async (req: Request, res: Response) => {
 
 router.get('/latest', async (req: Request, res: Response) => {
     try {
-        const date: Date =  getTodaysDate() // Uses the date in body if specified, otherwise get's today's date.
+        const date: Date =  getTodaysDate()
           
           const todayPrompt: IPrompt | null = await Prompt.findOne({ date });
         if (!todayPrompt) {
             return res.send(null);
         } else {
-            return res.json(todayPrompt);
+            return res.send(todayPrompt.prompt);
         }
 
-        
     } catch (error) {
         console.error(error);
         res.status(500).send('Server Error');

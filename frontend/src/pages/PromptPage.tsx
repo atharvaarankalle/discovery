@@ -121,9 +121,10 @@ export const PromptPage = () => {
     try {
       const baseURL = import.meta.env.VITE_API_BASE_URL;
       const existingResponse = await axios.get(`${baseURL}/prompt/latest`);
-
-      if(!existingResponse) {
-        setPrompt(existingResponse);
+      
+      if(existingResponse.data) {
+        console.log(existingResponse.data);
+        setPrompt(existingResponse.data);
       } else {
         const response = await axios.get(`${baseURL}/prompt`);
           if (response.status !== 200) {
