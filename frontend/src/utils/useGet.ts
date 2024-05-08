@@ -29,7 +29,7 @@ const useGet = <T>({
   const [data, setData] = useState(initialState);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [refreshToggle, setRefreshToggle] = useState<boolean>(false);
-  const [error, setError] = useState<AxiosError>();
+  const [error, setError] = useState<AxiosError | null>(null);
 
   // To prevent unnecessary re-rendering due to queryParams
   const queryParamsRef = useRef(queryParams);
