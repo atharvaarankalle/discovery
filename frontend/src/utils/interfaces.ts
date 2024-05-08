@@ -24,6 +24,25 @@ export interface SongData {
 }
 
 /**
+* @interface User
+* * `displayName`: required string, the user's username
+* * `steakCount`: required number, the user's current streak count
+* * `likedSongs`: required array of strings, the songs (referenced by Spotify song ID) that the user has liked
+* * `suggestedSongs`: required array of strings, the songs (referenced by Spotify song ID) that the user has suggested
+* * `profilePic`: optional string, the url link to the user's profile picture
+* * `hasSubmitted`: required boolean, representing if the user has submitted a song suggestion today, or not
+*
+* */
+export interface User {
+  displayName: string;
+  streakCount: number;
+  likedSongs: string[];
+  suggestedSongs: string[];
+  profilePic?: string;
+  hasSubmitted: boolean;
+}
+
+/**
  * @interface SongSuggestionData
  * * `id`: required string, uniquely identifies the song suggestion
  * * `songData`: required {@link SongData} object, containing songTitle, artist/s, album name, album art, preview audio or open in spotify url if no preview audio
