@@ -9,6 +9,7 @@ import { Document, Schema, Types } from "mongoose";
 import { Prompt } from "../../schemas/PromptSchema";
 import { compareDates, getTodaysDate } from "../../utils/DateUtils";
 import dotenv from "dotenv";
+import axios from "axios";
 
 dotenv.config();
 
@@ -91,17 +92,34 @@ router.patch("/:id", async (req: Request, res: Response) => {
 router.get("/:id/liked", async (req: Request, res: Response) => {
   try {
     const userId = req.params.id;
-    const user: IUser | null = await User.findById(userId).populate(
-      "likedSongs"
-    );
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+    const likedSongs: Array<ISuggestedSong> = await SuggestedSong.find({
+      user: userId,
+    });
+
+    if (!likedSongs) {
+      return res.status(404).json({ message: "No liked songs found" });
     }
 
-    const likedSongs = user.likedSongs;
+    const likedSongPromises = likedSongs.map(async (song) => {
+      const { spotifySongId } = song;
 
-    return res.json(likedSongs);
+      try {
+        const response = await axios.get(
+          `${API_BASE_URL}/songs/${spotifySongId}`
+        );
+
+        return {
+          songData: response.data,
+        };
+      } catch (error) {
+        res.status(500).json();
+      }
+    });
+
+    const likedSongsData = await Promise.all(likedSongPromises);
+
+    return res.json(likedSongsData);
   } catch (error) {
     return res
       .status(500)
