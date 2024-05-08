@@ -7,6 +7,9 @@ import { useState } from "react";
 /* Prop types for this component */
 interface SuggestionContainerPropTypes {
   songSuggestionList: Array<SongSuggestionData>;
+  onSongSuggestionCardClick?: (
+    songSuggestionData: SongSuggestionData | null
+  ) => void;
 }
 
 /**
@@ -16,14 +19,29 @@ interface SuggestionContainerPropTypes {
  * scrollable masonry style container that fills the height of its wrapper/parent component.
  * If provided an empty list, will render a message instead
  *
+ * Also takes in an optional onClick function to pass down to the rendered SongSuggestionCards,
+ * which takes the songSuggestionData as a parameter
+ *
  */
 const SongSuggestionsContainer = ({
   songSuggestionList,
+  onSongSuggestionCardClick,
 }: SuggestionContainerPropTypes) => {
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
 
-  const handleCardClick = (cardId: string) => {
-    setSelectedCardId(cardId === selectedCardId ? null : cardId);
+  const handleCardClick = (songSuggestionData: SongSuggestionData) => {
+    // call onClick function IF provided by higher level component
+    if (onSongSuggestionCardClick) {
+      /* check if the selected card is different to this newly clicked one and set the new data if true, 
+      or clear data if they are toggling the same card (i.e. unselection) */
+      selectedCardId !== songSuggestionData.id
+        ? onSongSuggestionCardClick(songSuggestionData)
+        : onSongSuggestionCardClick(null);
+    }
+    // set selected status for this newly clicked card
+    setSelectedCardId(
+      songSuggestionData.id === selectedCardId ? null : songSuggestionData.id
+    );
   };
 
   const songSuggestionsCount = songSuggestionList.length;
@@ -43,27 +61,15 @@ const SongSuggestionsContainer = ({
         >
           {/* Note that the MUI Masonry component is a part of MUI Labs, not MUI core */}
           <Masonry columns={2} spacing={2} sequential sx={{ margin: 0 }}>
-            {songSuggestionList.map(
-              ({ id, songData, username, caption, profilePictureSrc }) => (
-                <Box key={id}>
-                  <SongSuggestionCard
-                    songData={{
-                      id: songData.id,
-                      songTitle: songData.songTitle,
-                      album: songData.album,
-                      artists: songData.artists,
-                      albumArtSrc: songData.albumArtSrc,
-                    }}
-                    username={username}
-                    caption={caption}
-                    profilePictureSrc={profilePictureSrc}
-                    isSelected={songData.id === selectedCardId}
-                    onCardClick={() => handleCardClick(songData.id)}
-                    type="medium"
-                  />
-                </Box>
-              )
-            )}
+            {songSuggestionList.map((songSuggestionData) => (
+              <Box key={songSuggestionData.id}>
+                <SongSuggestionCard
+                  songSuggestionData={songSuggestionData}
+                  isSelected={songSuggestionData.id === selectedCardId}
+                  onCardClick={() => handleCardClick(songSuggestionData)}
+                />
+              </Box>
+            ))}
           </Masonry>
         </Box>
       ) : (

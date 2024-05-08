@@ -1,8 +1,8 @@
 import { Avatar, Box, styled } from "@mui/material";
 import IconTextLabel from "./IconTextLabel";
-import SongCard, { SongCardBasePropTypes } from "./SongCard";
+import SongCard from "./SongCard";
 import CustomTypography from "./CustomTypography";
-import { SongData } from "../utils/interfaces";
+import { SongSuggestionData } from "../utils/interfaces";
 
 /* Custom styles applied to MUI Box to be the main wrapper of SongSuggestionCard */
 const StyledBox = styled(Box)(({ theme }) => ({
@@ -15,28 +15,29 @@ const StyledBox = styled(Box)(({ theme }) => ({
 }));
 
 /* Prop types declaration for SongSuggestionCard */
-interface SongSuggestionCardPropTypes extends SongCardBasePropTypes {
-  username: string;
-  profilePictureSrc?: string;
-  caption?: string;
-  songData: SongData;
+interface SongSuggestionCardPropTypes {
+  songSuggestionData: SongSuggestionData;
+  onCardClick?: () => void;
+  isLiked?: boolean;
+  isSelected?: boolean;
 }
 
 /**
  * SongSuggestionCard Component
  *
- * @prop username: username of the user who suggested the song
- * @prop caption: optional prop for the caption the user writes to go along with their song suggestion
- * @prop songData: object containing song data such as song title, artist, album, and album art source
- * @prop All other valid props of the SongCard component
- */
+ * @prop songSuggestionData: an object containing song data ({@link SongSuggestionData})
+ * @prop onCardClick: the onClick function for the SongCard area. optional prop if type='small'
+ * @prop isLiked: boolean value to set the initial state of the like button, false by default unless specified true
+ * @prop isSelected: boolean value to set the selected state of the card, false by default
+ * **/
+
 const SongSuggestionCard = ({
-  username,
-  profilePictureSrc,
-  caption,
-  songData,
-  ...props
+  songSuggestionData,
+  isLiked,
+  isSelected,
+  onCardClick,
 }: SongSuggestionCardPropTypes) => {
+  const { username, caption, profilePictureSrc, songData } = songSuggestionData;
   return (
     <StyledBox>
       <IconTextLabel
@@ -47,7 +48,13 @@ const SongSuggestionCard = ({
       {caption && (
         <CustomTypography fontStyle="italic">{caption}</CustomTypography>
       )}
-      <SongCard songData={songData} {...props} />
+      <SongCard
+        songData={songData}
+        isLiked={isLiked}
+        isSelected={isSelected}
+        onCardClick={onCardClick}
+        type="medium"
+      />
     </StyledBox>
   );
 };
