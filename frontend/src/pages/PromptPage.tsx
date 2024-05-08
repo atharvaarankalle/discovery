@@ -6,6 +6,7 @@ import { ConfirmationDialog } from "../components/ConfirmDialog";
 import PromptSideDrawer from "../components/PromptSideDrawer";
 import { SongSelectionContainer } from "../components/SongCardPaginationContainers";
 import axios from "axios";
+import { colors } from "../theme";
 
 async function searchSongs(query: string, numSongs: number, page: number): Promise<any> {
   try {
@@ -60,7 +61,7 @@ export const PromptPage = () => {
     if (debouncedValue) {
       const fetchSongs = async () => {
         try {
-          const fetchedSongs = await searchSongs(debouncedValue, 8, 1);
+          const fetchedSongs = await searchSongs(debouncedValue, 50, 1);
           setSongs(fetchedSongs);
           console.log(songs[0])
         } catch (error) {
@@ -103,17 +104,22 @@ export const PromptPage = () => {
 
   return (
     <Box>
-      <Typography variant="h4">TODAY'S DISCO: </Typography>
       <Typography variant="h2" sx={{width: `calc(100vw - 37rem)`}}>{prompt}</Typography>
       <Button variant="contained" sx={{marginY: 3}} onClick={handlePrompt}>Generate</Button>
       <Box>
         <Box sx={{marginY: 5, width: `calc(100vw - 37rem)`, height: '80%', overflowY: 'auto'}}>
           <Searchbar onInputChange={setCurrentInput}/>
-          <Box sx={{marginX: 3}}>
-            <SongSelectionContainer
-              songs={songs}
-              />
-          </Box>
+          {(debouncedValue === '')? 
+            <Box sx={{display: 'flex', justifyContent: 'center', height: '35rem'}}>
+              <Typography variant="body2" sx={{color: colors.peach}}>
+                Search for a track that best describes the prompt above
+              </Typography>
+            </Box>: 
+            <Box sx={{marginX: 3}}>
+              <SongSelectionContainer
+                songs={songs}
+                />
+            </Box>}
         </Box>
       </Box>
       <SkipButton onOpen={handleOpenDialog}/>
