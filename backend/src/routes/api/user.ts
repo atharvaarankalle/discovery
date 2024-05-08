@@ -8,6 +8,11 @@ import {
 import { Document, Schema, Types } from "mongoose";
 import { Prompt } from "../../schemas/PromptSchema";
 import { compareDates, getTodaysDate } from "../../utils/DateUtils";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const API_BASE_URL = process.env.API_BASE_URL ?? "https://localhost:3000/api";
 
 const router: Router = express.Router();
 
@@ -95,6 +100,7 @@ router.get("/:id/liked", async (req: Request, res: Response) => {
     }
 
     const likedSongs = user.likedSongs;
+
     return res.json(likedSongs);
   } catch (error) {
     return res

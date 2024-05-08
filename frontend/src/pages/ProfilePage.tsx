@@ -1,57 +1,25 @@
-import { Typography, ThemeProvider } from "@mui/material";
-import { theme } from "../theme";
-import { SavedSongsContainer } from "../components/SongCardPaginationContainers";
+import { Typography } from "@mui/material";
 import { MusicPlayer } from "../components/MusicPlayer";
+import useGet from "../utils/useGet";
+import { SongData, User } from "../utils/interfaces";
+import { formatDate } from "../utils/dateFormatter";
+import { SavedSongsContainer } from "../components/SongCardPaginationContainers";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
 
 const ProfilePage = () => {
-  // Dummy user data
-  const dummyUser = {
-    name: "John Doe",
-    profilePic:
-      "https://images.unsplash.com/photo-1608848461950-0fe51dfc41cb?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8fA%3D%3D",
-    discoveryDate: "29th April 2024",
-  };
+  // TODO: replace with user from AppContext
+  const userId = "663b83b5e21bb2bb97d23a0a";
 
-  // Dummy data for songs
-  const dummySongs = [
-    {
-      id: "123123123",
-      songTitle: "Song 1",
-      artists: "Artist 1",
-      album: "Album 1",
-      albumArtSrc:
-        "https://m.media-amazon.com/images/I/61uEKlSVzqL._AC_UF894,1000_QL80_.jpg",
-    },
-    {
-      id: "123456789",
-      songTitle: "Song 2",
-      artists: "Artist 2",
-      album: "Album 2",
-      albumArtSrc: "https://i.redd.it/17iihei3zlkc1.jpeg",
-    },
-    {
-      id: "111222333",
-      songTitle: "Song 3",
-      artists: "Artist 3",
-      album: "Album 3",
-      albumArtSrc: "https://i.redd.it/17iihei3zlkc1.jpeg",
-    },
-    {
-      id: "456456456",
-      songTitle: "Song 4",
-      artists: "Artist 4",
-      album: "Album 4",
-      albumArtSrc:
-        "https://m.media-amazon.com/images/I/61uEKlSVzqL._AC_UF894,1000_QL80_.jpg",
-    },
-    {
-      id: "987654321",
-      songTitle: "Song 5",
-      artists: "Artist 5",
-      album: "Album 5",
-      albumArtSrc: "https://i.redd.it/17iihei3zlkc1.jpeg",
-    },
-  ];
+  const { data: userData } = useGet<User>({
+    url: `${API_BASE_URL}/user/${userId}`,
+  });
+
+  const user = userData === null ? null : (userData as User);
+  const signupDate = user?.accountCreationDate
+    ? formatDate(user.accountCreationDate)
+    : "";
+
 
   return (
     <>
@@ -70,7 +38,7 @@ const ProfilePage = () => {
           }}
         >
           <img
-            src={dummyUser.profilePic}
+            src={user?.profilePic}
             style={{
               width: "200px",
               height: "200px",
@@ -80,9 +48,9 @@ const ProfilePage = () => {
             }}
           />
           <div>
-            <Typography variant="h1">{dummyUser.name}</Typography>
+            <Typography variant="h1">{user?.displayName}</Typography>
             <Typography variant="subtitle1">
-              Discovering since {dummyUser.discoveryDate}
+              Discovering since {signupDate}
             </Typography>
           </div>
         </div>
@@ -100,7 +68,7 @@ const ProfilePage = () => {
           >
             DISCOVERED SONGS
           </Typography>
-          <SavedSongsContainer songs={dummySongs} />
+          {/* <SavedSongsContainer songs={likedSongs} /> */}
           <MusicPlayer />
         </div>
       </div>
