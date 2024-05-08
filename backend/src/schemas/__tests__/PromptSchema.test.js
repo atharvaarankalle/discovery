@@ -59,3 +59,10 @@ it("gets all prompts", async () => {
     expect(promptsFromDb[2].prompt).toBe("Daydreaming scenario song");
     expect(promptsFromDb[2].date).toEqual(new Date("2024-05-01T00:00:00.000+00:00"));
 });
+
+it("gets a single prompt", async () => {
+    const promptFromDb = await Prompt.findById("000000000000000000000003");
+
+    expect(promptFromDb.prompt).toBe("Daydreaming scenario song");
+    expect(promptFromDb.date).toEqual(new Date("2024-05-01T00:00:00.000+00:00"));
+});
