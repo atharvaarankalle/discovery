@@ -134,7 +134,7 @@ export const PromptPage = () => {
       <Typography variant="h2" sx={{width: `calc(100vw - 37rem)`}}>{prompt}</Typography>
       <Button variant="contained" sx={{marginY: 3}} onClick={handlePrompt}>Generate</Button>
       <Box>
-        <Box sx={{marginY: 1, width: `calc(100vw - 37rem)`, height: '80%', overflowY: 'auto'}}>
+        <Box sx={{marginY: 1, width: `calc(100vw - 38rem)`, height: '80%', overflowY: 'auto'}}>
           <Searchbar onInputChange={setCurrentInput}/>
           {/* this switches between two boxes depending if there's anything in the search bar*/}
           {(debouncedValue === '')? 
