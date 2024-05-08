@@ -25,6 +25,7 @@ export interface SongData {
 
 /**
  * @interface User
+ * * `id`: required string, the user document ID
  * * `displayName`: required string, the user's username
  * * `steakCount`: required number, the user's current streak count
  * * `likedSongs`: required array of strings, the songs (referenced by Spotify song ID) that the user has liked

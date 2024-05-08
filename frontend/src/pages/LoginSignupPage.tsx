@@ -2,6 +2,7 @@ import { Box, styled } from "@mui/material";
 import LoginSignupTabs, { TabsTypes } from "../components/LoginSignupTabs";
 import PlanetBackground from "../components/PlanetBackground";
 import { DiscoveryLogoWithtext } from "../components/Logos";
+import { useNavigate } from "react-router-dom";
 
 const LoginPageContent = styled("div")({
   position: "relative",
@@ -12,7 +13,7 @@ const LoginPageContent = styled("div")({
   zIndex: 5,
 });
 
-const StyledLogo = styled(Box)({
+export const StyledLogo = styled(Box)({
   position: "absolute",
   left: "60px", // to match landing page
   top: "30px", // to match landing page
@@ -23,11 +24,16 @@ type LoginSignupPageProps = {
 };
 
 const LoginSignupPage = ({ activeTab }: LoginSignupPageProps) => {
+  const navigate = useNavigate();
+
   return (
     <PlanetBackground>
       <LoginPageContent>
         <StyledLogo>
-          <DiscoveryLogoWithtext width="200px" />
+          <DiscoveryLogoWithtext
+            width="200px"
+            handleClick={() => navigate("/")}
+          />
         </StyledLogo>
         <LoginSignupTabs initialTab={activeTab} />
       </LoginPageContent>
