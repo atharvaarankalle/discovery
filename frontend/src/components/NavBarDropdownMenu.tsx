@@ -22,15 +22,18 @@ const StyledMenu = styled(Menu)(({ theme }) => ({
 /* Prop types declaration for NavBarDropdownMenu */
 interface NavBarDropdownMenuPropTypes {
     profilePictureSrc?: string;
+    width?: number;
+    height?: number;
 }
 
 /**
  * NavBarDropdownMenu Component
  * 
- * @prop username: username of the user to display in the dropdown menu
  * @prop profilePictureSrc: optional prop for the source of the user's profile picture
+ * @prop width: optional prop for the width of the avatar element
+ * @prop height: optional prop for the height of the avatar element
  */
-const NavBarDropdownMenu = ({ profilePictureSrc }: NavBarDropdownMenuPropTypes) => {
+const NavBarDropdownMenu = ({ profilePictureSrc, width, height }: NavBarDropdownMenuPropTypes) => {
     const theme: Theme = useTheme();
     const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
     const navigate = useNavigate();
@@ -55,7 +58,10 @@ const NavBarDropdownMenu = ({ profilePictureSrc }: NavBarDropdownMenuPropTypes) 
           aria-haspopup="true"
           aria-expanded={anchorElement ? "true" : undefined}
         >
-          <Avatar src={profilePictureSrc ?? undefined} />
+          <Avatar
+            src={profilePictureSrc ?? undefined}
+            sx={{ width: width, height: height }}
+          />
         </IconButton>
         <StyledMenu
           anchorEl={anchorElement}
@@ -66,9 +72,7 @@ const NavBarDropdownMenu = ({ profilePictureSrc }: NavBarDropdownMenuPropTypes) 
           anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
           transformOrigin={{ vertical: "top", horizontal: "right" }}
         >
-          <MenuItem onClick={() => handleNavigation("/user")}>
-            Profile
-          </MenuItem>
+          <MenuItem onClick={() => handleNavigation("/user")}>Profile</MenuItem>
           <Divider sx={{ backgroundColor: `${theme.palette.pink.main}40` }} />
           <MenuItem onClick={() => handleNavigation("/")}>
             <IconTextLabel

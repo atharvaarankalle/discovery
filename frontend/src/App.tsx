@@ -9,6 +9,7 @@ import UserAppBase from "./pages/UserAppBase.tsx";
 import { ThemeProvider, useMediaQuery } from "@mui/material";
 import { theme } from "./theme.ts";
 import MobileDefaultPage from "./pages/MobileDefaultPage.tsx";
+import { AppContextProvider } from "./AppContextProvider.tsx";
 
 function App() {
   const isMobileScreen = useMediaQuery(theme.breakpoints.down("md"));
@@ -22,26 +23,31 @@ function App() {
   }
 
   return (
-    <Routes>
-      {/* the landing and login page are only accessible if not logged in */}
-      <Route path="/" element={<AppBase />}>
-        <Route index element={<LandingPage />} />
-        <Route path="login" element={<LoginSignupPage activeTab="login" />} />
-        <Route path="signup" element={<LoginSignupPage activeTab="signup" />} />
+    <AppContextProvider>
+      <Routes>
+        {/* the landing and login page are only accessible if not logged in */}
+        <Route path="/" element={<AppBase />}>
+          <Route index element={<LandingPage />} />
+          <Route path="login" element={<LoginSignupPage activeTab="login" />} />
+          <Route
+            path="signup"
+            element={<LoginSignupPage activeTab="signup" />}
+          />
 
-        {/* "user" will likely be replaced by the user ID or similar */}
-        {/* the following routes are only accessible if logged in */}
-        <Route path="user" element={<UserAppBase />}>
-          <Route index element={<ProfilePage />} />
-          <Route path="discover" element={<DiscoverPage />} />
-          <Route path="prompt" element={<PromptPage />} />
+          {/* "user" will likely be replaced by the user ID or similar */}
+          {/* the following routes are only accessible if logged in */}
+          <Route path="user" element={<UserAppBase />}>
+            <Route index element={<ProfilePage />} />
+            <Route path="discover" element={<DiscoverPage />} />
+            <Route path="prompt" element={<PromptPage />} />
+          </Route>
         </Route>
-      </Route>
-      <Route
-        path="*"
-        element={<p>The page {useLocation().pathname} cannot be found!</p>}
-      />
-    </Routes>
+        <Route
+          path="*"
+          element={<p>The page {useLocation().pathname} cannot be found!</p>}
+        />
+      </Routes>
+    </AppContextProvider>
   );
 }
 
