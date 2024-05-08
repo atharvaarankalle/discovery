@@ -87,3 +87,15 @@ it("gets all users", async () => {
     expect(usersFromDb[2].suggestedSongs).toEqual([]);
     expect(usersFromDb[2].profilePic).toBe("profilePic3Source");
 });
+
+it("gets a single user", async () => {
+    const userFromDb = await User.findById("000000000000000000000003");
+
+    expect(userFromDb.email).toBe("user3@test.com");
+    expect(userFromDb.displayName).toBe("User 3");
+    expect(userFromDb.accountCreationDate).toEqual(new Date("2024-05-07T00:00:00.000+00:00"));
+    expect(userFromDb.streakCount).toBe(0);
+    expect(userFromDb.likedSongs).toEqual([]);
+    expect(userFromDb.suggestedSongs).toEqual([]);
+    expect(userFromDb.profilePic).toBe("profilePic3Source");
+});
