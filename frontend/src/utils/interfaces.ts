@@ -24,16 +24,18 @@ export interface SongData {
 }
 
 /**
-* @interface User
-* * `displayName`: required string, the user's username
-* * `steakCount`: required number, the user's current streak count
-* * `likedSongs`: required array of strings, the songs (referenced by Spotify song ID) that the user has liked
-* * `suggestedSongs`: required array of strings, the songs (referenced by Spotify song ID) that the user has suggested
-* * `profilePic`: optional string, the url link to the user's profile picture
-* * `hasSubmitted`: required boolean, representing if the user has submitted a song suggestion today, or not
-*
-* */
+ * @interface User
+ * * `id`: required string, the user document ID
+ * * `displayName`: required string, the user's username
+ * * `steakCount`: required number, the user's current streak count
+ * * `likedSongs`: required array of strings, the songs (referenced by Spotify song ID) that the user has liked
+ * * `suggestedSongs`: required array of strings, the songs (referenced by Spotify song ID) that the user has suggested
+ * * `profilePic`: optional string, the url link to the user's profile picture
+ * * `hasSubmitted`: required boolean, representing if the user has submitted a song suggestion today, or not
+ *
+ * */
 export interface User {
+  id: string;
   displayName: string;
   streakCount: number;
   likedSongs: string[];

@@ -16,10 +16,7 @@ export const SkipButton: React.FC<SkipButtonProps> = ({ onOpen }) => {
             variant="underlined" 
             color="pink" 
             onClick={onOpen}
-            sx={{position: 'fixed',
-                bottom: '3rem',
-                left: '3rem',
-            }}>
+            >
             Skip <SkipNextIcon/>
         </Button>
     );
