@@ -57,8 +57,6 @@ const ProfilePage = () => {
   return (
     <>
       <div style={{ height: "calc(100vh - 64px)", overflowY: "auto" }}>
-        <NavBar />
-
         <ThemeProvider theme={theme}>
           <Typography variant="h3" style={{ marginBottom: "20px" }}>
             PROFILE
@@ -92,7 +90,7 @@ const ProfilePage = () => {
             style={{
               display: "flex",
               flexDirection: "column",
-              marginBottom: "200px",
+              marginBottom: "350px",
             }}
           >
             <Typography variant="h3" style={{ marginBottom: "20px" }}>
