@@ -2,11 +2,11 @@ import { styled } from "@mui/material";
 import { ReactNode } from "react";
 import { landingBackground } from "../theme";
 import {
+  ForegroundPlanet,
   Planet1,
   Planet2,
   Planet3,
   Planet4,
-  ForegroundPlanet,
 } from "./Planets";
 import starsBackground from "../assets/stars_background.jpg";
 
@@ -21,7 +21,7 @@ const LandingPageBackground = styled("div")(({ theme }) => ({
 }));
 
 // Custom style to add transparent stars background through blend modes
-const StarsBackground = styled("div")({
+export const StarsBackground = styled("div")({
   backgroundImage: `url(${starsBackground})`,
   mixBlendMode: "color-dodge",
   height: "100%",

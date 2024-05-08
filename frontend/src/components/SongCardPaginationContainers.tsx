@@ -227,6 +227,7 @@ const SongCardGrid = ({
             type={songCardType}
             isSelected={songData.id === selectedCardId}
             onCardClick={() => handleCardClick(songData)}
+            isLiked
           />
         </Grid>
       ))}
