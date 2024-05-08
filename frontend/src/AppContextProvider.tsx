@@ -9,6 +9,8 @@ interface AppContextType {
   setCurrentUser: (user: User | null) => void;
   promptOfTheDay: string | undefined;
   setPromptOfTheDay: (prompt: string | undefined) => void;
+  isUserAuthenticated: boolean;
+  setIsUserAuthenticated: (isAuthenticated: boolean) => void;
 }
 
 export const AppContext = createContext<AppContextType>({
@@ -18,6 +20,8 @@ export const AppContext = createContext<AppContextType>({
   setCurrentUser: () => {},
   promptOfTheDay: undefined,
   setPromptOfTheDay: () => {},
+  isUserAuthenticated: false,
+  setIsUserAuthenticated: () => {},
 });
 
 interface AppContextProviderProps {
@@ -35,7 +39,14 @@ export function AppContextProvider({ children }: AppContextProviderProps) {
 
   const [currentUser, setCurrentUser] = useLocalStorage("currentUser", null);
 
-  const [promptOfTheDay, setPromptOfTheDay] = useState<string | undefined>(undefined);
+  const [promptOfTheDay, setPromptOfTheDay] = useState<string | undefined>(
+    undefined
+  );
+
+  const [isUserAuthenticated, setIsUserAuthenticated] = useLocalStorage(
+    "isUserAuthenticated",
+    false
+  );
 
   const context = {
     currentPreviewSong,
@@ -44,6 +55,8 @@ export function AppContextProvider({ children }: AppContextProviderProps) {
     setCurrentUser,
     promptOfTheDay,
     setPromptOfTheDay,
+    isUserAuthenticated,
+    setIsUserAuthenticated,
   };
 
   return <AppContext.Provider value={context}>{children}</AppContext.Provider>;
@@ -51,7 +64,7 @@ export function AppContextProvider({ children }: AppContextProviderProps) {
 
 export function useLocalStorage(
   key: string,
-  initialValue: SongData | User | null = null
+  initialValue: boolean | SongData | User | null = null
 ) {
   const [value, setValue] = useState(() => {
     try {

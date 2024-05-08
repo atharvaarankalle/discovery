@@ -2,31 +2,36 @@ import { Button, styled } from "@mui/material";
 import CustomTextField from "./CustomTextField";
 
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../AppContextProvider";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
 
 const StyledButton = styled(Button)({
   fontWeight: "bold",
 });
 
-const postLogin = async (loginData: { email: string; password: string }) => {
-  try {
-    const response = await axios.post(`${API_BASE_URL}/auth/login`, loginData, {
-      withCredentials: true,
-    });
-    axios.defaults.withCredentials = true;
-
-    console.log("Login successful:", response.data);
-  } catch (error: unknown) {
-    console.error("Login failed:", error);
-  }
-};
-
 const LoginTab = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
+  const { setIsUserAuthenticated } = useContext(AppContext);
+
+  // This method does a POST request to login and sets user as authenticated in context if true
+  // TODO: Remove console.log for success and store user data as appropriate
+  const postLogin = async (loginData: { email: string; password: string }) => {
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/auth/login`,
+        loginData
+      );
+      console.log("Login successful: ", response.data);
+      setIsUserAuthenticated(true);
+      navigate("/user/prompt");
+    } catch (error: unknown) {
+      console.error("Login failed:", error);
+    }
+  };
 
   return (
     <>
@@ -46,10 +51,9 @@ const LoginTab = () => {
         color="lightPeach"
         onClick={() => {
           if (email && password) {
-            postLogin({ email, password }); // Wait for postLogin to complete
+            postLogin({ email, password });
             setEmail("");
             setPassword("");
-            navigate("/user/prompt");
           }
         }}
       >

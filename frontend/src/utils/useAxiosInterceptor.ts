@@ -1,12 +1,14 @@
 import axios, { AxiosError } from "axios";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../AppContextProvider";
 
 /**
  * @function useAxiosInterceptor() hook
  *
  * if the authToken cookie stored in the frontend expires, any 401 responses from our API
- * endpoint requests using axios will redirect the user to the login page to login again.
+ * endpoint requests using axios will redirect the user to the login page to login again,
+ * as well as setting them as unauthenticated in the App Context.
  *
  * If not a 401 error, it will log this to the console as an error. You can implement more error
  * handling when using axios for requests, but no need to handle 401.
@@ -14,6 +16,7 @@ import { useNavigate } from "react-router-dom";
  */
 const useAxiosInterceptor = () => {
   const navigate = useNavigate();
+  const { setIsUserAuthenticated } = useContext(AppContext);
 
   useEffect(() => {
     const interceptor = axios.interceptors.response.use(
@@ -25,6 +28,7 @@ const useAxiosInterceptor = () => {
         if ((error as AxiosError).response?.status === 401) {
           console.log("Unauthorized Error. Redirecting to login page...");
           // navigate user to login
+          setIsUserAuthenticated(false);
           navigate("/login");
         } else {
           console.error("There was a problem fetching the message:", error);
@@ -37,7 +41,7 @@ const useAxiosInterceptor = () => {
     return () => {
       axios.interceptors.response.eject(interceptor);
     };
-  }, [navigate]);
+  }, [navigate, setIsUserAuthenticated]);
 };
 
 export default useAxiosInterceptor;

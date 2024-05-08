@@ -16,7 +16,7 @@ dotenv.config();
 const AUTH_SECRET_KEY: string = process.env.AUTH_SECRET_KEY || "";
 const router: Router = express.Router();
 
-const TOKEN_EXPIRY_IN_HOURS: number = 0.02;
+const TOKEN_EXPIRY_IN_HOURS: number = 1;
 
 /* This function creates and return a JWT token for authentication */
 const getJWTAuthToken = (userId: string) =>
@@ -37,7 +37,11 @@ export const authenticateToken: RequestHandler = (
   next: NextFunction
 ) => {
   // if req is made to login or signup endpoints, skip auth token verification
-  if (req.path === "/auth/login" || req.path === "/auth/signup") {
+  if (
+    req.path === "/auth/login" ||
+    req.path === "/auth/signup" ||
+    req.path === "/auth/logout"
+  ) {
     return next();
   }
 
@@ -174,14 +178,15 @@ router.post("/login", async (req: Request, res: Response) => {
 /**
  * LOGOUT ENDPOINT [POST]
  *
- * No request body, this endpoint simply clears auth cookie sent from client on logout
+ * No request body, this endpoint simply clears auth cookie from client on logout
+ * if it hasn't expired already
  *
  * @returns
  * - 200 OK: Successful logout, JWT auth token cleared
  *
  */
 router.post("/logout", (req, res) => {
-  res.clearCookie("authToken");
+  res.clearCookie("authToken"); // clear authToken cookie if it exists
   res.status(200).json({ message: "Logout successful!" });
 });
 

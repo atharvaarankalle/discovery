@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Avatar,
   Divider,
@@ -12,6 +12,7 @@ import IconTextLabel from "./IconTextLabel";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { AppContext } from "../AppContextProvider";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
 
 /* Custom styles applied to MUI Menu */
@@ -50,6 +51,7 @@ const NavBarDropdownMenu = ({
   const theme: Theme = useTheme();
   const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
   const navigate = useNavigate();
+  const { setIsUserAuthenticated } = useContext(AppContext);
 
   const handleProfilePictureClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElement(event.currentTarget);
@@ -90,6 +92,7 @@ const NavBarDropdownMenu = ({
         <MenuItem
           onClick={async () => {
             await axios.post(`${API_BASE_URL}/auth/logout`);
+            setIsUserAuthenticated(false);
             handleNavigation("/");
           }}
         >
