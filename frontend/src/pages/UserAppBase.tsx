@@ -15,7 +15,6 @@ export const LoggedInBackground = styled("div")({
 const UserAppBase = () => {
   return (
     <LoggedInBackground>
-      {/* TODO in future issue: NavBar */}
       <NavBar />
       {/* adding spacing around all child elements */}
       <Box m={"3rem"}>
