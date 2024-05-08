@@ -210,7 +210,7 @@ const SongCardGrid = ({
   };
 
   // Display no data message if there is no data to display
-  if (!pageContents) {
+  if (!pageContents || pageContents.length === 0) {
     return (
       <Box
         sx={{

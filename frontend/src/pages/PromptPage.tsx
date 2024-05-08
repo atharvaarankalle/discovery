@@ -18,8 +18,10 @@ import { SongData } from "../utils/interfaces";
  */
 async function searchSongs(query: string, numSongs: number, page: number): Promise<any> {
   try {
-      const response = await axios.get("http://localhost:3000/api/songs/search", {
-          params: {
+    const baseURL = import.meta.env.VITE_API_BASE_URL;
+
+    const response = await axios.get(`${baseURL}/songs/search`, {
+        params: {
               searchQuery: query,
               numSongs: numSongs,
               page: page
@@ -80,7 +82,6 @@ export const PromptPage = () => {
         try {
           const fetchedSongs = await searchSongs(debouncedValue, 50, 1);
           setSongs(fetchedSongs);
-          console.log(songs[0])
         } catch (error) {
           console.error('Error fetching songs:', error);
           setSongs([]);
@@ -94,8 +95,11 @@ export const PromptPage = () => {
   }, [debouncedValue]);
 
   const handleOpenDialog = () => setOpenDialog(true);
+
   const handleCloseDialog = () => setOpenDialog(false);
+
   const handleDrawer = () => setOpenDrawer(!openDrawer);
+
   //Data type handling between song cards and drawer
   const handleSongCardClick = (songData: SongData | null) => {
     if (songData !== null) {
@@ -108,7 +112,6 @@ export const PromptPage = () => {
 
   //Confirm quit and takees the user to another page
   const handleConfirmQuit = () => {
-      console.log("User confirmed to quit");
       handleCloseDialog();
       // Additional actions to quit goes here
   };
@@ -127,7 +130,7 @@ export const PromptPage = () => {
   };
 
   return (
-    <Box>
+    <div>
       <Typography variant="h2" sx={{width: `calc(100vw - 37rem)`}}>{prompt}</Typography>
       <Button variant="contained" sx={{marginY: 3}} onClick={handlePrompt}>Generate</Button>
       <Box>
@@ -139,13 +142,11 @@ export const PromptPage = () => {
               <Typography variant="body2" sx={{color: colors.peach}}>
                 Search for a track that best describes the prompt above
               </Typography>
-            </Box>: 
-            <Box sx={{marginX: 3}}>
+            </Box>:
               <SongSelectionContainer
                 songs={songs}
                 onSongCardClick={handleSongCardClick}
-                />
-            </Box>}
+                />}
         </Box>
       </Box>
       <SkipButton onOpen={handleOpenDialog}/>
@@ -155,7 +156,7 @@ export const PromptPage = () => {
                 onConfirm={handleConfirmQuit}
             />
       <PromptSideDrawer drawerOpen={openDrawer} toggleDrawer={handleDrawer} songData={displayedSong}/>
-    </Box>
+    </div>
   );
 };
 

@@ -50,7 +50,7 @@ export const Searchbar = ( { onInputChange }: SearchbarProps ) => {
   };
 
   return (
-    <Box sx={{m:3}}>
+    <Box>
       <Box
         sx={{
           display: "flex",
