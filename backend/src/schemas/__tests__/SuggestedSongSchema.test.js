@@ -78,3 +78,21 @@ it("gets a single suggested song", async () => {
     expect(suggestedSongFromDb.spotifySongId).toBe("songId2");
     expect(suggestedSongFromDb.user).toEqual(new mongoose.Types.ObjectId("000000000000000000000002"));
 });
+
+it("creates a suggested song", async () => {
+    const newSuggestedSong = new SuggestedSong({
+        caption: "This song is so happy",
+        prompt: new mongoose.Types.ObjectId("000000000000000000000001"),
+        spotifySongId: "songId4",
+        user: new mongoose.Types.ObjectId("000000000000000000000004")
+    });
+
+    await newSuggestedSong.save();
+
+    const newSuggestedSongFromDb = await mongoose.connection.db.collection("suggestedsongs").findOne({ _id: newSuggestedSong._id });
+
+    expect(newSuggestedSongFromDb.caption).toBe("This song is so happy");
+    expect(newSuggestedSongFromDb.prompt).toEqual(new mongoose.Types.ObjectId("000000000000000000000001"));
+    expect(newSuggestedSongFromDb.spotifySongId).toBe("songId4");
+    expect(newSuggestedSongFromDb.user).toEqual(new mongoose.Types.ObjectId("000000000000000000000004"));
+});
