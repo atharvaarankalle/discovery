@@ -7,6 +7,12 @@ import {
   SuggestedSong,
 } from "../../schemas/SuggestedSongSchema";
 import { getTodaysDate } from "../../utils/DateUtils";
+import axios from "axios";
+import dotenv from "dotenv";
+import { FeedEndpointResult } from "../../utils/interfaces";
+
+dotenv.config();
+const API_BASE_URL = process.env.API_BASE_URL ?? "https://localhost:3000/api";
 
 const router: Router = express.Router();
 
@@ -44,9 +50,31 @@ router.get(
           .populate({ path: "user", select: ["profilePic", "displayName"] })
           .populate({ path: "prompt", select: "prompt" });
 
+        const songSuggestionPromises = suggestedSongs.map(async (song) => {
+          const { _id, caption, spotifySongId, user } =
+            song as unknown as FeedEndpointResult;
+
+          try {
+            const response = await axios.get(
+              `${API_BASE_URL}/songs/${spotifySongId}`
+            );
+
+            return {
+              id: _id,
+              songData: response.data,
+              username: user.displayName,
+              caption,
+              profilePictureSrc: user.profilePic,
+            };
+          } catch (error) {
+            res.status(500).json();
+          }
+        });
+
+        const songSuggestionData = await Promise.all(songSuggestionPromises);
         if (suggestedSongs.length > 0) {
           // Returning the suggested songs
-          res.status(200).json(suggestedSongs);
+          res.status(200).json(songSuggestionData);
         } else {
           // No suggestedSong entries found
           res

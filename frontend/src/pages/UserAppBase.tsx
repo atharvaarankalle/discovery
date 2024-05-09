@@ -1,7 +1,9 @@
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { Box, styled } from "@mui/material";
 import { loggedInBackground } from "../theme";
+import { AppContext } from "../AppContextProvider";
+import { useContext } from "react";
 
 // Background container for the whole logged in user experience
 export const LoggedInBackground = styled("div")({
@@ -13,14 +15,22 @@ export const LoggedInBackground = styled("div")({
 });
 
 const UserAppBase = () => {
+  const { currentUserId } = useContext(AppContext);
+
   return (
-    <LoggedInBackground>
-      <NavBar />
-      {/* adding spacing around all child elements */}
-      <Box m={"3rem"}>
-        <Outlet />
-      </Box>
-    </LoggedInBackground>
+    <>
+      {currentUserId ? (
+        <LoggedInBackground>
+          <NavBar />
+          {/* adding spacing around all child elements */}
+          <Box m={"3rem"}>
+            <Outlet />
+          </Box>
+        </LoggedInBackground>
+      ) : (
+        <Navigate to="/login" />
+      )}
+    </>
   );
 };
 

@@ -4,6 +4,7 @@ import { SuggestedSong } from "../schemas/SuggestedSongSchema";
 export interface IUser extends Document {
   email: string;
   displayName?: string;
+  password: string;
   accountCreationDate: Date;
   streakCount: number;
   likedSongs: Array<Schema.Types.ObjectId>;
@@ -19,6 +20,10 @@ const userSchema = new Schema<IUser>(
       required: [true, "Username is required"],
     },
     displayName: String,
+    password: {
+      type: String,
+      required: [true, "Password is required"],
+    },
     accountCreationDate: {
       type: Date,
       required: [true, "Account creation date is required"],
