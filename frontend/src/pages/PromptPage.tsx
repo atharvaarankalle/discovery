@@ -93,13 +93,13 @@ export const PromptPage = () => {
 
   const {
       data: existingResponse
-  } = useGet<String>({
+  } = useGet<string>({
       url: `${baseURL}/prompt/latest`
   });
 
   const {
     data: newResponse
-  } = useGet<String>({
+  } = useGet<string>({
       url: `${baseURL}/prompt`
   });
 
