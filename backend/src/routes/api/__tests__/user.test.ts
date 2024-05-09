@@ -20,6 +20,29 @@ const users = [
         likedSongs: [],
         suggestedSongs: [],
         profilePic: "profilePic1Source"
+    },
+    {
+        _id: new mongoose.Types.ObjectId("000000000000000000000002"),
+        email: "user2@test.com",
+        displayName: "User 2",
+        accountCreationDate: new Date("2024-05-04T00:00:00.000+00:00"),
+        streakCount: 0,
+        likedSongs: [],
+        suggestedSongs: [],
+        profilePic: "profilePic2Source"
+    }
+];
+
+/* Define the suggested songs to be used in the tests */
+const suggestedSongs = [
+    {
+        _id: new mongoose.Types.ObjectId("000000000000000000000003"),
+        spotifySongId: "song1Id",
+        caption: "Song 1",
+        prompt: new mongoose.Types.ObjectId("000000000000000000000004"),
+        user: new mongoose.Types.ObjectId("000000000000000000000002"),
+        createdAt: new Date("2024-05-04T00:00:00.000+00:00"),
+        updatedAt: new Date("2024-05-04T00:00:00.000+00:00")
     }
 ];
 
@@ -35,11 +58,16 @@ beforeEach(async () => {
     const collection = await mongoose.connection.db.collection("users");
     await collection.deleteMany({});
     await collection.insertMany(users);
+
+    const suggestedSongCollection = await mongoose.connection.db.collection("suggestedsongs");
+    await suggestedSongCollection.deleteMany({});
+    await suggestedSongCollection.insertMany(suggestedSongs);
 });
 
 /* Clear the database after each test */
 afterEach(async () => {
     await mongoose.connection.db.dropCollection("users");
+    await mongoose.connection.db.dropCollection("suggestedsongs");
 });
 
 /* Stop the in-memory database after all tests */
@@ -124,9 +152,9 @@ describe("GET /:id", () => {
     });
 
     /**
-     * Tests that the GET /:id route returns a 404 if the user is not found
+     * Tests that the GET /:id route returns 404 not found if the user is not found
      */
-    it("returns a 404 if the user is not found", (done) => {
+    it("returns 404 not found if the user is not found", (done) => {
         request(app)
         .get("/000000000000000000000004")
         .send()
@@ -163,9 +191,9 @@ describe("PATCH /:id", () => {
     });
 
     /**
-     * Tests that the PATCH /:id route returns a 404 if the user is not found
+     * Tests that the PATCH /:id route returns 404 not found if the user is not found
      */
-    it("returns a 404 if the user is not found", (done) => {
+    it("returns 404 not found if the user is not found", (done) => {
         request(app)
         .patch("/000000000000000000000004")
         .send({
@@ -203,12 +231,73 @@ describe("GET /:id/liked", () => {
     });
 
     /**
-     * Tests that the GET /:id/liked route returns a 404 if the user is not found
+     * Tests that the GET /:id/liked route returns 404 not found if the user is not found
      */
-    it("returns a 404 if the user is not found", (done) => {
+    it("returns 404 not found if the user is not found", (done) => {
         request(app)
         .get("/000000000000000000000004/liked")
         .send()
+        .expect(404, done);
+    });
+});
+
+describe("PUT /:id/liked", () => {
+    /**
+     * Tests that the PUT /:id/liked route successfully adds a song to the user's liked songs
+     */
+    it("adds a song to the user's liked songs", (done) => {
+        request(app)
+        .put("/000000000000000000000001/liked")
+        .send({
+            songId: "000000000000000000000003"
+        })
+        .expect(200)
+        .end((err, res) => {
+            // If an error occurred, fail the test
+            if (err) {
+                return done(err);
+            }
+
+            const user = res.body;
+            expect(user.likedSongs).toEqual(["000000000000000000000003"]);
+
+            return done();
+        });
+    });
+
+    /**
+     * Tests that the PUT /:id/liked route returns 400 bad request if the song is already liked
+     */
+    it("returns 400 bad request if the song is already liked", (done) => {
+        request(app)
+        .put("/000000000000000000000001/liked")
+        .send({
+            songId: "000000000000000000000003"
+        })
+        .end((err, res) => {
+            // If an error occurred, fail the test
+            if (err) {
+                return done(err);
+            }
+
+            request(app)
+            .put("/000000000000000000000001/liked")
+            .send({
+                songId: "000000000000000000000003"
+            })
+            .expect(400, done);
+        });
+    });
+
+    /**
+     * Tests that the PUT /:id/liked route returns 404 not found if the user is not found
+     */
+    it("returns 404 not found if the user is not found", (done) => {
+        request(app)
+        .put("/000000000000000000000004/liked")
+        .send({
+            songId: "000000000000000000000003"
+        })
         .expect(404, done);
     });
 });
