@@ -301,3 +301,36 @@ describe("PUT /:id/liked", () => {
         .expect(404, done);
     });
 });
+
+describe("DELETE /:id/liked/:songId", () => {
+    /**
+     * Tests that the DELETE /:id/liked/:songId route successfully deletes a song from the user's liked songs
+     */
+    it("deletes a song from the user's liked songs", (done) => {
+        request(app)
+        .delete("/000000000000000000000002/liked/000000000000000000000003")
+        .send()
+        .expect(200)
+        .end((err, res) => {
+            // If an error occurred, fail the test
+            if (err) {
+                return done(err);
+            }
+
+            const user = res.body;
+            expect(user.likedSongs).toEqual([]);
+
+            return done();
+        });
+    });
+
+    /**
+     * Tests that the DELETE /:id/liked/:songId route returns 404 not found if the user is not found
+     */
+    it("returns 404 not found if the user is not found", (done) => {
+        request(app)
+        .delete("/000000000000000000000004/liked/000000000000000000000003")
+        .send()
+        .expect(404, done);
+    });
+});
