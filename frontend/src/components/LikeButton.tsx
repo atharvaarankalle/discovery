@@ -13,7 +13,7 @@ const LikeButton = ({ isLikedInitial }: { isLikedInitial: boolean }) => {
   };
 
   return (
-    <IconButton onClick={handleLikeClick} color="lightPeach">
+    <IconButton className="like-button" onClick={handleLikeClick} color="lightPeach">
       {isLiked ? <Favorite /> : <FavoriteBorder />}
     </IconButton>
   );
