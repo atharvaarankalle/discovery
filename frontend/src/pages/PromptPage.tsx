@@ -8,6 +8,7 @@ import { SongSelectionContainer } from "../components/SongCardPaginationContaine
 import axios from "axios";
 import { colors } from "../theme";
 import { SongData } from "../utils/interfaces";
+import { useNavigate } from "react-router-dom";
 
 /**
  * This function searches the Spotify library for songs that matches the string given.
@@ -67,6 +68,9 @@ export const PromptPage = () => {
   const [displayedSong, setDisplayedSong] =
     useState<SongData>(defaultTrackData);
 
+  const navigate = useNavigate();
+
+  //Checks if there is an existing prompt for the day, otherwise a new prompt is created and saved
   useEffect(() => {
     checkDrawer();
   }, [currentInput]);
@@ -120,7 +124,7 @@ export const PromptPage = () => {
   //Confirm quit and takees the user to another page
   const handleConfirmQuit = () => {
     handleCloseDialog();
-    // Additional actions to quit goes here
+    navigate("../discover");
   };
 
   //Put away drawer if searchbar is empty
