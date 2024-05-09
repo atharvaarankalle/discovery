@@ -21,7 +21,9 @@ const LikeButton = ({
       onClick={() => handleLikeClick()}
       color="lightPeach"
       disabled={isLikedInitial}
+       className="like-button"
     >
+
       {isLiked ? <Favorite /> : <FavoriteBorder />}
     </IconButton>
   );
