@@ -138,7 +138,7 @@ router.get(
 router.put("/:id/liked", async (req: Request, res: Response) => {
   try {
     const userId = req.params.id;
-    const { songId } = req.body;
+    const songId = req.body.songSuggestionId;
 
     const user: IUser | null = await User.findById(userId);
 

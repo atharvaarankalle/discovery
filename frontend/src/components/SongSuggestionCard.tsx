@@ -20,6 +20,7 @@ interface SongSuggestionCardPropTypes {
   onCardClick?: () => void;
   isLiked?: boolean;
   isSelected?: boolean;
+  onLikeClick?: () => void;
 }
 
 /**
@@ -36,6 +37,7 @@ const SongSuggestionCard = ({
   isLiked,
   isSelected,
   onCardClick,
+  onLikeClick,
 }: SongSuggestionCardPropTypes) => {
   const { username, caption, profilePictureSrc, songData } = songSuggestionData;
   return (
@@ -51,6 +53,7 @@ const SongSuggestionCard = ({
       <SongCard
         songData={songData}
         isLiked={isLiked}
+        onLikeClick={onLikeClick}
         isSelected={isSelected}
         onCardClick={onCardClick}
         type="medium"
