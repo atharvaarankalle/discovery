@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { SongData, User } from "./utils/interfaces.ts";
+import { SongData } from "./utils/interfaces.ts";
 
 /* AppContext prop types */
 interface AppContextType {

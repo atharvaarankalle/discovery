@@ -16,6 +16,16 @@ const StyledDiscoverContainer = styled("div")({
 });
 
 const DiscoverPage = () => {
+  const { currentUserId, setCurrentPreviewSong } = useContext(AppContext);
+
+  // Getting Current User's Song Suggestion
+  const { data: todaysSongSuggestionData } = useGet<SongData>({
+    url: `${API_BASE_URL}/user/${currentUserId}/suggested/today`,
+  });
+  const todaysSongSuggestion =
+    todaysSongSuggestionData === null ? undefined : todaysSongSuggestionData;
+
+  // Getting Today's Discover Feed
   const { isLoading: isFeedLoading, data: feedData } = useGet<
     SongSuggestionData[]
   >({
@@ -23,13 +33,12 @@ const DiscoverPage = () => {
   });
   const songs = feedData === null ? [] : feedData;
 
-  const { currentUserId, setCurrentUserId } = useContext(AppContext);
-  setCurrentUserId("663858af99e6720bfd8f96fb"); // TODO: REMOVE
-  const { data: todaysSongSuggestionData } = useGet<SongData>({
-    url: `${API_BASE_URL}/user/${currentUserId}/suggested/today`,
-  });
-  const todaysSongSuggestion =
-    todaysSongSuggestionData === null ? undefined : todaysSongSuggestionData;
+  // Updating the music player when user clicks the song card
+  const handleSongSuggestionClick = (
+    songSuggestionData: SongSuggestionData | null
+  ) => {
+    setCurrentPreviewSong(songSuggestionData?.songData ?? null);
+  };
 
   return (
     <StyledDiscoverContainer>
@@ -37,7 +46,10 @@ const DiscoverPage = () => {
       {isFeedLoading ? (
         <LoadingSpinner />
       ) : (
-        <SongSuggestionsContainer songSuggestionList={songs} />
+        <SongSuggestionsContainer
+          songSuggestionList={songs}
+          onSongSuggestionCardClick={handleSongSuggestionClick}
+        />
       )}
     </StyledDiscoverContainer>
   );
