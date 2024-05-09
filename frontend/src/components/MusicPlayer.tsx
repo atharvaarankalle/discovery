@@ -25,7 +25,7 @@ const MusicPlayerCard = styled(Card)(({ theme }) => ({
   width: "550px",
   height: "75px",
   backgroundColor: `${theme.palette.primary.dark}B3`,
-  zIndex: 3,
+  zIndex: 1300,
   position: "fixed",
   bottom: "1rem",
   left: "50%",
