@@ -2,7 +2,7 @@ import { Box, Button, styled, Typography } from "@mui/material";
 import CustomTextField from "./CustomTextField";
 
 import axios from "axios";
-import { useContext, useState } from "react";
+import { FormEvent, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../AppContextProvider";
 
@@ -42,12 +42,38 @@ const SignupTab = () => {
     }
   };
 
+  const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+    setIsErrorState(false);
+    e.preventDefault();
+    if (email && password) {
+      postSignup({ email, password, displayName });
+      setEmail("");
+      setPassword("");
+      setDisplayName("");
+    }
+    if (!email) {
+      setIsEmailErrorState(true);
+    }
+    if (!password) {
+      setIsPasswordErrorState(true);
+    }
+  };
+
   return (
-    <>
+    <form
+      onSubmit={onFormSubmit}
+      style={{
+        padding: "3.5em",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-evenly",
+        alignItems: "center",
+        gap: "2em",
+      }}
+    >
       <CustomTextField
-        label="Email"
+        label="Email *"
         value={email}
-        required
         onChange={(event) => setEmail(event.target.value)}
         error={isEmailErrorState || isErrorState}
         onFocus={() => {
@@ -57,10 +83,9 @@ const SignupTab = () => {
         helperText={isEmailErrorState ? "Email is required" : null}
       />
       <CustomTextField
-        label="Password"
+        label="Password *"
         type="password"
         value={password}
-        required
         onChange={(event) => setPassword(event.target.value)}
         error={isPasswordErrorState || isErrorState}
         onFocus={() => {
@@ -94,24 +119,11 @@ const SignupTab = () => {
         variant="contained"
         color="lightPeach"
         disabled={isButtonDisabled}
-        onClick={() => {
-          if (email && password) {
-            postSignup({ email, password, displayName });
-            setEmail("");
-            setPassword("");
-            setDisplayName("");
-          }
-          if (!email) {
-            setIsEmailErrorState(true);
-          }
-          if (!password) {
-            setIsPasswordErrorState(true);
-          }
-        }}
+        type="submit"
       >
         SIGN UP
       </StyledButton>
-    </>
+    </form>
   );
 };
 

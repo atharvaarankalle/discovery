@@ -2,7 +2,7 @@ import { Box, Button, styled, Typography } from "@mui/material";
 import CustomTextField from "./CustomTextField";
 
 import axios from "axios";
-import { useContext, useState } from "react";
+import { FormEvent, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../AppContextProvider";
 
@@ -39,8 +39,34 @@ const LoginTab = () => {
     }
   };
 
+  const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+    setIsErrorState(false);
+    e.preventDefault();
+    if (email && password) {
+      postLogin({ email, password });
+      setEmail("");
+      setPassword("");
+    }
+    if (!email) {
+      setIsEmailErrorState(true);
+    }
+    if (!password) {
+      setIsPasswordErrorState(true);
+    }
+  };
+
   return (
-    <>
+    <form
+      onSubmit={onFormSubmit}
+      style={{
+        padding: "3.5em",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-evenly",
+        alignItems: "center",
+        gap: "2em",
+      }}
+    >
       <CustomTextField
         label="Email"
         value={email}
@@ -83,23 +109,11 @@ const LoginTab = () => {
         variant="contained"
         color="lightPeach"
         disabled={isButtonDisabled}
-        onClick={() => {
-          if (email && password) {
-            postLogin({ email, password });
-            setEmail("");
-            setPassword("");
-          }
-          if (!email) {
-            setIsEmailErrorState(true);
-          }
-          if (!password) {
-            setIsPasswordErrorState(true);
-          }
-        }}
+        type="submit"
       >
         LOG IN
       </StyledButton>
-    </>
+    </form>
   );
 };
 
