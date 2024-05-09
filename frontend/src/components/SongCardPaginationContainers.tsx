@@ -131,7 +131,6 @@ const SongCardContainer = ({
    * @param pageNumber: number of the page selected by the click event
    */
   const handleChangePage = (e: ChangeEvent<unknown>, pageNumber: number) => {
-    console.log(e.type); // event must be used or else error
     setPageContents(getSongsToDisplay(pageNumber));
     setCurrentPage(pageNumber);
   };
