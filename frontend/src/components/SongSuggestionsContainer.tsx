@@ -49,14 +49,9 @@ const SongSuggestionsContainer = ({
   return (
     <>
       {songSuggestionsCount > 0 ? (
-        <Box>
+        <Box pb={10}>
           {/* Note that the MUI Masonry component is a part of MUI Labs, not MUI core */}
-          <Masonry
-            columns={{ lg: 2, xl: 3 }}
-            spacing={1}
-            sequential
-            sx={{ margin: 0 }}
-          >
+          <Masonry columns={2} spacing={1} sequential sx={{ margin: 0 }}>
             {songSuggestionList.map((songSuggestionData) => (
               <Box key={songSuggestionData.id}>
                 <SongSuggestionCard
