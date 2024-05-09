@@ -174,20 +174,22 @@ const ActiveMusicPlayerContent = () => {
     }
   };
 
-  // handle pause and play state when the song audio ends
+  // handle audio controls when switching between songs
   useEffect(() => {
-    const currentSong = songAudioRef.current;
-
-    const handleSongEnd = () => {
+    // change audio to the new song
+    const newSong = songAudioRef.current;
+    if (currentPreviewSong) {
+      newSong.src = currentPreviewSong.songAudioSrc as string;
       setIsPlaying(false);
-    };
+    }
 
-    currentSong.addEventListener("ended", handleSongEnd);
-
+    // stop the previous audio and reset to 0s
+    const previousSong = songAudioRef.current;
     return () => {
-      currentSong.removeEventListener("ended", handleSongEnd);
+      previousSong.pause();
+      previousSong.currentTime = 0;
     };
-  }, []);
+  }, [currentPreviewSong]);
 
   return (
     <>
