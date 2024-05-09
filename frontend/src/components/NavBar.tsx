@@ -1,20 +1,30 @@
-import { AppBar, IconButton, Stack, Theme, Toolbar, Typography, styled, useTheme } from "@mui/material";
+import {
+  AppBar,
+  IconButton,
+  Stack,
+  styled,
+  Theme,
+  Toolbar,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { DiscoveryLogo } from "./Logos";
-import LocalFireDepartmentTwoToneIcon from '@mui/icons-material/LocalFireDepartmentTwoTone';
-import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
-import PriorityHighTwoToneIcon from '@mui/icons-material/PriorityHighTwoTone';
+import LocalFireDepartmentTwoToneIcon from "@mui/icons-material/LocalFireDepartmentTwoTone";
+import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
+import PriorityHighTwoToneIcon from "@mui/icons-material/PriorityHighTwoTone";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AppContext } from "../AppContextProvider";
 import NavBarDropdownMenu from "./NavBarDropdownMenu";
 import StyledToolTip from "./StyledTooltip";
 import CustomTypography from "./CustomTypography";
+import { ConfirmationDialog } from "./ConfirmDialog.tsx";
 
 /* Custom styles applied to MUI AppBar */
 const StyledAppBar = styled(AppBar)({
   backgroundColor: "transparent",
   boxShadow: "none",
-  padding: "1.5rem 0.5rem"
+  padding: "1.5rem 0.5rem",
 });
 
 /* Custom styles applied to MUI IconButton */
@@ -30,14 +40,15 @@ type LoggedInUserPages = "Discover" | "Prompt" | "Profile";
 
 /**
  * NavBar Component
- * 
- * Renders the navigation bar at the top of the user pages, using context to get the currently logged in user. 
+ *
+ * Renders the navigation bar at the top of the user pages, using context to get the currently logged in user.
  */
 const NavBar = () => {
   const location = useLocation();
   const { currentUser, promptOfTheDay } = useContext(AppContext);
   const theme: Theme = useTheme();
   const navigate = useNavigate();
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   // Determine the current page based on the URL path
   let currentPage: LoggedInUserPages;
@@ -56,17 +67,29 @@ const NavBar = () => {
    * Handles the click event when the user clicks on the Discovery logo.
    * If the user is on the Discover page, the page will refresh.
    * If the user is on any other page, they will be navigated back to the Discover page.
-   * 
+   *
    * @param currentPage - the current page the user is on
    */
   const handleLogoClick = () => {
     if (currentPage === "Discover") {
       window.location.reload();
+    } else if (currentPage === "Prompt") {
+      // ask user if they are sure they want to skip
+      setOpenDialog(true);
     } else {
       navigate("/user/discover");
     }
-  }
-  
+  };
+
+  // close skip dialog
+  const handleCloseDialog = () => setOpenDialog(false);
+
+  // Confirm to skip prompt and takes the user to another page
+  const handleConfirmQuit = () => {
+    handleCloseDialog();
+    navigate("/user/discover");
+  };
+
   return (
     <StyledAppBar position="static">
       <Toolbar>
@@ -86,10 +109,7 @@ const NavBar = () => {
             },
           }}
         >
-          <StyledIconButton
-            size="large"
-            onClick={() => handleLogoClick()}
-          >
+          <StyledIconButton size="large" onClick={() => handleLogoClick()}>
             <DiscoveryLogo width={75} height={75} />
           </StyledIconButton>
         </StyledToolTip>
@@ -144,6 +164,13 @@ const NavBar = () => {
             {promptOfTheDay}
           </CustomTypography>
         </Stack>
+      )}
+      {currentPage === "Prompt" && (
+        <ConfirmationDialog
+          open={openDialog}
+          onClose={handleCloseDialog}
+          onConfirm={handleConfirmQuit}
+        />
       )}
     </StyledAppBar>
   );

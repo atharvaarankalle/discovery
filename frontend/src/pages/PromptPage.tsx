@@ -7,6 +7,7 @@ import PromptSideDrawer from "../components/PromptSideDrawer";
 import { SongSelectionContainer } from "../components/SongCardPaginationContainers";
 import axios from "axios";
 import { SongData } from "../utils/interfaces";
+import { useNavigate } from "react-router-dom";
 
 /**
  * This function searches the Spotify library for songs that matches the string given.
@@ -65,6 +66,7 @@ export const PromptPage = () => {
   const [songs, setSongs] = useState([]);
   const [debouncedValue, setDebouncedValue] = useState("");
   const [displayedSong, setDisplayedSong] = useState<SongData>(mockTrackData);
+  const navigate = useNavigate();
 
   //Using debounce to limit the amount of API calls
   useEffect(() => {
@@ -112,10 +114,10 @@ export const PromptPage = () => {
     }
   };
 
-  //Confirm quit and takees the user to another page
+  //Confirm quit and takes the user to another page
   const handleConfirmQuit = () => {
     handleCloseDialog();
-    // Additional actions to quit goes here
+    navigate("/user/discover");
   };
 
   //Retrieve the prompt using axios
