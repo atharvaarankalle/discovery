@@ -31,7 +31,7 @@ const useAxiosInterceptor = () => {
           setCurrentUserId(null);
           navigate("/login");
         } else {
-          console.error("There was a problem fetching the message:", error);
+          // other error
         }
         return Promise.reject(error);
       }
