@@ -5,15 +5,18 @@ import { SongData, User } from "../utils/interfaces";
 import { formatDate } from "../utils/dateFormatter";
 import { SavedSongsContainer } from "../components/SongCardPaginationContainers";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { useContext } from "react";
+import { AppContext } from "../AppContextProvider";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
 
 const ProfilePage = () => {
-  // TODO: replace with user from AppContext
-  const userId = "663b83b5e21bb2bb97d23a0a";
+  const { currentUserId, setCurrentPreviewSong } = useContext(AppContext);
+  // User for testing
+  // const currentUserId = "663b83b5e21bb2bb97d23a0a";
 
   const { data: userData } = useGet<User>({
-    url: `${API_BASE_URL}/user/${userId}`,
+    url: `${API_BASE_URL}/user/${currentUserId}`,
   });
 
   const user = userData === null ? null : (userData as User);
@@ -24,10 +27,15 @@ const ProfilePage = () => {
   const { isLoading: isLikedLoading, data: likedSongsData } = useGet<
     SongData[]
   >({
-    url: `${API_BASE_URL}/user/${userId}/liked`,
+    url: `${API_BASE_URL}/user/${currentUserId}/liked`,
   });
 
   const likedSongs = likedSongsData === null ? [] : likedSongsData;
+
+  // Updating the music player when user clicks the song card
+  const handleSongCardClick = (songData: SongData | null) => {
+    setCurrentPreviewSong(songData);
+  };
 
   return (
     <>
@@ -79,7 +87,10 @@ const ProfilePage = () => {
           {isLikedLoading ? (
             <LoadingSpinner />
           ) : (
-            <SavedSongsContainer songs={likedSongs} />
+            <SavedSongsContainer
+              songs={likedSongs}
+              onSongCardClick={handleSongCardClick}
+            />
           )}
           <MusicPlayer />
         </div>
