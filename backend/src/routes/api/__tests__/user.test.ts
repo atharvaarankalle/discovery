@@ -15,6 +15,7 @@ const users = [
     {
         _id: new mongoose.Types.ObjectId("000000000000000000000001"),
         email: "user1@test.com",
+        password: "testUser1Password",
         displayName: "User 1",
         accountCreationDate: new Date("2024-05-03T00:00:00.000+00:00"),
         streakCount: 2,
@@ -25,6 +26,7 @@ const users = [
     {
         _id: new mongoose.Types.ObjectId("000000000000000000000002"),
         email: "user2@test.com",
+        password: "testUser2Password",
         displayName: "User 2",
         accountCreationDate: new Date("2024-05-04T00:00:00.000+00:00"),
         streakCount: 0,
@@ -47,7 +49,7 @@ const suggestedSongs = [
     },
     {
         _id: new mongoose.Types.ObjectId("000000000000000000000004"),
-        spotifySongId: "song2Id",
+        spotifySongId: "2pKdeTspc5If91jL1v203P",
         caption: "Song 2",
         prompt: new mongoose.Types.ObjectId("000000000000000000000005"),
         user: new mongoose.Types.ObjectId("000000000000000000000002"),
@@ -117,6 +119,7 @@ describe("POST /", () => {
             .send({
                 email: "testuser1@email.com",
                 displayName: "Test User 1",
+                password: "testUser1Password",
                 accountCreationDate: new Date("2024-05-09T00:00:00.000+00:00"),
                 streakCount: 0,
                 likedSongs: [],
@@ -388,13 +391,12 @@ describe("GET /:id/suggested/today", () => {
             }
 
             const suggestedSong = res.body;
-            expect(suggestedSong).toHaveProperty("_id");
-            expect(suggestedSong.spotifySongId).toBe("song2Id");
-            expect(suggestedSong.caption).toBe("Song 2");
-            expect(suggestedSong.prompt).toBe("000000000000000000000005");
-            expect(suggestedSong.user).toBe("000000000000000000000002");
-            expect(suggestedSong.createdAt).toBe(getTodaysDate().toISOString());
-            expect(suggestedSong.updatedAt).toBe(getTodaysDate().toISOString());
+            expect(suggestedSong.id).toBe("2pKdeTspc5If91jL1v203P");
+            expect(suggestedSong.songTitle).toBe("Hello");
+            expect(suggestedSong.artists).toBe("Martin Solveig, Dragonette");
+            expect(suggestedSong.album).toBe("Smash");
+            expect(suggestedSong.albumArtSrc).toBe("https://i.scdn.co/image/ab67616d00001e02a991b1e9a11bafa3dd4c56f1");
+            expect(suggestedSong.openInSpotifyUrl).toBe("https://open.spotify.com/track/2pKdeTspc5If91jL1v203P");
 
             return done();
         });
