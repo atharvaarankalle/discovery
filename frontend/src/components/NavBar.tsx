@@ -18,7 +18,10 @@ import { AppContext } from "../AppContextProvider";
 import NavBarDropdownMenu from "./NavBarDropdownMenu";
 import StyledToolTip from "./StyledTooltip";
 import CustomTypography from "./CustomTypography";
-import { User } from "../utils/interfaces";
+import useGet from "../utils/useGet";
+import { SongData, User } from "../utils/interfaces";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
 
 /* Custom styles applied to MUI AppBar */
 const StyledAppBar = styled(AppBar)({
@@ -45,12 +48,23 @@ type LoggedInUserPages = "Discover" | "Prompt" | "Profile";
  */
 const NavBar = () => {
   const location = useLocation();
-  const currentUser = {
-    // TODO: retrieve the currentUserID from context and make a call to backend to get the relevant details to populate the navbar
-  };
-  const { promptOfTheDay } = useContext(AppContext);
   const theme: Theme = useTheme();
   const navigate = useNavigate();
+
+  // Getting current user details
+  const { currentUserId } = useContext(AppContext);
+  const { data: userData } = useGet<Omit<User, "hasSubmitted" | "id">>({
+    url: `${API_BASE_URL}/user/${currentUserId}`,
+  });
+  const { data: todaysSongData } = useGet<SongData>({
+    url: `${API_BASE_URL}/user/${currentUserId}/suggested/today`,
+  });
+  const currentUser: Omit<Partial<User>, "id"> = {
+    ...userData,
+    hasSubmitted: todaysSongData !== null,
+  };
+
+  const { promptOfTheDay } = useContext(AppContext);
 
   // Determine the current page based on the URL path
   let currentPage: LoggedInUserPages;
@@ -141,7 +155,7 @@ const NavBar = () => {
             <Typography variant="h3">{currentUser?.streakCount}</Typography>
           </Stack>
           <NavBarDropdownMenu
-            profilePictureSrc="https://media.cnn.com/api/v1/images/stellar/prod/191026120622-03-black-cat.jpg?q=w_1110,c_fill"
+            profilePictureSrc={currentUser.profilePic}
             width={60}
             height={60}
           />
