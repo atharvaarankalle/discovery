@@ -2,7 +2,9 @@ import { Box, Typography } from "@mui/material";
 import SongSuggestionCard from "./SongSuggestionCard";
 import Masonry from "@mui/lab/Masonry";
 import { SongSuggestionData } from "../utils/interfaces";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import axios from "axios";
+import { AppContext } from "../AppContextProvider";
 
 /* Prop types for this component */
 interface SuggestionContainerPropTypes {
@@ -11,6 +13,8 @@ interface SuggestionContainerPropTypes {
     songSuggestionData: SongSuggestionData | null
   ) => void;
 }
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
 
 /**
  * SONG SUGGESTIONS CONTAINER:
@@ -29,6 +33,8 @@ const SongSuggestionsContainer = ({
 }: SuggestionContainerPropTypes) => {
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
 
+  const { currentUserId } = useContext(AppContext);
+
   const handleCardClick = (songSuggestionData: SongSuggestionData) => {
     // call onClick function IF provided by higher level component
     if (onSongSuggestionCardClick) {
@@ -42,6 +48,17 @@ const SongSuggestionsContainer = ({
     setSelectedCardId(
       songSuggestionData.id === selectedCardId ? null : songSuggestionData.id
     );
+  };
+
+  const handleLikeClick = async (songSuggestionData: SongSuggestionData) => {
+    const songSuggestionId = songSuggestionData.id;
+    try {
+      await axios.put(`${API_BASE_URL}/user/${currentUserId}/liked`, {
+        songSuggestionId,
+      });
+    } catch (error: unknown) {
+      // catching error
+    }
   };
 
   const songSuggestionsCount = songSuggestionList.length;
@@ -67,6 +84,7 @@ const SongSuggestionsContainer = ({
                   songSuggestionData={songSuggestionData}
                   isSelected={songSuggestionData.id === selectedCardId}
                   onCardClick={() => handleCardClick(songSuggestionData)}
+                  onLikeClick={() => handleLikeClick(songSuggestionData)}
                 />
               </Box>
             ))}

@@ -2,18 +2,26 @@ import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import { useState } from "react";
 
-const LikeButton = ({ isLikedInitial }: { isLikedInitial: boolean }) => {
+const LikeButton = ({
+  isLikedInitial,
+  onLikeClick,
+}: {
+  isLikedInitial: boolean;
+  onLikeClick: () => void;
+}) => {
   const [isLiked, setIsLiked] = useState<boolean>(isLikedInitial);
 
   const handleLikeClick = () => {
     setIsLiked(!isLiked);
-
-    // TODO: Call endpoint to add song to the user's liked songs.
-    // Will likely need to pass in some details from SuggestionCard / SongCard (i.e., user id, song id, etc.)
+    onLikeClick && onLikeClick();
   };
 
   return (
-    <IconButton onClick={handleLikeClick} color="lightPeach">
+    <IconButton
+      onClick={() => handleLikeClick()}
+      color="lightPeach"
+      disabled={isLikedInitial}
+    >
       {isLiked ? <Favorite /> : <FavoriteBorder />}
     </IconButton>
   );
