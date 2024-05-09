@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, Button, Typography} from "@mui/material";
+import { Box, Typography} from "@mui/material";
 import { Searchbar } from "../components/Searchbar"
 import { SkipButton } from "../components/SkipButton";
 import { ConfirmationDialog } from "../components/ConfirmDialog";
@@ -36,6 +36,28 @@ async function searchSongs(query: string, numSongs: number, page: number): Promi
   }
 }
 
+
+/**
+ * This function takes in a string and optionally a date to save the prompt to the database.
+ * Id no date is given, it will be saved under today's date.
+ * @param promptText The prompt to be saved
+ * @param date A date or null for today's date
+ */
+async function savePrompt(promptText: String, date: Date | null) {
+  try {
+      const baseURL = import.meta.env.VITE_API_BASE_URL;
+      const response = await axios.post(`${baseURL}/prompt/save`, {
+          prompt: promptText,
+          date: date
+      });
+
+      console.log('Prompt saved successfully:', response.data);
+  } catch (error) {
+      console.error('Failed to save prompt');
+  }
+}
+
+
 /**
  * This prompt page ultilises the GPT API and the Spotify API to give a prompt
  * to the user. The user then answer with a song by searching through the Spotify
@@ -56,13 +78,17 @@ export const PromptPage = () => {
   }
   
 
-  const [prompt, setPrompt] = useState("Press button for prompt");
+  const [prompt, setPrompt] = useState("   ");
   const [currentInput, setCurrentInput] = useState('');
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [songs, setSongs] = useState([]);
   const [debouncedValue, setDebouncedValue] = useState("");
   const [displayedSong, setDisplayedSong] = useState<SongData>(mockTrackData);
+
+  useEffect(()=> {
+    handlePrompt();
+  }, []);
 
   //Using debounce to limit the amount of API calls
   useEffect(() => {
@@ -116,6 +142,8 @@ export const PromptPage = () => {
       // Additional actions to quit goes here
   };
   
+
+  
   //Retrieve the prompt using axios
   const handlePrompt = async () => {
     try {
@@ -123,7 +151,6 @@ export const PromptPage = () => {
       const existingResponse = await axios.get(`${baseURL}/prompt/latest`);
       
       if(existingResponse.data) {
-        console.log(existingResponse.data);
         setPrompt(existingResponse.data);
       } else {
         const response = await axios.get(`${baseURL}/prompt`);
@@ -131,6 +158,7 @@ export const PromptPage = () => {
               throw new Error(`HTTP error! Status: ${response.status}`);
           }
           setPrompt(response.data);
+          savePrompt(response.data, null);
       }
 
     } catch (error) {
@@ -141,7 +169,6 @@ export const PromptPage = () => {
   return (
     <div>
       <Typography variant="h2" sx={{width: `calc(100vw - 37rem)`}}>{prompt}</Typography>
-      <Button variant="contained" sx={{marginY: 3}} onClick={handlePrompt}>Generate</Button>
       <Box>
         <Box sx={{marginY: 1, width: `calc(100vw - 38rem)`, height: '80%', overflowY: 'auto'}}>
           <Searchbar onInputChange={setCurrentInput}/>
