@@ -17,7 +17,9 @@
 3. Run `npm run dev` or `npm start` in the terminal to run the backend.
 4. The backend should now be hosted on port 3000!
 
-## Running Mongoose Schema Tests
+## Running Backend Tests
+
+These test the express API endpoints and mongoose schemas.
 
 ### Steps:
 

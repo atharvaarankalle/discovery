@@ -17,6 +17,15 @@
 3. Run `npm run dev` in the terminal to run the frontend.
 4. The frontend should now be hosted on http://localhost:5173/!
 
+## Frontend Tests
+
+These test the `SongCard` component using Vitest
+
+### Steps:
+
+1. Run `npm install` from the root of the frontend folder to install all the required testing dependencies
+2. To run the test cases, run `npm test`
+
 ## Frontend Tech
 
 - React w/ TypeScript
