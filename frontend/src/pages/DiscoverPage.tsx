@@ -1,6 +1,6 @@
 import DiscoverPageHeader from "../components/DiscoverPageHeader";
 import SongSuggestionsContainer from "../components/SongSuggestionsContainer";
-import { styled } from "@mui/material";
+import { Box, styled } from "@mui/material";
 import useGet from "../utils/useGet";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { SongData, SongSuggestionData } from "../utils/interfaces";
@@ -44,7 +44,16 @@ const DiscoverPage = () => {
     <StyledDiscoverContainer>
       <DiscoverPageHeader songData={todaysSongSuggestion} />
       {isFeedLoading ? (
-        <LoadingSpinner />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "40vh",
+          }}
+        >
+          <LoadingSpinner />
+        </Box>
       ) : (
         <SongSuggestionsContainer
           songSuggestionList={songs}
