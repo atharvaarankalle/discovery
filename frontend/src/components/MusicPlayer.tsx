@@ -189,6 +189,23 @@ const ActiveMusicPlayerContent = () => {
     };
   }, []);
 
+  // handle audio controls when switching between songs
+  useEffect(() => {
+    // change audio to the new song
+    const newSong = songAudioRef.current;
+    if (currentPreviewSong) {
+      newSong.src = currentPreviewSong.songAudioSrc as string;
+      setIsPlaying(false);
+    }
+
+    // stop the previous audio and reset to 0s
+    const previousSong = songAudioRef.current;
+    return () => {
+      previousSong.pause();
+      previousSong.currentTime = 0;
+    };
+  }, [currentPreviewSong]);
+
   return (
     <>
       <Box

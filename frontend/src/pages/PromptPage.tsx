@@ -89,12 +89,13 @@ export const PromptPage = () => {
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [songs, setSongs] = useState([]);
   const [debouncedValue, setDebouncedValue] = useState("");
-  const navigate = useNavigate();
   const [displayedSong, setDisplayedSong] =
     useState<SongData>(defaultTrackData);
   const { setCurrentPreviewSong } = useContext(AppContext);
 
   const baseURL = import.meta.env.VITE_API_BASE_URL;
+
+  const navigate = useNavigate();
 
   const { data: existingResponse, isLoading: isExistingLoading } =
     useGet<string>({
@@ -170,7 +171,7 @@ export const PromptPage = () => {
   //Confirm quit and takes the user to another page
   const handleConfirmQuit = () => {
     handleCloseDialog();
-    navigate("/user/discover");
+    navigate("../discover");
   };
 
   //Put away drawer if searchbar is empty

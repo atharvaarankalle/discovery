@@ -25,9 +25,11 @@ const DiscoverPage = () => {
   const { currentUserId, setCurrentPreviewSong } = useContext(AppContext);
 
   // Getting Current User's Song Suggestion
-  const { data: todaysSongSuggestionData } = useGet<SongData>({
-    url: `${API_BASE_URL}/user/${currentUserId}/suggested/today`,
-  });
+  const { data: todaysSongSuggestionData, isLoading: isSuggestionLoading } =
+    useGet<SongData>({
+      url: `${API_BASE_URL}/user/${currentUserId}/suggested/today`,
+    });
+
   const todaysSongSuggestion =
     todaysSongSuggestionData === null ? undefined : todaysSongSuggestionData;
 
@@ -48,7 +50,20 @@ const DiscoverPage = () => {
 
   return (
     <StyledDiscoverContainer>
-      <DiscoverPageHeader songData={todaysSongSuggestion} />
+      {isSuggestionLoading ? (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "15vh",
+          }}
+        >
+          <LoadingSpinner />
+        </Box>
+      ) : (
+        <DiscoverPageHeader songData={todaysSongSuggestion} />
+      )}
       {isFeedLoading ? (
         <Box
           sx={{
