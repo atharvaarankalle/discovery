@@ -106,3 +106,34 @@ describe("POST /", () => {
             });
     });
 });
+
+/**
+ * Tests that the GET /:id route successfully retrieves a single user
+ */
+describe("GET /:id", () => {
+    it("gets a single user", (done) => {
+        request(app)
+        .get("/000000000000000000000003")
+        .send()
+        .expect(200)
+        .end((err, res) => {
+            // If an error occurred, fail the test
+            if (err) {
+                return done(err);
+            }
+
+            // Check the user returned in the response has the correct properties
+            const user = res.body;
+            expect(user).toHaveProperty("_id");
+            expect(user.email).toBe("user3@test.com");
+            expect(user.displayName).toBe("User 3");
+            expect(user.accountCreationDate).toBe("2024-05-07T00:00:00.000Z");
+            expect(user.streakCount).toBe(0);
+            expect(user.likedSongs).toEqual([]);
+            expect(user.suggestedSongs).toEqual([]);
+            expect(user.profilePic).toBe("profilePic3Source");
+
+            return done();
+        });
+    });
+});
