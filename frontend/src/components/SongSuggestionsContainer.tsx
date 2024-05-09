@@ -8,7 +8,7 @@ import { useState } from "react";
 interface SuggestionContainerPropTypes {
   songSuggestionList: Array<SongSuggestionData>;
   onSongSuggestionCardClick?: (
-    songSuggestionData: SongSuggestionData | null
+    songSuggestionData: SongSuggestionData | null,
   ) => void;
 }
 
@@ -40,7 +40,7 @@ const SongSuggestionsContainer = ({
     }
     // set selected status for this newly clicked card
     setSelectedCardId(
-      songSuggestionData.id === selectedCardId ? null : songSuggestionData.id
+      songSuggestionData.id === selectedCardId ? null : songSuggestionData.id,
     );
   };
 
@@ -49,18 +49,14 @@ const SongSuggestionsContainer = ({
   return (
     <>
       {songSuggestionsCount > 0 ? (
-        <Box
-          sx={{
-            width: "100%",
-            height: "100%",
-            maxHeight: "53vh",
-            overflowY: "auto",
-            overflowX: "hidden",
-            paddingRight: "0.5rem",
-          }}
-        >
+        <Box>
           {/* Note that the MUI Masonry component is a part of MUI Labs, not MUI core */}
-          <Masonry columns={2} spacing={2} sequential sx={{ margin: 0 }}>
+          <Masonry
+            columns={{ lg: 2, xl: 3 }}
+            spacing={1}
+            sequential
+            sx={{ margin: 0 }}
+          >
             {songSuggestionList.map((songSuggestionData) => (
               <Box key={songSuggestionData.id}>
                 <SongSuggestionCard
