@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { MusicPlayer } from "../components/MusicPlayer";
 import useGet from "../utils/useGet";
 import { SongData, User } from "../utils/interfaces";
@@ -85,7 +85,14 @@ const ProfilePage = () => {
             DISCOVERED SONGS
           </Typography>
           {isLikedLoading ? (
-            <LoadingSpinner />
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <LoadingSpinner />
+            </Box>
           ) : (
             <SavedSongsContainer
               songs={likedSongs}
