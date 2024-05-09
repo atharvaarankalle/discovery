@@ -68,6 +68,9 @@ afterAll(async () => {
     await mongod.stop();
 });
 
+/**
+ * Tests for the POST / route
+ */
 describe("POST /", () => {
     /**
      * Tests that the POST / route successfully creates a new user
@@ -107,6 +110,9 @@ describe("POST /", () => {
     });
 });
 
+/**
+ * Tests for the GET /:id route
+ */
 describe("GET /:id", () => {
     /**
      * Tests that the GET /:id route successfully retrieves a single user
@@ -144,6 +150,47 @@ describe("GET /:id", () => {
         request(app)
         .get("/000000000000000000000004")
         .send()
+        .expect(404, done);
+    });
+});
+
+/**
+ * Tests for the PATCH /:id route
+ */
+describe("PATCH /:id", () => {
+    /**
+     * Tests that the PATCH /:id route successfully updates a user
+     */
+    it("updates a user", (done) => {
+        request(app)
+        .patch("/000000000000000000000001")
+        .send({
+            streakCount: 3
+        })
+        .expect(200)
+        .end((err, res) => {
+            // If an error occurred, fail the test
+            if (err) {
+                return done(err);
+            }
+
+            // Check the user returned in the response has the updated streak count
+            const user = res.body;
+            expect(user.streakCount).toBe(3);
+
+            return done();
+        });
+    });
+
+    /**
+     * Tests that the PATCH /:id route returns a 404 if the user is not found
+     */
+    it("returns a 404 if the user is not found", (done) => {
+        request(app)
+        .patch("/000000000000000000000004")
+        .send({
+            streakCount: 3
+        })
         .expect(404, done);
     });
 });
