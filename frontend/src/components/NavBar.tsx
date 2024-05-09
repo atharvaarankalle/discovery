@@ -129,7 +129,7 @@ const NavBar = () => {
           direction="row"
           gap={6}
           alignItems="center"
-          sx={{ paddingRight: "0.5rem" }}
+          sx={{ paddingRight: currentPage !== "Prompt" ? "0.5rem" : "33rem" }}
         >
           <Stack direction="row" alignItems="center">
             {currentUser?.hasSubmitted ? (
@@ -158,7 +158,7 @@ const NavBar = () => {
         </Stack>
       </Toolbar>
       {currentPage === "Prompt" && (
-        <Stack direction="column" sx={{ padding: "1rem 0 0 2.5rem" }}>
+        <Stack direction="column" sx={{ pl: "2.5rem" }}>
           <Typography variant="h4">TODAY'S DISCO:</Typography>
           <CustomTypography variant="h1" num_lines={1}>
             {promptOfTheDay}

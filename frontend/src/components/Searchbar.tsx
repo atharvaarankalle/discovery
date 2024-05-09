@@ -5,7 +5,7 @@ import { colors } from "../theme";
 import CustomTextField from "./CustomTextField";
 
 interface SearchbarProps {
-  onInputChange: (input: string) => void;  // Define the callback type
+  onInputChange: (input: string) => void; // Define the callback type
 }
 
 //Styling for clear search button
@@ -30,14 +30,13 @@ const ClearSearchLink = styled(Link)({
  * @returns Searchbar
  */
 
-export const Searchbar = ( { onInputChange }: SearchbarProps ) => {
+export const Searchbar = ({ onInputChange }: SearchbarProps) => {
   const [inputValue, setInputValue] = useState("");
-
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setInputValue(value);
-    if (onInputChange) { 
+    if (onInputChange) {
       onInputChange(value);
     }
   };
@@ -45,7 +44,7 @@ export const Searchbar = ( { onInputChange }: SearchbarProps ) => {
   const clearInput = () => {
     setInputValue("");
     if (onInputChange) {
-      onInputChange(""); 
+      onInputChange("");
     }
   };
 
@@ -66,7 +65,7 @@ export const Searchbar = ( { onInputChange }: SearchbarProps ) => {
           onChange={handleInputChange}
         />
       </Box>
-      <Box sx={{ display: "flex", justifyContent: "flex-end", paddingY:3}}>
+      <Box sx={{ display: "flex", justifyContent: "flex-end", pb: 2 }}>
         <ClearSearchLink
           onClick={clearInput}
           underline="always"

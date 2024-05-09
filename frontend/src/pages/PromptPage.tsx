@@ -140,7 +140,7 @@ export const PromptPage = () => {
       sx={{
         marginY: 1,
         width: `calc(100vw - 38rem)`,
-        height: "70vh", // SUBJECT TO CHANGE
+        height: "calc(100vh - 350px)", // SUBJECT TO CHANGE
         overflowY: "scroll",
         overflowX: "clip",
       }}
@@ -154,9 +154,8 @@ export const PromptPage = () => {
       <Box>
         <Box
           sx={{
-            mt: 1,
             mr: "0.5rem",
-            mb: "5rem", // SUBJECT TO CHANGE
+            mb: "75px", // SUBJECT TO CHANGE
           }}
         >
           <Searchbar onInputChange={setCurrentInput} />
