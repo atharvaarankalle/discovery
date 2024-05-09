@@ -65,7 +65,8 @@ const NavBar = () => {
     hasSubmitted: todaysSongData !== null,
   };
 
-  const { promptOfTheDay, setPromptOfTheDay } = useContext(AppContext);
+  const { promptOfTheDay, setPromptOfTheDay, setPromptIdOfTheDay } =
+    useContext(AppContext);
 
   /**
    * This function takes in a string and optionally a date to save the prompt to the database.
@@ -82,11 +83,12 @@ const NavBar = () => {
       });
 
       console.log("Prompt saved successfully:", response.data);
+      setPromptIdOfTheDay(response.data._id);
     } catch (error) {
       console.error("Failed to save prompt");
     }
   }
-  const { data: existingPrompt } = useGet<string>({
+  const { data: existingPrompt } = useGet<{ prompt: string; id: string }>({
     url: `${API_BASE_URL}/prompt/latest`,
   });
 
@@ -97,11 +99,14 @@ const NavBar = () => {
   //Checks if there is an existing prompt for the day, otherwise a new prompt is created and saved
   useEffect(() => {
     if (existingPrompt) {
-      setPromptOfTheDay(existingPrompt);
+      setPromptOfTheDay(existingPrompt.prompt);
+      setPromptIdOfTheDay(existingPrompt.id);
     } else if (newPromptOfDay) {
       savePrompt(newPromptOfDay, null);
+      setPromptOfTheDay(newPromptOfDay);
     }
-  }, [existingPrompt, newPromptOfDay, setPromptOfTheDay]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [existingPrompt, newPromptOfDay]); // not exhaustive to prevent unnecessary regenerating of prompt.
 
   // Determine the current page based on the URL path
   let currentPage: LoggedInUserPages;
