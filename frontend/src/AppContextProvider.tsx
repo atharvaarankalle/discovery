@@ -9,6 +9,8 @@ interface AppContextType {
   setCurrentUserId: (userId: string | null) => void;
   promptOfTheDay: string | undefined;
   setPromptOfTheDay: (prompt: string | undefined) => void;
+  promptIdOfTheDay: string | undefined;
+  setPromptIdOfTheDay: (promptId: string | undefined) => void;
 }
 
 export const AppContext = createContext<AppContextType>({
@@ -18,6 +20,8 @@ export const AppContext = createContext<AppContextType>({
   setCurrentUserId: () => {},
   promptOfTheDay: undefined,
   setPromptOfTheDay: () => {},
+  promptIdOfTheDay: undefined,
+  setPromptIdOfTheDay: () => {},
 });
 
 interface AppContextProviderProps {
@@ -42,6 +46,10 @@ export function AppContextProvider({ children }: AppContextProviderProps) {
     undefined
   );
 
+  const [promptIdOfTheDay, setPromptIdOfTheDay] = useState<string | undefined>(
+    undefined
+  );
+
   const context = {
     currentPreviewSong,
     setCurrentPreviewSong,
@@ -49,6 +57,8 @@ export function AppContextProvider({ children }: AppContextProviderProps) {
     setCurrentUserId,
     promptOfTheDay,
     setPromptOfTheDay,
+    promptIdOfTheDay,
+    setPromptIdOfTheDay,
   };
 
   return <AppContext.Provider value={context}>{children}</AppContext.Provider>;

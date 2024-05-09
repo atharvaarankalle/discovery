@@ -9,8 +9,6 @@ import axios from "axios";
 import { colors } from "../theme";
 import { SongData } from "../utils/interfaces";
 import { useNavigate } from "react-router-dom";
-import useGet from "../utils/useGet";
-import LoadingSpinner from "../components/LoadingSpinner";
 import { AppContext } from "../AppContextProvider.tsx";
 
 /**
@@ -45,26 +43,6 @@ async function searchSongs(
 }
 
 /**
- * This function takes in a string and optionally a date to save the prompt to the database.
- * If no date is given, it will be saved under today's date.
- * @param promptText The prompt to be saved
- * @param date A date or null for today's date
- */
-async function savePrompt(promptText: string, date: Date | null) {
-  try {
-    const baseURL = import.meta.env.VITE_API_BASE_URL;
-    const response = await axios.post(`${baseURL}/prompt/save`, {
-      prompt: promptText,
-      date: date,
-    });
-
-    console.log("Prompt saved successfully:", response.data);
-  } catch (error) {
-    console.error("Failed to save prompt");
-  }
-}
-
-/**
  * This prompt page ultilises the GPT API and the Spotify API to give a prompt
  * to the user. The user then answer with a song by searching through the Spotify
  * library. A song can then be choosen and added to their personal list along with a comment.
@@ -83,7 +61,6 @@ export const PromptPage = () => {
     openInSpotifyUrl: "https://open.spotify.com/track/4kiVGEOrzWmEUCxXU21rtN",
   };
 
-  const [prompt, setPrompt] = useState<string | null>(null);
   const [currentInput, setCurrentInput] = useState("");
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
@@ -93,18 +70,7 @@ export const PromptPage = () => {
     useState<SongData>(defaultTrackData);
   const { setCurrentPreviewSong } = useContext(AppContext);
 
-  const baseURL = import.meta.env.VITE_API_BASE_URL;
-
   const navigate = useNavigate();
-
-  const { data: existingResponse, isLoading: isExistingLoading } =
-    useGet<string>({
-      url: `${baseURL}/prompt/latest`,
-    });
-
-  const { data: newResponse, isLoading: isNewLoading } = useGet<string>({
-    url: `${baseURL}/prompt`,
-  });
 
   useEffect(() => {
     checkDrawer();
@@ -112,13 +78,8 @@ export const PromptPage = () => {
 
   //Checks if there is an existing prompt for the day, otherwise a new prompt is created and saved
   useEffect(() => {
-    if (existingResponse) {
-      setPrompt(existingResponse);
-    } else if (newResponse) {
-      setPrompt(newResponse);
-      savePrompt(newResponse, null);
-    }
-  }, [existingResponse, newResponse]);
+    checkDrawer();
+  }, [currentInput]);
 
   //Using debounce to limit the amount of API calls
   useEffect(() => {
@@ -182,27 +143,33 @@ export const PromptPage = () => {
   };
 
   return (
-    <Box
-      sx={{
-        marginY: 1,
-        width: `calc(100vw - 33.5rem)`,
-        height: "calc(100vh - 260px)", // SUBJECT TO CHANGE
-        overflowY: "scroll",
-        overflowX: "clip",
-      }}
-    >
-      {isExistingLoading || isNewLoading ? (
-        <LoadingSpinner />
-      ) : (
-        <Typography variant="h2" sx={{ width: `calc(100vw - 37rem)` }}>
-          {prompt}
-        </Typography>
-      )}
+    // <<<<<<< HEAD
+    //     <Box
+    //       sx={{
+    //         marginY: 1,
+    //         width: `calc(100vw - 33.5rem)`,
+    //         height: "calc(100vh - 260px)", // SUBJECT TO CHANGE
+    //         overflowY: "scroll",
+    //         overflowX: "clip",
+    //       }}
+    //     >
+    //       {isExistingLoading || isNewLoading ? (
+    //         <LoadingSpinner />
+    //       ) : (
+    //         <Typography variant="h2" sx={{ width: `calc(100vw - 37rem)` }}>
+    //           {prompt}
+    //         </Typography>
+    //       )}
+    // =======
+    <Box>
       <Box>
         <Box
           sx={{
-            mr: "0.5rem",
-            mb: "100px", // SUBJECT TO CHANGE
+            marginY: 1,
+            width: `calc(100vw - 33.5rem)`,
+            height: "calc(100vh - 260px)", // SUBJECT TO CHANGE
+            overflowY: "scroll",
+            overflowX: "clip",
           }}
         >
           <Searchbar onInputChange={setCurrentInput} />
