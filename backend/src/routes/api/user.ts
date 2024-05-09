@@ -93,11 +93,18 @@ router.get("/:id/liked", async (req: Request, res: Response) => {
   try {
     const userId = req.params.id;
 
+    const user: IUser | null = await User.findById(userId).populate(
+      "likedSongs"
+    );
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
     const likedSongs: Array<ISuggestedSong> = await SuggestedSong.find({
-      user: userId,
+      _id: user.likedSongs,
     });
 
-    if (!likedSongs) {
+    if (!likedSongs || likedSongs.length === 0) {
       return res.status(404).json({ message: "No liked songs found" });
     }
 
@@ -109,9 +116,7 @@ router.get("/:id/liked", async (req: Request, res: Response) => {
           `${API_BASE_URL}/songs/${spotifySongId}`
         );
 
-        return {
-          songData: response.data,
-        };
+        return response.data;
       } catch (error) {
         res.status(500).json();
       }
