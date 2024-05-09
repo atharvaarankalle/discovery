@@ -15,7 +15,7 @@
 1. Make sure you are in the `/frontend` directory.
 2. Run `npm install` in the terminal to ensure all the required packages are installed.
 3. Run `npm run dev` in the terminal to run the frontend.
-4. The frontend should now be hosted on http://localhost:5173/!
+4. The frontend should now be hosted on http://localhost:5173/! For security and authentication reasons, please make sure this is on port 5173.
 
 ## Frontend Tests
 
