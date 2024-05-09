@@ -45,7 +45,10 @@ type LoggedInUserPages = "Discover" | "Prompt" | "Profile";
  */
 const NavBar = () => {
   const location = useLocation();
-  const { currentUser, promptOfTheDay } = useContext(AppContext);
+  const currentUser = {
+    // TODO: retrieve the currentUserID from context and make a call to backend to get the relevant details to populate the navbar
+  };
+  const { promptOfTheDay } = useContext(AppContext);
   const theme: Theme = useTheme();
   const navigate = useNavigate();
   const [openDialog, setOpenDialog] = useState<boolean>(false);
