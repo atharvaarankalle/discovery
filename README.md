@@ -32,7 +32,7 @@ _DISCLAIMER: discOvery is not supported for small screens at the moment (e.g. mo
 
 ## Running the Project ☆ﾐ(o*･ω･)ﾉ
 
-In order to run the project on your own machine, you must ave access to both the frontend and backend `.env` files, and
+In order to run the project on your own machine, you must have access to both the frontend and backend `.env` files, and
 run both the frontend and backend.
 To run the frontend please see the README [here](frontend/README.md). To run the backend please see the
 README [here](backend/README.md)!

@@ -17,6 +17,14 @@
 3. Run `npm run dev` or `npm start` in the terminal to run the backend.
 4. The backend should now be hosted on port 3000!
 
+## Running Mongoose Schema Tests
+
+### Steps:
+
+1. Run `npm install` from the root of the backend folder to install all the required testing dependencies
+2. To run all test cases, run `npm test`
+3. To run test cases in a specific file, run `npm test -- filename` (for example: `npm test -- PromptSchema.test.js`)
+
 ## Backend Tech
 
 - Node.js w/ TypeScript
