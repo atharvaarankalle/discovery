@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Avatar, Box, Typography } from "@mui/material";
 import { MusicPlayer } from "../components/MusicPlayer";
 import useGet from "../utils/useGet";
 import { SongData, User } from "../utils/interfaces";
@@ -53,7 +53,7 @@ const ProfilePage = () => {
             marginBottom: "40px",
           }}
         >
-          <img
+          <Avatar
             src={user?.profilePic}
             style={{
               width: "200px",
