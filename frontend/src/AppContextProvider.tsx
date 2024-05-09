@@ -1,12 +1,12 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { SongData, User } from "./utils/interfaces.ts";
+import { SongData } from "./utils/interfaces.ts";
 
 /* AppContext prop types */
 interface AppContextType {
   currentPreviewSong: SongData | null;
   setCurrentPreviewSong: (song: SongData | null) => void;
-  currentUser: User | null;
-  setCurrentUser: (user: User | null) => void;
+  currentUserId: string | null;
+  setCurrentUserId: (userId: string | null) => void;
   promptOfTheDay: string | undefined;
   setPromptOfTheDay: (prompt: string | undefined) => void;
 }
@@ -14,8 +14,8 @@ interface AppContextType {
 export const AppContext = createContext<AppContextType>({
   currentPreviewSong: null,
   setCurrentPreviewSong: () => {},
-  currentUser: null,
-  setCurrentUser: () => {},
+  currentUserId: null,
+  setCurrentUserId: () => {},
   promptOfTheDay: undefined,
   setPromptOfTheDay: () => {},
 });
@@ -33,15 +33,20 @@ export function AppContextProvider({ children }: AppContextProviderProps) {
     null
   );
 
-  const [currentUser, setCurrentUser] = useLocalStorage("currentUser", null);
+  const [currentUserId, setCurrentUserId] = useLocalStorage(
+    "currentUserId",
+    null
+  );
 
-  const [promptOfTheDay, setPromptOfTheDay] = useState<string | undefined>(undefined);
+  const [promptOfTheDay, setPromptOfTheDay] = useState<string | undefined>(
+    undefined
+  );
 
   const context = {
     currentPreviewSong,
     setCurrentPreviewSong,
-    currentUser,
-    setCurrentUser,
+    currentUserId,
+    setCurrentUserId,
     promptOfTheDay,
     setPromptOfTheDay,
   };
@@ -49,10 +54,7 @@ export function AppContextProvider({ children }: AppContextProviderProps) {
   return <AppContext.Provider value={context}>{children}</AppContext.Provider>;
 }
 
-export function useLocalStorage(
-  key: string,
-  initialValue: SongData | User | null = null
-) {
+export function useLocalStorage(key: string, initialValue: null = null) {
   const [value, setValue] = useState(() => {
     try {
       const data = window.localStorage.getItem(key);

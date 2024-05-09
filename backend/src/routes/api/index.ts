@@ -8,8 +8,19 @@ router.get("/", (req, res) => {
   res.send("Hello from API :)");
 });
 
+const corsOptions = {
+  origin: "http://localhost:5173", // only requests from this origin can access backend endpoints
+  credentials: true, // allows cookies to be sent with cross-origin requests
+};
+
 import cors from "cors";
-router.use(cors());
+router.use(cors(corsOptions));
+
+import cookieParser from "cookie-parser";
+router.use(cookieParser());
+
+import { authenticateToken } from "./auth";
+router.use(authenticateToken);
 
 // Nested routes
 import auth from "./auth";

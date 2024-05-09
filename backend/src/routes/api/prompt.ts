@@ -10,25 +10,19 @@ const router: Router = express.Router();
  * GET / - Call ChatGPT API to generate a new prompt.
  */
 router.get("/", async (req, res) => {
-    
-    try {
-        const prompt  = await generate();
+  try {
+    const prompt = await generate();
 
-        if (prompt) {
-            //'Access-Control-Allow-Origin' is enabled to bypass CORS of certain browsers.
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            res.json(prompt)
-        } else {
-            res.status(500).json({error: 'Error generating prompt'})
-        }
-
-    } catch (e) {
-        console.error(e)
-        res.status(500).json({error: 'Error getting prompt'})
+    if (prompt) {
+      res.json(prompt);
+    } else {
+      res.status(500).json({ error: "Error generating prompt" });
     }
-
-  });
-
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "Error getting prompt" });
+  }
+});
 
 /**
  * POST /save - Create a new prompt in the Mongol database.
@@ -39,28 +33,28 @@ router.get("/", async (req, res) => {
  *                          500: Sever error while trying to save
  */
 router.post("/save", async (req: Request, res: Response) => {
-    try {
-        // Retrieve the 'prompt' from request body
-        const { prompt, date } = req.body;
+  try {
+    // Retrieve the 'prompt' from request body
+    const { prompt, date } = req.body;
 
-        // Check for a date in the body, use getTodaysDate() if none provided
-        const dateInput = date ? new Date(date) : getTodaysDate();
+    // Check for a date in the body, use getTodaysDate() if none provided
+    const dateInput = date ? new Date(date) : getTodaysDate();
 
-        if (!prompt) {
-            return res.status(400).json({ message: "Prompt is required" });
-        }
-
-        const newPrompt = new Prompt({
-            prompt,
-            date: dateInput
-        });
-
-        await newPrompt.save();
-        res.status(201).json(newPrompt);
-    } catch (error: any) {
-        console.error('Error saving the prompt');
-        res.status(500).json({ message: error.message });
+    if (!prompt) {
+      return res.status(400).json({ message: "Prompt is required" });
     }
+
+    const newPrompt = new Prompt({
+      prompt,
+      date: dateInput,
+    });
+
+    await newPrompt.save();
+    res.status(201).json(newPrompt);
+  } catch (error: any) {
+    console.error("Error saving the prompt");
+    res.status(500).json({ message: error.message });
+  }
 });
 
 /**
@@ -68,16 +62,16 @@ router.post("/save", async (req: Request, res: Response) => {
  * Note that the ID only need to be on the path, this does not take in a request.
  * @param {Response} res - The Json object containing details for the prompt
  */
-router.get('/find/:id', async (req: Request, res: Response) => {
-    try {
-        const promptId = req.params.id;
+router.get("/find/:id", async (req: Request, res: Response) => {
+  try {
+    const promptId = req.params.id;
 
-        const prompt = await Prompt.findById(promptId);
+    const prompt = await Prompt.findById(promptId);
 
-        // Check if the prompt is found before responding, otherwise the database link crashes
-        if (!prompt) {
-            return res.status(404).json({ message: "Prompt not found" });
-        }
+    // Check if the prompt is found before responding, otherwise the database link crashes
+    if (!prompt) {
+      return res.status(404).json({ message: "Prompt not found" });
+    }
 
         res.json(prompt);
 

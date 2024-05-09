@@ -5,9 +5,14 @@ import {
   ISuggestedSong,
   SuggestedSong,
 } from "../../schemas/SuggestedSongSchema";
-import { Document, Schema, Types } from "mongoose";
+import { Schema } from "mongoose";
 import { Prompt } from "../../schemas/PromptSchema";
 import { compareDates, getTodaysDate } from "../../utils/DateUtils";
+import axios from "axios";
+import dotenv from "dotenv";
+
+dotenv.config();
+const API_BASE_URL = process.env.API_BASE_URL ?? "https://localhost:3000/api";
 
 const router: Router = express.Router();
 
@@ -184,20 +189,31 @@ router.get("/:id/suggested/today", async (req: Request, res: Response) => {
     const lastSuggestedSongId =
       user.suggestedSongs[user.suggestedSongs.length - 1];
 
-    const lastSuggestedSong = await SuggestedSong.findById(lastSuggestedSongId);
-    if (!lastSuggestedSong) {
+    const lastSuggestedSongEntry = await SuggestedSong.findById(
+      lastSuggestedSongId
+    );
+    if (!lastSuggestedSongEntry) {
       return res
         .status(404)
         .json({ message: "Last suggested song is not found" });
     }
     // Get the date for the prompt
-    const lastPrompt = await Prompt.findById(lastSuggestedSong.prompt);
+    const lastPrompt = await Prompt.findById(lastSuggestedSongEntry.prompt);
     const lastSuggestedSongDate = lastPrompt?.date as Date | Schema.Types.Date;
 
     if (
       compareDates({ date1: lastSuggestedSongDate, date2: getTodaysDate() })
     ) {
-      return res.json(lastSuggestedSong);
+      const { spotifySongId } = lastSuggestedSongEntry;
+
+      try {
+        const response = await axios.get(
+          `${API_BASE_URL}/songs/${spotifySongId}`
+        );
+        return res.json(response.data);
+      } catch (error) {
+        res.status(500).json();
+      }
     } else {
       return res
         .status(404)
