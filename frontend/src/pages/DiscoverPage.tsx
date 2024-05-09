@@ -13,6 +13,12 @@ const StyledDiscoverContainer = styled("div")({
   display: "flex",
   flexDirection: "column",
   gap: 50,
+  width: "100%",
+  height: "100%",
+  maxHeight: "75vh",
+  overflowY: "auto",
+  overflowX: "hidden",
+  paddingRight: "0.5rem",
 });
 
 const DiscoverPage = () => {
@@ -37,7 +43,7 @@ const DiscoverPage = () => {
 
   // Updating the music player when user clicks the song card
   const handleSongSuggestionClick = (
-    songSuggestionData: SongSuggestionData | null
+    songSuggestionData: SongSuggestionData | null,
   ) => {
     setCurrentPreviewSong(songSuggestionData?.songData ?? null);
   };

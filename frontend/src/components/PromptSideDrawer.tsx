@@ -26,7 +26,7 @@ const StyledDrawer = styled(Drawer)(() => ({
 
 /* Custom styles applied to MUI Box to be the main wrapper for the content in PromptSideDrawer */
 const StyledBox = styled(Box)(() => ({
-  width: "30rem",
+  width: "25rem",
   display: "flex",
   flexDirection: "column",
   padding: "4rem 2rem",
@@ -77,6 +77,8 @@ interface PromptSideDrawerPropTypes extends DrawerProps {
  * @prop toggleDrawer: function to toggle the drawer open and close
  * @prop songData: object containing song data such as song title, artist, album, and album art source
  */
+
+
 const PromptSideDrawer = ({
   drawerOpen,
   toggleDrawer,
@@ -87,7 +89,7 @@ const PromptSideDrawer = ({
   const navigate = useNavigate();
 
   const handleCaptionChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     // If the input is empty, set caption to undefined
     if (event.target.value === "") {
@@ -104,7 +106,7 @@ const PromptSideDrawer = ({
       prompt: promptIdOfTheDay,
     });
     setCaption("");
-    window.location.href = "/user/discover"; // Force a full page reload
+      window.location.href = "/user/discover"; // Force a full page reload
   };
 
   return (

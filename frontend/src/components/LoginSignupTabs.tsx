@@ -1,4 +1,4 @@
-import { Box, Tab, Tabs, styled, Theme, useTheme, Button } from "@mui/material";
+import { Box, Button, styled, Tab, Tabs, Theme, useTheme } from "@mui/material";
 import { ReactNode, SyntheticEvent, useState } from "react";
 import { baseGlow } from "../theme";
 import LoginTab from "./LoginTab";
@@ -27,15 +27,6 @@ const StyledTab = styled(Tab)(({ theme }) => ({
     color: theme.palette.lightPeach.main,
   },
 }));
-
-const StyledTabContent = styled(Box)({
-  padding: "3.5em",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "space-evenly",
-  alignItems: "center",
-  gap: "2em",
-});
 
 const StyledButton = styled(Button)({
   position: "absolute",
@@ -99,5 +90,5 @@ type TabContentProps = {
   children: ReactNode;
 };
 const TabContent = ({ currentTab, tabValue, children }: TabContentProps) =>
-  currentTab === tabValue && <StyledTabContent>{children}</StyledTabContent>;
+  currentTab === tabValue && <Box>{children}</Box>;
 export default LoginSignupTabs;
