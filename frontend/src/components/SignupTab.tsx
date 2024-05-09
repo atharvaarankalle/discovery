@@ -21,6 +21,7 @@ const SignupTab = () => {
   const [isEmailErrorState, setIsEmailErrorState] = useState(false);
   const [isPasswordErrorState, setIsPasswordErrorState] = useState(false);
   const [isErrorState, setIsErrorState] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   // This method does a POST request to signup and sets user ID in context if successful,
   // thus logging them in automatically after sign up.
@@ -29,15 +30,15 @@ const SignupTab = () => {
     password: string;
     displayName?: string;
   }) => {
-    console.log("click");
-
     try {
+      setIsButtonDisabled(true);
       const response = await axios.post(`${API_BASE_URL}/auth/signup`, signUp);
       setCurrentUserId(response.data.user._id); // sets the user ID in App Context (i.e. they are authenticated)
       navigate("/user/prompt");
     } catch (error: unknown) {
       console.error("Signup failed:", error);
       setIsErrorState(true);
+      setIsButtonDisabled(false);
     }
   };
 
@@ -73,6 +74,7 @@ const SignupTab = () => {
           label="Display Name"
           value={displayName}
           error={isErrorState}
+          onFocus={() => setIsErrorState(false)}
           onChange={(event) => setDisplayName(event.target.value)}
         />
         {isErrorState && (
@@ -91,6 +93,7 @@ const SignupTab = () => {
       <StyledButton
         variant="contained"
         color="lightPeach"
+        disabled={isButtonDisabled}
         onClick={() => {
           if (email && password) {
             postSignup({ email, password, displayName });

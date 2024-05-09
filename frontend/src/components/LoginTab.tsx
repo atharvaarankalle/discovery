@@ -20,10 +20,12 @@ const LoginTab = () => {
   const [isEmailErrorState, setIsEmailErrorState] = useState(false);
   const [isPasswordErrorState, setIsPasswordErrorState] = useState(false);
   const [isErrorState, setIsErrorState] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   // This method does a POST request to login and sets user ID in app context if successful
   const postLogin = async (loginData: { email: string; password: string }) => {
     try {
+      setIsButtonDisabled(true);
       const response = await axios.post(
         `${API_BASE_URL}/auth/login`,
         loginData,
@@ -31,8 +33,9 @@ const LoginTab = () => {
       setCurrentUserId(response.data.user._id); // sets the user ID in App Context (i.e. they are authenticated)
       navigate("/user/prompt");
     } catch (error: unknown) {
-      setIsErrorState(true);
       console.error("Login failed:", error);
+      setIsErrorState(true);
+      setIsButtonDisabled(false);
     }
   };
 
@@ -79,6 +82,7 @@ const LoginTab = () => {
       <StyledButton
         variant="contained"
         color="lightPeach"
+        disabled={isButtonDisabled}
         onClick={() => {
           if (email && password) {
             postLogin({ email, password });
