@@ -3,8 +3,8 @@ import {
   Button,
   Drawer,
   DrawerProps,
-  styled,
   TextField,
+  styled,
 } from "@mui/material";
 import CustomTypography from "./CustomTypography";
 import SongCard from "./SongCard";
@@ -78,6 +78,7 @@ interface PromptSideDrawerPropTypes extends DrawerProps {
  * @prop songData: object containing song data such as song title, artist, album, and album art source
  */
 
+
 const PromptSideDrawer = ({
   drawerOpen,
   toggleDrawer,
@@ -105,7 +106,7 @@ const PromptSideDrawer = ({
       prompt: promptIdOfTheDay,
     });
     setCaption("");
-    navigate("/user/discover");
+      window.location.href = "/user/discover"; // Force a full page reload
   };
 
   return (
