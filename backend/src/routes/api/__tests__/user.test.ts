@@ -17,29 +17,9 @@ const users = [
         displayName: "User 1",
         accountCreationDate: new Date("2024-05-03T00:00:00.000+00:00"),
         streakCount: 2,
-        likedSongs: [new mongoose.Types.ObjectId("000000000000000000000001"), new mongoose.Types.ObjectId("000000000000000000000002")],
-        suggestedSongs: [new mongoose.Types.ObjectId("000000000000000000000002"), new mongoose.Types.ObjectId("000000000000000000000003")],
-        profilePic: "profilePic1Source"
-    },
-    {
-        _id: new mongoose.Types.ObjectId("000000000000000000000002"),
-        email: "user2@test.com",
-        displayName: "User 2",
-        accountCreationDate: new Date("2024-05-02T00:00:00.000+00:00"),
-        streakCount: 5,
-        likedSongs: [new mongoose.Types.ObjectId("000000000000000000000003"), new mongoose.Types.ObjectId("000000000000000000000004")],
-        suggestedSongs: [new mongoose.Types.ObjectId("000000000000000000000003"), new mongoose.Types.ObjectId("000000000000000000000004")],
-        profilePic: "profilePic2Source"
-    },
-    {
-        _id: new mongoose.Types.ObjectId("000000000000000000000003"),
-        email: "user3@test.com",
-        displayName: "User 3",
-        accountCreationDate: new Date("2024-05-07T00:00:00.000+00:00"),
-        streakCount: 0,
         likedSongs: [],
         suggestedSongs: [],
-        profilePic: "profilePic3Source"
+        profilePic: "profilePic1Source"
     }
 ];
 
@@ -119,7 +99,7 @@ describe("GET /:id", () => {
      */
     it("gets a single user", (done) => {
         request(app)
-        .get("/000000000000000000000003")
+        .get("/000000000000000000000001")
         .send()
         .expect(200)
         .end((err, res) => {
@@ -131,13 +111,13 @@ describe("GET /:id", () => {
             // Check the user returned in the response has the correct properties
             const user = res.body;
             expect(user).toHaveProperty("_id");
-            expect(user.email).toBe("user3@test.com");
-            expect(user.displayName).toBe("User 3");
-            expect(user.accountCreationDate).toBe("2024-05-07T00:00:00.000Z");
-            expect(user.streakCount).toBe(0);
+            expect(user.email).toBe("user1@test.com");
+            expect(user.displayName).toBe("User 1");
+            expect(user.accountCreationDate).toBe("2024-05-03T00:00:00.000Z");
+            expect(user.streakCount).toBe(2);
             expect(user.likedSongs).toEqual([]);
             expect(user.suggestedSongs).toEqual([]);
-            expect(user.profilePic).toBe("profilePic3Source");
+            expect(user.profilePic).toBe("profilePic1Source");
 
             return done();
         });
@@ -191,6 +171,44 @@ describe("PATCH /:id", () => {
         .send({
             streakCount: 3
         })
+        .expect(404, done);
+    });
+});
+
+/**
+ * Tests for the GET /:id/liked route
+ */
+describe("GET /:id/liked", () => {
+    /**
+     * Tests that the GET /:id/liked route successfully retrieves a user's liked songs
+     */
+    it("gets the user's liked songs", (done) => {
+        request(app)
+        .get("/000000000000000000000001/liked")
+        .send()
+        .expect(200)
+        .end((err, res) => {
+            // If an error occurred, fail the test
+            if (err) {
+                return done(err);
+            }
+
+            // Check the liked songs returned in the response are correct
+            const likedSongs = res.body;
+            expect(likedSongs.length).toBe(0);
+            expect(likedSongs).toEqual([]);
+
+            return done();
+        });
+    });
+
+    /**
+     * Tests that the GET /:id/liked route returns a 404 if the user is not found
+     */
+    it("returns a 404 if the user is not found", (done) => {
+        request(app)
+        .get("/000000000000000000000004/liked")
+        .send()
         .expect(404, done);
     });
 });
