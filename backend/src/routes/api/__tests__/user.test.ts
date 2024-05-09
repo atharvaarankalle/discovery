@@ -67,3 +67,42 @@ afterAll(async () => {
     await mongoose.disconnect();
     await mongod.stop();
 });
+
+/**
+ * Tests that the POST / route successfully creates a new user
+ */
+describe("POST /", () => {
+    it("creates a new user", (done) => {
+        request(app)
+            .post("/")
+            .send({
+                email: "testuser1@email.com",
+                displayName: "Test User 1",
+                accountCreationDate: new Date("2024-05-09T00:00:00.000+00:00"),
+                streakCount: 0,
+                likedSongs: [],
+                suggestedSongs: [],
+                profilePic: "profilePicSource"
+            })
+            .expect(201)
+            .end((err, res) => {
+                // If an error occurred, fail the test
+                if (err) {
+                    return done(err);
+                }
+
+                // Check the user returned in the response has the correct properties
+                const user = res.body;
+                expect(user).toHaveProperty("_id");
+                expect(user.email).toBe("testuser1@email.com");
+                expect(user.displayName).toBe("Test User 1");
+                expect(user.accountCreationDate).toBe("2024-05-09T00:00:00.000Z");
+                expect(user.streakCount).toBe(0);
+                expect(user.likedSongs).toEqual([]);
+                expect(user.suggestedSongs).toEqual([]);
+                expect(user.profilePic).toBe("profilePicSource");
+                
+                return done();
+            });
+    });
+});
