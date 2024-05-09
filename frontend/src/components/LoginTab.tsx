@@ -17,7 +17,9 @@ const LoginTab = () => {
   const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
   const { setCurrentUserId } = useContext(AppContext);
-  const [isErrorState, setisErrorState] = useState(false);
+  const [isEmailErrorState, setIsEmailErrorState] = useState(false);
+  const [isPasswordErrorState, setIsPasswordErrorState] = useState(false);
+  const [isErrorState, setIsErrorState] = useState(false);
 
   // This method does a POST request to login and sets user ID in app context if successful
   const postLogin = async (loginData: { email: string; password: string }) => {
@@ -29,8 +31,8 @@ const LoginTab = () => {
       setCurrentUserId(response.data.user._id); // sets the user ID in App Context (i.e. they are authenticated)
       navigate("/user/prompt");
     } catch (error: unknown) {
+      setIsErrorState(true);
       console.error("Login failed:", error);
-      setisErrorState(true);
     }
   };
 
@@ -40,8 +42,12 @@ const LoginTab = () => {
         label="Email"
         value={email}
         onChange={(event) => setEmail(event.target.value)}
-        error={isErrorState}
-        onFocus={() => setisErrorState(false)}
+        error={isEmailErrorState || isErrorState}
+        onFocus={() => {
+          setIsEmailErrorState(false);
+          setIsErrorState(false);
+        }}
+        helperText={isEmailErrorState ? "Email is required" : null}
       />
       <Box sx={{ width: "100%" }}>
         <CustomTextField
@@ -49,8 +55,12 @@ const LoginTab = () => {
           type="password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
-          error={isErrorState}
-          onFocus={() => setisErrorState(false)}
+          error={isPasswordErrorState || isErrorState}
+          onFocus={() => {
+            setIsPasswordErrorState(false);
+            setIsErrorState(false);
+          }}
+          helperText={isPasswordErrorState ? "Password is required" : null}
         />
         {isErrorState && (
           <Typography
@@ -61,7 +71,8 @@ const LoginTab = () => {
               textAlign: "center",
             }}
           >
-            Looks like you've entered incorrect credentials :( Please try again
+            Looks like you've entered incorrect credentials or login has failed
+            :( Please try again
           </Typography>
         )}
       </Box>
@@ -73,6 +84,12 @@ const LoginTab = () => {
             postLogin({ email, password });
             setEmail("");
             setPassword("");
+          }
+          if (!email) {
+            setIsEmailErrorState(true);
+          }
+          if (!password) {
+            setIsPasswordErrorState(true);
           }
         }}
       >
