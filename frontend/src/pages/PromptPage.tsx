@@ -134,7 +134,15 @@ export const PromptPage = () => {
   };
 
   return (
-    <div>
+    <Box
+      sx={{
+        marginY: 1,
+        width: `calc(100vw - 38rem)`,
+        height: "70vh", // SUBJECT TO CHANGE
+        overflowY: "scroll",
+        overflowX: "clip",
+      }}
+    >
       <Typography variant="h2" sx={{ width: `calc(100vw - 37rem)` }}>
         {prompt}
       </Typography>
@@ -144,10 +152,9 @@ export const PromptPage = () => {
       <Box>
         <Box
           sx={{
-            marginY: 1,
-            width: `calc(100vw - 38rem)`,
-            height: "80%",
-            overflowY: "auto",
+            mt: 1,
+            mr: "0.5rem",
+            mb: "5rem", // SUBJECT TO CHANGE
           }}
         >
           <Searchbar onInputChange={setCurrentInput} />
@@ -157,7 +164,6 @@ export const PromptPage = () => {
           />
         </Box>
       </Box>
-      <SkipButton onOpen={handleOpenDialog} />
       <ConfirmationDialog
         open={openDialog}
         onClose={handleCloseDialog}
@@ -168,7 +174,8 @@ export const PromptPage = () => {
         toggleDrawer={handleDrawer}
         songData={displayedSong}
       />
-    </div>
+      <SkipButton onOpen={handleOpenDialog} />
+    </Box>
   );
 };
 
