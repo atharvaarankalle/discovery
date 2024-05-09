@@ -8,6 +8,7 @@ import {
 import { Schema } from "mongoose";
 import { Prompt } from "../../schemas/PromptSchema";
 import { compareDates, getTodaysDate } from "../../utils/DateUtils";
+
 import { getTrackBySpotifyId, spotifyTokenMiddleware } from "./songs";
 
 const router: Router = express.Router();
@@ -84,25 +85,50 @@ router.patch("/:id", async (req: Request, res: Response) => {
  *
  * @returns List of liked songs as JSON object
  */
-router.get("/:id/liked", async (req: Request, res: Response) => {
-  try {
-    const userId = req.params.id;
-    const user: IUser | null = await User.findById(userId).populate(
-      "likedSongs"
-    );
+router.get(
+  "/:id/liked",
+  spotifyTokenMiddleware,
+  async (req: Request, res: Response) => {
+    try {
+      const userId = req.params.id;
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      const user: IUser | null = await User.findById(userId).populate(
+        "likedSongs"
+      );
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const likedSongs: Array<ISuggestedSong> = await SuggestedSong.find({
+        _id: user.likedSongs,
+      });
+
+      if (!likedSongs || likedSongs.length === 0) {
+        return res.status(404).json({ message: "No liked songs found" });
+      }
+
+      const likedSongPromises = likedSongs.map(async (song) => {
+        const { spotifySongId } = song;
+
+        try {
+          const songData = await getTrackBySpotifyId(spotifySongId);
+
+          return songData;
+        } catch (error) {
+          res.status(500).json();
+        }
+      });
+
+      const likedSongsData = await Promise.all(likedSongPromises);
+
+      return res.json(likedSongsData);
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: `Error fetching user's liked songs: ${error}` });
     }
-
-    const likedSongs = user.likedSongs;
-    return res.json(likedSongs);
-  } catch (error) {
-    return res
-      .status(500)
-      .json({ message: `Error fetching user's liked songs: ${error}` });
   }
-});
+);
 
 /**
  * PUT add a song to a user's list of liked songs

@@ -37,6 +37,7 @@ export interface SongData {
 export interface User {
   id: string;
   displayName: string;
+  accountCreationDate: Date;
   streakCount: number;
   likedSongs: string[];
   suggestedSongs: string[];
