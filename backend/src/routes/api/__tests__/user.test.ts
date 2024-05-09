@@ -28,7 +28,7 @@ const users = [
         accountCreationDate: new Date("2024-05-04T00:00:00.000+00:00"),
         streakCount: 0,
         likedSongs: [],
-        suggestedSongs: [],
+        suggestedSongs: [new mongoose.Types.ObjectId("000000000000000000000004")],
         profilePic: "profilePic2Source"
     }
 ];
@@ -40,9 +40,31 @@ const suggestedSongs = [
         spotifySongId: "song1Id",
         caption: "Song 1",
         prompt: new mongoose.Types.ObjectId("000000000000000000000004"),
+        user: new mongoose.Types.ObjectId("000000000000000000000001"),
+        createdAt: new Date("2024-05-08T00:00:00.000+00:00"),
+        updatedAt: new Date("2024-05-08T00:00:00.000+00:00")
+    },
+    {
+        _id: new mongoose.Types.ObjectId("000000000000000000000004"),
+        spotifySongId: "song2Id",
+        caption: "Song 2",
+        prompt: new mongoose.Types.ObjectId("000000000000000000000005"),
         user: new mongoose.Types.ObjectId("000000000000000000000002"),
-        createdAt: new Date("2024-05-04T00:00:00.000+00:00"),
-        updatedAt: new Date("2024-05-04T00:00:00.000+00:00")
+        createdAt: new Date("2024-05-09T00:00:00.000+00:00"),
+        updatedAt: new Date("2024-05-09T00:00:00.000+00:00")
+    }
+];
+
+const prompts = [
+    {
+        _id: new mongoose.Types.ObjectId("000000000000000000000004"),
+        date: new Date("2024-05-08T00:00:00.000+00:00"),
+        prompt: "Prompt 1"
+    },
+    {
+        _id: new mongoose.Types.ObjectId("000000000000000000000005"),
+        date: new Date("2024-05-09T00:00:00.000+00:00"),
+        prompt: "Prompt 2"
     }
 ];
 
@@ -62,12 +84,17 @@ beforeEach(async () => {
     const suggestedSongCollection = await mongoose.connection.db.collection("suggestedsongs");
     await suggestedSongCollection.deleteMany({});
     await suggestedSongCollection.insertMany(suggestedSongs);
+
+    const promptCollection = await mongoose.connection.db.collection("prompts");
+    await promptCollection.deleteMany({});
+    await promptCollection.insertMany(prompts);
 });
 
 /* Clear the database after each test */
 afterEach(async () => {
     await mongoose.connection.db.dropCollection("users");
     await mongoose.connection.db.dropCollection("suggestedsongs");
+    await mongoose.connection.db.dropCollection("prompts");
 });
 
 /* Stop the in-memory database after all tests */
@@ -241,6 +268,9 @@ describe("GET /:id/liked", () => {
     });
 });
 
+/**
+ * Tests for the PUT /:id/liked route
+ */
 describe("PUT /:id/liked", () => {
     /**
      * Tests that the PUT /:id/liked route successfully adds a song to the user's liked songs
@@ -302,6 +332,9 @@ describe("PUT /:id/liked", () => {
     });
 });
 
+/**
+ * Tests for the DELETE /:id/liked/:songId route
+ */
 describe("DELETE /:id/liked/:songId", () => {
     /**
      * Tests that the DELETE /:id/liked/:songId route successfully deletes a song from the user's liked songs
@@ -330,6 +363,58 @@ describe("DELETE /:id/liked/:songId", () => {
     it("returns 404 not found if the user is not found", (done) => {
         request(app)
         .delete("/000000000000000000000004/liked/000000000000000000000003")
+        .send()
+        .expect(404, done);
+    });
+});
+
+/**
+ * Tests for the GET /:id/suggested/today route
+ */
+describe("GET /:id/suggested/today", () => {
+    /**
+     * Tests that the GET /:id/suggested/today route successfully retrieves today's suggested song for the user
+     */
+    it("gets today's suggested song for the user", (done) => {
+        request(app)
+        .get("/000000000000000000000002/suggested/today")
+        .send()
+        .expect(200)
+        .end((err, res) => {
+            // If an error occurred, fail the test
+            if (err) {
+                return done(err);
+            }
+
+            const suggestedSong = res.body;
+            expect(suggestedSong).toHaveProperty("_id");
+            expect(suggestedSong.spotifySongId).toBe("song2Id");
+            expect(suggestedSong.caption).toBe("Song 2");
+            expect(suggestedSong.prompt).toBe("000000000000000000000005");
+            expect(suggestedSong.user).toBe("000000000000000000000002");
+            expect(suggestedSong.createdAt).toBe("2024-05-09T00:00:00.000Z");
+            expect(suggestedSong.updatedAt).toBe("2024-05-09T00:00:00.000Z");
+
+            return done();
+        });
+    });
+
+    /**
+     * Tests that the GET /:id/suggested/today route returns 404 not found if the user has no suggested songs for today
+     */
+    it("returns 404 not found if the user has no suggested songs for today", (done) => {
+        request(app)
+        .get("/000000000000000000000001/suggested/today")
+        .send()
+        .expect(404, done);
+    });
+
+    /**
+     * Tests that the GET /:id/suggested/today route returns 404 not found if the user is not found
+     */
+    it("returns 404 not found if the user is not found", (done) => {
+        request(app)
+        .get("/000000000000000000000004/suggested/today")
         .send()
         .expect(404, done);
     });
