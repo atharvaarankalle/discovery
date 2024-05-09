@@ -12,8 +12,6 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
 
 const ProfilePage = () => {
   const { currentUserId, setCurrentPreviewSong } = useContext(AppContext);
-  // User for testing
-  // const currentUserId = "663b83b5e21bb2bb97d23a0a";
 
   const { data: userData } = useGet<User>({
     url: `${API_BASE_URL}/user/${currentUserId}`,

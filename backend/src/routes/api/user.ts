@@ -112,7 +112,8 @@ router.get(
 
         try {
           const songData = await getTrackBySpotifyId(spotifySongId);
-          return res.json(songData);
+
+          return songData;
         } catch (error) {
           res.status(500).json();
         }
