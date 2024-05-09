@@ -68,10 +68,10 @@ afterAll(async () => {
     await mongod.stop();
 });
 
-/**
- * Tests that the POST / route successfully creates a new user
- */
 describe("POST /", () => {
+    /**
+     * Tests that the POST / route successfully creates a new user
+     */
     it("creates a new user", (done) => {
         request(app)
             .post("/")
@@ -107,10 +107,10 @@ describe("POST /", () => {
     });
 });
 
-/**
- * Tests that the GET /:id route successfully retrieves a single user
- */
 describe("GET /:id", () => {
+    /**
+     * Tests that the GET /:id route successfully retrieves a single user
+     */
     it("gets a single user", (done) => {
         request(app)
         .get("/000000000000000000000003")
@@ -135,5 +135,15 @@ describe("GET /:id", () => {
 
             return done();
         });
+    });
+
+    /**
+     * Tests that the GET /:id route returns a 404 if the user is not found
+     */
+    it("returns a 404 if the user is not found", (done) => {
+        request(app)
+        .get("/000000000000000000000004")
+        .send()
+        .expect(404, done);
     });
 });
