@@ -10,6 +10,7 @@ import { colors } from "../theme";
 import { SongData } from "../utils/interfaces";
 import useGet from "../utils/useGet";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { useNavigate } from "react-router-dom";
 
 /**
  * This function searches the Spotify library for songs that matches the string given.
@@ -91,6 +92,8 @@ export const PromptPage = () => {
 
   const baseURL = import.meta.env.VITE_API_BASE_URL;
 
+  const navigate = useNavigate();
+
   const { data: existingResponse, isLoading: isExistingLoading } =
     useGet<string>({
       url: `${baseURL}/prompt/latest`,
@@ -160,8 +163,10 @@ export const PromptPage = () => {
 
   //Confirm quit and takees the user to another page
   const handleConfirmQuit = () => {
+
     handleCloseDialog();
-    // Additional actions to quit goes here
+    navigate('../discover');
+
   };
 
   //Put away drawer if searchbar is empty
