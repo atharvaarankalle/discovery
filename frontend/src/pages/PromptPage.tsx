@@ -44,7 +44,7 @@ async function searchSongs(
 
 /**
  * This function takes in a string and optionally a date to save the prompt to the database.
- * Id no date is given, it will be saved under today's date.
+ * If no date is given, it will be saved under today's date.
  * @param promptText The prompt to be saved
  * @param date A date or null for today's date
  */
@@ -70,7 +70,7 @@ async function savePrompt(promptText: string, date: Date | null) {
  * @returns The prompt page to be rendered
  */
 export const PromptPage = () => {
-  const mockTrackData = {
+  const defaultTrackData = {
     id: "4kiVGEOrzWmEUCxXU21rtN",
     songTitle: "John The Fisherman",
     artists: "Primus",
@@ -87,7 +87,7 @@ export const PromptPage = () => {
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [songs, setSongs] = useState([]);
   const [debouncedValue, setDebouncedValue] = useState("");
-  const [displayedSong, setDisplayedSong] = useState<SongData>(mockTrackData);
+  const [displayedSong, setDisplayedSong] = useState<SongData>(defaultTrackData);
 
   const baseURL = import.meta.env.VITE_API_BASE_URL;
 
@@ -200,7 +200,7 @@ export const PromptPage = () => {
                 height: "35rem",
               }}
             >
-              <Typography variant="body2" sx={{ color: colors.peach }}>
+              <Typography variant="subtitle1" sx={{ color: colors.peach }}>
                 Search for a track that best describes the prompt above
               </Typography>
             </Box>
