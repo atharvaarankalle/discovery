@@ -6,15 +6,6 @@ import generate from "./openAI";
 
 const router: Router = express.Router();
 
-interface DataObject {
-    _id: string;
-    prompt: string;
-    date: string;
-    createdAt: string;
-    updatedAt: string;
-    __v: number;
-  }
-
 /**
  * GET / - Call ChatGPT API to generate a new prompt.
  */

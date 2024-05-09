@@ -8,6 +8,7 @@ import { SongSelectionContainer } from "../components/SongCardPaginationContaine
 import axios from "axios";
 import { colors } from "../theme";
 import { SongData } from "../utils/interfaces";
+import useGet from "../utils/useGet";
 
 /**
  * This function searches the Spotify library for songs that matches the string given.
@@ -78,17 +79,43 @@ export const PromptPage = () => {
   }
   
 
-  const [prompt, setPrompt] = useState("   ");
+  const [prompt, setPrompt] = useState<String>("");
   const [currentInput, setCurrentInput] = useState('');
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [songs, setSongs] = useState([]);
   const [debouncedValue, setDebouncedValue] = useState("");
   const [displayedSong, setDisplayedSong] = useState<SongData>(mockTrackData);
+ 
+  const baseURL = import.meta.env.VITE_API_BASE_URL;
 
-  useEffect(()=> {
-    handlePrompt();
-  }, []);
+  useEffect(()=>{handlePrompt()},[]);
+
+  const {
+      data: existingResponse
+  } = useGet<String>({
+      url: `${baseURL}/prompt/latest`
+  });
+
+  const {
+    data: newResponse
+  } = useGet<String>({
+      url: `${baseURL}/prompt`
+  });
+
+
+  const handlePrompt = () => {
+    if(existingResponse) {
+      console.log(existingResponse)
+      setPrompt(existingResponse);
+    } else {
+      if(newResponse) {
+        console.log(newResponse)
+        setPrompt(newResponse);
+        savePrompt(newResponse, null);
+      }
+    }}
+  
 
   //Using debounce to limit the amount of API calls
   useEffect(() => {
@@ -143,32 +170,9 @@ export const PromptPage = () => {
   };
   
 
-  
-  //Retrieve the prompt using axios
-  const handlePrompt = async () => {
-    try {
-      const baseURL = import.meta.env.VITE_API_BASE_URL;
-      const existingResponse = await axios.get(`${baseURL}/prompt/latest`);
-      
-      if(existingResponse.data) {
-        setPrompt(existingResponse.data);
-      } else {
-        const response = await axios.get(`${baseURL}/prompt`);
-          if (response.status !== 200) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          setPrompt(response.data);
-          savePrompt(response.data, null);
-      }
-
-    } catch (error) {
-        console.error('There was a problem fetching the message:', error);
-    }
-  };
-
   return (
     <div>
-      <Typography variant="h2" sx={{width: `calc(100vw - 37rem)`}}>{prompt}</Typography>
+      <Typography variant="h2" sx={{width: `calc(100vw - 37rem)`}}>{existingResponse? existingResponse:newResponse}</Typography>
       <Box>
         <Box sx={{marginY: 1, width: `calc(100vw - 38rem)`, height: '80%', overflowY: 'auto'}}>
           <Searchbar onInputChange={setCurrentInput}/>
