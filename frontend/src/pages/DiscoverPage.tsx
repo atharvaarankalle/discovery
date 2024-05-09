@@ -31,7 +31,7 @@ const DiscoverPage = () => {
   const { isLoading: isFeedLoading, data: feedData } = useGet<
     SongSuggestionData[]
   >({
-    url: `${API_BASE_URL}/feed?date=2024-05-05`,
+    url: `${API_BASE_URL}/feed?`,
   });
   const songs = feedData === null ? [] : feedData;
 
@@ -44,9 +44,7 @@ const DiscoverPage = () => {
 
   return (
     <StyledDiscoverContainer>
-      {todaysSongSuggestionData || isSuggestionLoading ? (
-        <DiscoverPageHeader songData={todaysSongSuggestion} />
-      ) : (
+      {isSuggestionLoading ? (
         <Box
           sx={{
             display: "flex",
@@ -57,8 +55,10 @@ const DiscoverPage = () => {
         >
           <LoadingSpinner />
         </Box>
+      ) : (
+        <DiscoverPageHeader songData={todaysSongSuggestion} />
       )}
-      {isFeedLoading || !feedData ? (
+      {isFeedLoading ? (
         <Box
           sx={{
             display: "flex",
