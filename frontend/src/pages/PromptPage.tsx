@@ -143,33 +143,20 @@ export const PromptPage = () => {
   };
 
   return (
-    // <<<<<<< HEAD
-    //     <Box
-    //       sx={{
-    //         marginY: 1,
-    //         width: `calc(100vw - 33.5rem)`,
-    //         height: "calc(100vh - 260px)", // SUBJECT TO CHANGE
-    //         overflowY: "scroll",
-    //         overflowX: "clip",
-    //       }}
-    //     >
-    //       {isExistingLoading || isNewLoading ? (
-    //         <LoadingSpinner />
-    //       ) : (
-    //         <Typography variant="h2" sx={{ width: `calc(100vw - 37rem)` }}>
-    //           {prompt}
-    //         </Typography>
-    //       )}
-    // =======
-    <Box>
+    <Box
+      sx={{
+        marginY: 1,
+        width: `calc(100vw - 33.5rem)`,
+        height: "calc(100vh - 300px)", // SUBJECT TO CHANGE
+        overflowY: "scroll",
+        overflowX: "clip",
+      }}
+    >
       <Box>
         <Box
           sx={{
-            marginY: 1,
-            width: `calc(100vw - 33.5rem)`,
-            height: "calc(100vh - 260px)", // SUBJECT TO CHANGE
-            overflowY: "scroll",
-            overflowX: "clip",
+            mr: "0.5rem",
+            mb: "100px",
           }}
         >
           <Searchbar onInputChange={setCurrentInput} />
@@ -179,7 +166,7 @@ export const PromptPage = () => {
               sx={{
                 display: "flex",
                 justifyContent: "center",
-                height: "35rem",
+                height: "3rem",
               }}
             >
               <Typography variant="subtitle1" sx={{ color: colors.peach }}>
