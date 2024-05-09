@@ -14,6 +14,8 @@ const StyledBox = styled(Box)(({ theme }) => ({
   backgroundRepeat: "no-repeat",
   backgroundSize: "cover",
   borderRadius: "1.25rem",
+  width: "calc(100% - 6px)",
+  marginLeft: "3px",
 }));
 
 /* Prop types for the DiscoverPageHeader component for clarity */
@@ -36,12 +38,7 @@ const DiscoverPageHeader = ({
 
   return (
     <StyledBox>
-      <Stack
-        spacing={3}
-        p="1.25rem"
-        alignItems="center"
-        justifyContent="center"
-      >
+      <Stack spacing={2} p="2rem" alignItems="center" justifyContent="center">
         <CustomTypography
           variant="h3"
           sx={{

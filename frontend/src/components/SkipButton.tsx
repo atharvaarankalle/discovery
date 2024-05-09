@@ -1,8 +1,8 @@
 import { Button } from "@mui/material";
-import SkipNextIcon from '@mui/icons-material/SkipNext';
+import SkipNextIcon from "@mui/icons-material/SkipNext";
 
 interface SkipButtonProps {
-    onOpen: () => void; // Function type for event handling
+  onOpen: () => void; // Function type for event handling
 }
 
 /**
@@ -11,13 +11,18 @@ interface SkipButtonProps {
  * @returns The 'Skip' button with the skip icon.
  */
 export const SkipButton: React.FC<SkipButtonProps> = ({ onOpen }) => {
-    return (
-        <Button 
-            variant="underlined" 
-            color="pink" 
-            onClick={onOpen}
-            >
-            Skip <SkipNextIcon/>
-        </Button>
-    );
+  return (
+    <Button
+      variant="underlined"
+      color="pink"
+      onClick={onOpen}
+      sx={{
+        position: "absolute",
+        bottom: "1rem",
+        left: "3rem",
+      }}
+    >
+      Skip <SkipNextIcon />
+    </Button>
+  );
 };

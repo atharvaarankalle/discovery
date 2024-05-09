@@ -2,6 +2,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { Box, styled } from "@mui/material";
 import { loggedInBackground } from "../theme";
+import { MusicPlayer } from "../components/MusicPlayer.tsx";
 import { AppContext } from "../AppContextProvider";
 import { useContext } from "react";
 
@@ -23,9 +24,10 @@ const UserAppBase = () => {
         <LoggedInBackground>
           <NavBar />
           {/* adding spacing around all child elements */}
-          <Box m={"3rem"}>
+          <Box marginX={"3rem"}>
             <Outlet />
           </Box>
+          <MusicPlayer />
         </LoggedInBackground>
       ) : (
         <Navigate to="/login" />

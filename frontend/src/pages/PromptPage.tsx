@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import { Searchbar } from "../components/Searchbar";
 import { SkipButton } from "../components/SkipButton";
@@ -9,6 +9,7 @@ import axios from "axios";
 import { colors } from "../theme";
 import { SongData } from "../utils/interfaces";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../AppContextProvider.tsx";
 
 /**
  * This function searches the Spotify library for songs that matches the string given.
@@ -20,7 +21,7 @@ import { useNavigate } from "react-router-dom";
 async function searchSongs(
   query: string,
   numSongs: number,
-  page: number
+  page: number,
 ): Promise<any> {
   try {
     const baseURL = import.meta.env.VITE_API_BASE_URL;
@@ -67,8 +68,13 @@ export const PromptPage = () => {
   const [debouncedValue, setDebouncedValue] = useState("");
   const [displayedSong, setDisplayedSong] =
     useState<SongData>(defaultTrackData);
+  const { setCurrentPreviewSong } = useContext(AppContext);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    checkDrawer();
+  }, [currentInput]);
 
   //Checks if there is an existing prompt for the day, otherwise a new prompt is created and saved
   useEffect(() => {
@@ -116,12 +122,14 @@ export const PromptPage = () => {
     if (songData !== null) {
       setDisplayedSong(songData);
       setOpenDrawer(true);
+      setCurrentPreviewSong(songData);
     } else {
       setOpenDrawer(false);
+      setCurrentPreviewSong(null);
     }
   };
 
-  //Confirm quit and takees the user to another page
+  //Confirm quit and takes the user to another page
   const handleConfirmQuit = () => {
     handleCloseDialog();
     navigate("../discover");
@@ -135,14 +143,20 @@ export const PromptPage = () => {
   };
 
   return (
-    <div>
+    <Box
+      sx={{
+        marginY: 1,
+        width: `calc(100vw - 33.5rem)`,
+        height: "calc(100vh - 300px)", // SUBJECT TO CHANGE
+        overflowY: "scroll",
+        overflowX: "clip",
+      }}
+    >
       <Box>
         <Box
           sx={{
-            marginY: 3,
-            width: `calc(100vw - 38rem)`,
-            height: "80%",
-            overflowY: "auto",
+            mr: "0.5rem",
+            mb: "100px",
           }}
         >
           <Searchbar onInputChange={setCurrentInput} />
@@ -152,7 +166,7 @@ export const PromptPage = () => {
               sx={{
                 display: "flex",
                 justifyContent: "center",
-                height: "35rem",
+                height: "3rem",
               }}
             >
               <Typography variant="subtitle1" sx={{ color: colors.peach }}>
@@ -167,7 +181,6 @@ export const PromptPage = () => {
           )}
         </Box>
       </Box>
-      <SkipButton onOpen={handleOpenDialog} />
       <ConfirmationDialog
         open={openDialog}
         onClose={handleCloseDialog}
@@ -178,7 +191,8 @@ export const PromptPage = () => {
         toggleDrawer={handleDrawer}
         songData={displayedSong}
       />
-    </div>
+      <SkipButton onOpen={handleOpenDialog} />
+    </Box>
   );
 };
 

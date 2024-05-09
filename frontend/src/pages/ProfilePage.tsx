@@ -36,71 +36,69 @@ const ProfilePage = () => {
   };
 
   return (
-    <>
-      <div style={{ height: "calc(100vh - 64px)", overflowY: "auto" }}>
+    <Box sx={{ height: "70vh", overflowY: "auto" }}>
+      <Typography
+        variant="h3"
+        style={{ marginBottom: "20px", letterSpacing: "0.14em" }}
+      >
+        PROFILE
+      </Typography>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          marginBottom: "40px",
+        }}
+      >
+        <Avatar
+          src={user?.profilePic}
+          style={{
+            width: "200px",
+            height: "200px",
+            objectFit: "cover",
+            borderRadius: "50%",
+            marginRight: "60px",
+          }}
+        />
+        <div>
+          <Typography variant="h1">{user?.displayName}</Typography>
+          <Typography variant="subtitle1">
+            Discovering since {signupDate}
+          </Typography>
+        </div>
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          marginBottom: "10vh",
+        }}
+      >
         <Typography
           variant="h3"
           style={{ marginBottom: "20px", letterSpacing: "0.14em" }}
         >
-          PROFILE
+          DISCOVERED SONGS
         </Typography>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            marginBottom: "40px",
-          }}
-        >
-          <Avatar
-            src={user?.profilePic}
-            style={{
-              width: "200px",
-              height: "200px",
-              objectFit: "cover",
-              borderRadius: "50%",
-              marginRight: "60px",
+        {isLikedLoading ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
             }}
-          />
-          <div>
-            <Typography variant="h1">{user?.displayName}</Typography>
-            <Typography variant="subtitle1">
-              Discovering since {signupDate}
-            </Typography>
-          </div>
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            marginBottom: "350px",
-          }}
-        >
-          <Typography
-            variant="h3"
-            style={{ marginBottom: "20px", letterSpacing: "0.14em" }}
           >
-            DISCOVERED SONGS
-          </Typography>
-          {isLikedLoading ? (
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              <LoadingSpinner />
-            </Box>
-          ) : (
-            <SavedSongsContainer
-              songs={likedSongs}
-              onSongCardClick={handleSongCardClick}
-            />
-          )}
-          <MusicPlayer />
-        </div>
+            <LoadingSpinner />
+          </Box>
+        ) : (
+          <SavedSongsContainer
+            songs={likedSongs}
+            onSongCardClick={handleSongCardClick}
+          />
+        )}
+        <MusicPlayer />
       </div>
-    </>
+    </Box>
   );
 };
 

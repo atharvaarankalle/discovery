@@ -63,7 +63,7 @@ export const SongSelectionContainer = ({
       songs={songs}
       songsPerPage={6}
       songCardType="large"
-      height="35rem"
+      height={songs && songs.length > 0 ? "35rem" : "auto"}
       noDataMessage="Loading..."
       onSongCardClick={onSongCardClick}
     />
@@ -131,7 +131,6 @@ const SongCardContainer = ({
    * @param pageNumber: number of the page selected by the click event
    */
   const handleChangePage = (e: ChangeEvent<unknown>, pageNumber: number) => {
-    console.log(e.type); // event must be used or else error
     setPageContents(getSongsToDisplay(pageNumber));
     setCurrentPage(pageNumber);
   };

@@ -2,10 +2,10 @@ import {
   AppBar,
   IconButton,
   Stack,
+  styled,
   Theme,
   Toolbar,
   Typography,
-  styled,
   useTheme,
 } from "@mui/material";
 import { DiscoveryLogo } from "./Logos";
@@ -13,11 +13,12 @@ import LocalFireDepartmentTwoToneIcon from "@mui/icons-material/LocalFireDepartm
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import PriorityHighTwoToneIcon from "@mui/icons-material/PriorityHighTwoTone";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../AppContextProvider";
 import NavBarDropdownMenu from "./NavBarDropdownMenu";
 import StyledToolTip from "./StyledTooltip";
 import CustomTypography from "./CustomTypography";
+import { ConfirmationDialog } from "./ConfirmDialog.tsx";
 import useGet from "../utils/useGet";
 import { SongData, User } from "../utils/interfaces";
 import axios from "axios";
@@ -51,6 +52,7 @@ const NavBar = () => {
   const location = useLocation();
   const theme: Theme = useTheme();
   const navigate = useNavigate();
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   // Getting current user details
   const { currentUserId } = useContext(AppContext);
@@ -88,6 +90,7 @@ const NavBar = () => {
       console.error("Failed to save prompt");
     }
   }
+
   const { data: existingPrompt } = useGet<{ prompt: string; id: string }>({
     url: `${API_BASE_URL}/prompt/latest`,
   });
@@ -131,9 +134,21 @@ const NavBar = () => {
   const handleLogoClick = () => {
     if (currentPage === "Discover") {
       window.location.reload();
+    } else if (currentPage === "Prompt") {
+      // ask user if they are sure they want to skip
+      setOpenDialog(true);
     } else {
       navigate("/user/discover");
     }
+  };
+
+  // close skip dialog
+  const handleCloseDialog = () => setOpenDialog(false);
+
+  // Confirm to skip prompt and takes the user to another page
+  const handleConfirmQuit = () => {
+    handleCloseDialog();
+    navigate("/user/discover");
   };
 
   return (
@@ -175,7 +190,7 @@ const NavBar = () => {
           direction="row"
           gap={6}
           alignItems="center"
-          sx={{ paddingRight: "0.5rem" }}
+          sx={{ paddingRight: currentPage !== "Prompt" ? "0.5rem" : "28em" }}
         >
           <Stack direction="row" alignItems="center">
             {currentUser?.hasSubmitted ? (
@@ -204,12 +219,19 @@ const NavBar = () => {
         </Stack>
       </Toolbar>
       {currentPage === "Prompt" && (
-        <Stack direction="column" sx={{ padding: "1rem 0 0 2.5rem" }}>
+        <Stack direction="column" sx={{ pl: "2.5rem" }}>
           <Typography variant="h4">TODAY'S DISCO:</Typography>
           <CustomTypography variant="h2" num_lines={1}>
             {promptOfTheDay}
           </CustomTypography>
         </Stack>
+      )}
+      {currentPage === "Prompt" && (
+        <ConfirmationDialog
+          open={openDialog}
+          onClose={handleCloseDialog}
+          onConfirm={handleConfirmQuit}
+        />
       )}
     </StyledAppBar>
   );

@@ -44,10 +44,10 @@ const StyledCard = styled(Card)(({ theme }) => ({
   display: "flex",
   justifyContent: "space-between",
   position: "relative",
-  backgroundColor: `${theme.palette.primary.main}80`, // adds 50% opacity to colour hexcode
+  backgroundColor: `${theme.palette.darkestBlue.main}80`, // adds 50% opacity to colour hexcode
   transition: "background-color 0.3s ease",
   "&:hover": {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: `${theme.palette.darkestBlue.main}BF`, // adds 75% opacity to colour hexcode
     " .secondImage ": {
       transform: "translateX(0%)",
     },
@@ -69,13 +69,13 @@ export interface SongCardBasePropTypes extends CardProps {
 
 /**
  * SongCardBase Component
- * 
-@prop songData: an object containing song data ({@link SongData})
-@prop type: required prop with value of "small", "medium" or "large", indicating what SongCard type to render
-@prop onCardClick: the onClick function for the card area. optional prop if type='small'
-@prop isLiked: boolean value to set the initial state of the like button, false by default unless specified true
-@prop isSelected: boolean value to set the selected state of the card, false by default
-**/
+ *
+ @prop songData: an object containing song data ({@link SongData})
+ @prop type: required prop with value of "small", "medium" or "large", indicating what SongCard type to render
+ @prop onCardClick: the onClick function for the card area. optional prop if type='small'
+ @prop isLiked: boolean value to set the initial state of the like button, false by default unless specified true
+ @prop isSelected: boolean value to set the selected state of the card, false by default
+ **/
 const SongCard = ({
   songData,
   type,
@@ -117,7 +117,9 @@ const SongCard = ({
       sx={{
         height: `${cardHeight}`,
         // adding styles to apply to overall card when selected or not selected
-        backgroundColor: isSelected ? theme.palette.primary.main : "auto",
+        backgroundColor: isSelected
+          ? `${theme.palette.darkestBlue.main}BF`
+          : "auto",
         borderRight: isSelected
           ? `0.5rem solid ${theme.palette.secondary.main}`
           : "none",
