@@ -31,7 +31,7 @@ const DiscoverPage = () => {
   const { isLoading: isFeedLoading, data: feedData } = useGet<
     SongSuggestionData[]
   >({
-    url: `${API_BASE_URL}/feed?`,
+    url: `${API_BASE_URL}/feed`,
   });
   const songs = feedData === null ? [] : feedData;
 
