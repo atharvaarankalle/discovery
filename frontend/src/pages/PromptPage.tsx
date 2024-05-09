@@ -100,6 +100,9 @@ export const PromptPage = () => {
     url: `${baseURL}/prompt`,
   });
 
+  useEffect(()=>{checkDrawer()},[currentInput])
+
+  //Checks if there is an existing prompt for the day, otherwise a new prompt is created and saved
   useEffect(() => {
     if (existingResponse) {
       setPrompt(existingResponse);
@@ -161,6 +164,13 @@ export const PromptPage = () => {
     // Additional actions to quit goes here
   };
 
+  //Put away drawer if searchbar is empty
+  const checkDrawer = () => {
+    if(!currentInput || currentInput === "") {
+      setOpenDrawer(false);
+    }
+  }
+
   return (
     <div>
       {isExistingLoading || isNewLoading ? (
@@ -174,7 +184,7 @@ export const PromptPage = () => {
       <Box>
         <Box
           sx={{
-            marginY: 1,
+            marginY: 3,
             width: `calc(100vw - 38rem)`,
             height: "80%",
             overflowY: "auto",

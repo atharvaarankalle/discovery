@@ -1,5 +1,5 @@
-import { Typography, ThemeProvider } from "@mui/material";
-import { theme } from "../theme";
+import { Typography } from "@mui/material";
+
 import { SavedSongsContainer } from "../components/SongCardPaginationContainers";
 import { MusicPlayer } from "../components/MusicPlayer";
 
