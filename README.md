@@ -28,7 +28,10 @@ to see suggestions in their feeds while using the app.
 - **Save Discovered Songs**: The user will be able to "like" a song from their Discovery Feed and will be able to access
   these songs from their user profile.
 
-_DISCLAIMER: discOvery is not supported for small screens at the moment (e.g. mobile devices, tablets, small windows)_
+#### Limitations
+
+- No supported for small screens at the moment (e.g. mobile devices, tablets, small windows)
+- Crrently not supported on Safari
 
 ## Running the Project ☆ﾐ(o*･ω･)ﾉ
 
