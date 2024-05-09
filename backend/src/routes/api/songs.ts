@@ -75,11 +75,11 @@ const formatResponseData = (trackData: any) => {
  * Response:
  * An array of objects, each containing the following information about a song:
  * - id: The Spotify ID of the song
- * - title: The title of the song
- * - artist: The artist(s) of the song
+ * - songTitle: The title of the song
+ * - artists: The artist(s) of the song
  * - album: The album of the song
- * - albumArt: The URL of the album art for the song
- * - previewUrl: The URL of the song preview on Spotify (if available)
+ * - albumArtSrc: The URL of the album art for the song
+ * - songAudioSrc: The URL of the song preview on Spotify (if available)
  * - openInSpotifyUrl: The URL to open the song in the Spotify app (if no preview URL is available)
  *
  * Response Codes:
