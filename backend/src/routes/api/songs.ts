@@ -15,7 +15,11 @@ let TOKEN_EXPIRATION_TIME: number = -1;
  * @param res The response object
  * @param next The next middleware function to call
  */
-const tokenMiddleware = async (req: Request, res: Response, next: any) => {
+export const spotifyTokenMiddleware = async (
+  req: Request,
+  res: Response,
+  next: any
+) => {
   if (!SPOTIFY_API_ACCESS_TOKEN || Date.now() >= TOKEN_EXPIRATION_TIME) {
     try {
       const { data } = await axios.post(
@@ -63,6 +67,41 @@ const formatResponseData = (trackData: any) => {
 };
 
 /**
+ * @function getTrackBySpotifyId
+ *
+ * Retrieves information about a song from the Spotify API based on the Spotify ID provided in the path parameters.
+ *
+ * Parameters:
+ * - spotifySongId: The Spotify ID of the song (required string)
+ *
+ * Response:
+ * A songData object containing the following information about the song:
+ * - id: The Spotify ID of the song
+ * - title: The title of the song
+ * - artist: The artist(s) of the song
+ * - album: The album of the song
+ * - albumArt: The URL of the album art for the song
+ * - previewUrl: The URL of the song preview on Spotify (if available)
+ * - openInSpotifyUrl: The URL to open the song in the Spotify app (if no preview URL is available)
+ *
+ */
+export const getTrackBySpotifyId = async (spotifySongId: string) => {
+  try {
+    const response = await axios.get(
+      `https://api.spotify.com/v1/tracks/${spotifySongId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${SPOTIFY_API_ACCESS_TOKEN}`,
+        },
+      }
+    );
+    return formatResponseData(response.data);
+  } catch (error: any) {
+    return error;
+  }
+};
+
+/**
  * GET /api/songs/search
  *
  * Searches for a certain number of songs from the Spotify API based on a search query provided in the query parameters.
@@ -88,125 +127,68 @@ const formatResponseData = (trackData: any) => {
  * - 401 Unauthorized: The Spotify API access token is invalid
  * - 404 Not Found: No songs were found matching the search query
  */
-router.get("/search", tokenMiddleware, async (req: Request, res: Response) => {
-  // Get values from query parameters passed from the frontend
-  const searchQuery: string | undefined =
-    req.query.searchQuery && String(req.query.searchQuery);
-  const numSongs: number = Number(req.query.numSongs) || 6;
-  const page: number | undefined = req.query.page
-    ? Number(req.query.page)
-    : undefined;
+router.get(
+  "/search",
+  spotifyTokenMiddleware,
+  async (req: Request, res: Response) => {
+    // Get values from query parameters passed from the frontend
+    const searchQuery: string | undefined =
+      req.query.searchQuery && String(req.query.searchQuery);
+    const numSongs: number = Number(req.query.numSongs) || 6;
+    const page: number | undefined = req.query.page
+      ? Number(req.query.page)
+      : undefined;
 
-  // If no song title or page number is provided, send a 400 Bad Request response
-  if (!searchQuery || !page) {
-    res
-      .status(400)
-      .json({ error: "Please provide a song title and page number" });
-    return;
-  }
-
-  try {
-    // Calculate the offset for the search query based on the page number
-    const searchOffset = (page - 1) * numSongs;
-
-    const response = await axios.get("https://api.spotify.com/v1/search", {
-      params: {
-        q: searchQuery,
-        type: "track",
-        limit: numSongs,
-        offset: searchOffset,
-      },
-      headers: {
-        Authorization: `Bearer ${SPOTIFY_API_ACCESS_TOKEN}`,
-      },
-    });
-
-    // If no songs are found matching the search query, send a 404 Not Found response
-    if (response.data.tracks.items.length === 0) {
+    // If no song title or page number is provided, send a 400 Bad Request response
+    if (!searchQuery || !page) {
       res
-        .status(404)
-        .json({ error: "No songs found matching the search query" });
+        .status(400)
+        .json({ error: "Please provide a song title and page number" });
       return;
     }
 
-    // Extract the relevant information from the Spotify API response and send it back to the frontend
-    const responseData = response.data.tracks.items.map((track: any) => {
-      return formatResponseData(track);
-    });
+    try {
+      // Calculate the offset for the search query based on the page number
+      const searchOffset = (page - 1) * numSongs;
 
-    res.status(200).json(responseData);
-  } catch (error: any) {
-    switch (error.response.data.error.status) {
-      case 401:
-        res.status(401).json({ message: "Unauthorized" });
-        return;
-      default:
-        res
-          .status(error.response.data.error.status)
-          .json({ message: error.message });
-    }
-  }
-});
-
-/**
- * GET /api/songs/:id
- *
- * Retrieves information about a song from the Spotify API based on the Spotify ID provided in the path parameters.
- *
- * Path Parameters:
- * - id: The Spotify ID of the song (required)
- *
- * Response:
- * An object containing the following information about the song:
- * - id: The Spotify ID of the song
- * - title: The title of the song
- * - artist: The artist(s) of the song
- * - album: The album of the song
- * - albumArt: The URL of the album art for the song
- * - previewUrl: The URL of the song preview on Spotify (if available)
- * - openInSpotifyUrl: The URL to open the song in the Spotify app (if no preview URL is available)
- *
- * Response Codes:
- * - 200 OK: Successful request
- * - 400 Bad Request: Invalid Spotify ID
- * - 401 Unauthorized: The Spotify API access token is invalid
- * - 404 Not Found: The song with the specified ID was not found
- */
-router.get("/:id", tokenMiddleware, async (req: Request, res: Response) => {
-  const spotifySongId = req.params.id;
-
-  try {
-    const response = await axios.get(
-      `https://api.spotify.com/v1/tracks/${spotifySongId}`,
-      {
+      const response = await axios.get("https://api.spotify.com/v1/search", {
+        params: {
+          q: searchQuery,
+          type: "track",
+          limit: numSongs,
+          offset: searchOffset,
+        },
         headers: {
           Authorization: `Bearer ${SPOTIFY_API_ACCESS_TOKEN}`,
         },
-      }
-    );
+      });
 
-    const responseData = formatResponseData(response.data);
-
-    res.status(200).json(responseData);
-  } catch (error: any) {
-    switch (error.response.data.error.status) {
-      case 400:
-        res.status(400).json({ message: "Invalid Spotify ID" });
-        break;
-      case 401:
-        res.status(401).json({ message: "Unauthorized" });
-        break;
-      case 404:
+      // If no songs are found matching the search query, send a 404 Not Found response
+      if (response.data.tracks.items.length === 0) {
         res
           .status(404)
-          .json({ message: "Song with the specified ID not found" });
-        break;
-      default:
-        res
-          .status(error.response.data.error.status)
-          .json({ message: error.message });
+          .json({ error: "No songs found matching the search query" });
+        return;
+      }
+
+      // Extract the relevant information from the Spotify API response and send it back to the frontend
+      const responseData = response.data.tracks.items.map((track: any) => {
+        return formatResponseData(track);
+      });
+
+      res.status(200).json(responseData);
+    } catch (error: any) {
+      switch (error.response.data.error.status) {
+        case 401:
+          res.status(401).json({ message: "Unauthorized" });
+          return;
+        default:
+          res
+            .status(error.response.data.error.status)
+            .json({ message: error.message });
+      }
     }
   }
-});
+);
 
 export default router;

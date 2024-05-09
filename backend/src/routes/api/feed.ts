@@ -7,12 +7,8 @@ import {
   SuggestedSong,
 } from "../../schemas/SuggestedSongSchema";
 import { getTodaysDate } from "../../utils/DateUtils";
-import axios from "axios";
-import dotenv from "dotenv";
 import { FeedEndpointResult } from "../../utils/interfaces";
-
-dotenv.config();
-const API_BASE_URL = process.env.API_BASE_URL ?? "https://localhost:3000/api";
+import { getTrackBySpotifyId, spotifyTokenMiddleware } from "./songs";
 
 const router: Router = express.Router();
 
@@ -31,6 +27,7 @@ type GetSuggestedSongsQueryParams = {
  */
 router.get(
   "/",
+  spotifyTokenMiddleware,
   async (
     req: Request<any, any, any, GetSuggestedSongsQueryParams>,
     res: Response
@@ -55,13 +52,10 @@ router.get(
             song as unknown as FeedEndpointResult;
 
           try {
-            const response = await axios.get(
-              `${API_BASE_URL}/songs/${spotifySongId}`
-            );
-
+            const songData = await getTrackBySpotifyId(spotifySongId);
             return {
               id: _id,
-              songData: response.data,
+              songData,
               username: user.displayName,
               caption,
               profilePictureSrc: user.profilePic,

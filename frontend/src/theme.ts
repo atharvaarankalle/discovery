@@ -62,6 +62,7 @@ export const colors = {
   darkestBlue: "#121229",
   white: "#FFFFFF",
   darkGrey: "#272727",
+  red: "#FF6464",
 };
 
 // commonly used styles
@@ -148,6 +149,10 @@ export const theme = createTheme({
     },
     darkGrey: {
       main: colors.darkGrey,
+      contrastText: colors.lightPeach,
+    },
+    error: {
+      main: colors.red,
       contrastText: colors.lightPeach,
     },
   },

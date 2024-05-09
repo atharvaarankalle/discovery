@@ -8,11 +8,7 @@ import {
 import { Schema } from "mongoose";
 import { Prompt } from "../../schemas/PromptSchema";
 import { compareDates, getTodaysDate } from "../../utils/DateUtils";
-import axios from "axios";
-import dotenv from "dotenv";
-
-dotenv.config();
-const API_BASE_URL = process.env.API_BASE_URL ?? "https://localhost:3000/api";
+import { getTrackBySpotifyId, spotifyTokenMiddleware } from "./songs";
 
 const router: Router = express.Router();
 
@@ -173,58 +169,62 @@ router.delete("/:id/liked/:songId", async (req: Request, res: Response) => {
  *
  * @returns JSON object for the suggested song entry
  */
-router.get("/:id/suggested/today", async (req: Request, res: Response) => {
-  try {
-    const userId = req.params.id;
-    const user: IUser | null = await User.findById(userId);
+router.get(
+  "/:id/suggested/today",
+  spotifyTokenMiddleware,
+  async (req: Request, res: Response) => {
+    try {
+      const userId = req.params.id;
+      const user: IUser | null = await User.findById(userId);
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    // Find the date of the last suggested song
-    if (user.suggestedSongs.length == 0) {
-      return res.status(404).json({ message: "User has no suggested songs" });
-    }
-    const lastSuggestedSongId =
-      user.suggestedSongs[user.suggestedSongs.length - 1];
-
-    const lastSuggestedSongEntry = await SuggestedSong.findById(
-      lastSuggestedSongId
-    );
-    if (!lastSuggestedSongEntry) {
-      return res
-        .status(404)
-        .json({ message: "Last suggested song is not found" });
-    }
-    // Get the date for the prompt
-    const lastPrompt = await Prompt.findById(lastSuggestedSongEntry.prompt);
-    const lastSuggestedSongDate = lastPrompt?.date as Date | Schema.Types.Date;
-
-    if (
-      compareDates({ date1: lastSuggestedSongDate, date2: getTodaysDate() })
-    ) {
-      const { spotifySongId } = lastSuggestedSongEntry;
-
-      try {
-        const response = await axios.get(
-          `${API_BASE_URL}/songs/${spotifySongId}`
-        );
-        return res.json(response.data);
-      } catch (error) {
-        res.status(500).json();
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
       }
-    } else {
-      return res
-        .status(404)
-        .json({ message: "Last suggested song is not from today" });
+
+      // Find the date of the last suggested song
+      if (user.suggestedSongs.length == 0) {
+        return res.status(404).json({ message: "User has no suggested songs" });
+      }
+      const lastSuggestedSongId =
+        user.suggestedSongs[user.suggestedSongs.length - 1];
+
+      const lastSuggestedSongEntry = await SuggestedSong.findById(
+        lastSuggestedSongId
+      );
+      if (!lastSuggestedSongEntry) {
+        return res
+          .status(404)
+          .json({ message: "Last suggested song is not found" });
+      }
+      // Get the date for the prompt
+      const lastPrompt = await Prompt.findById(lastSuggestedSongEntry.prompt);
+      const lastSuggestedSongDate = lastPrompt?.date as
+        | Date
+        | Schema.Types.Date;
+
+      if (
+        compareDates({ date1: lastSuggestedSongDate, date2: getTodaysDate() })
+      ) {
+        const { spotifySongId } = lastSuggestedSongEntry;
+
+        try {
+          const songData = await getTrackBySpotifyId(spotifySongId);
+          return res.json(songData);
+        } catch (error) {
+          res.status(500).json();
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ message: "Last suggested song is not from today" });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        message: `Error fetching user's today's suggested song: ${error}`,
+      });
     }
-  } catch (error) {
-    return res.status(500).json({
-      message: `Error fetching user's today's suggested song: ${error}`,
-    });
   }
-});
+);
 
 /**
  * PUT add a song to a user's suggested songs, and add new suggested song entry
