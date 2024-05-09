@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import express from "express";
 import request from "supertest";
+import { getTodaysDate } from "../../../utils/DateUtils";
 
 let mongod: MongoMemoryServer;
 const app = express();
@@ -50,8 +51,8 @@ const suggestedSongs = [
         caption: "Song 2",
         prompt: new mongoose.Types.ObjectId("000000000000000000000005"),
         user: new mongoose.Types.ObjectId("000000000000000000000002"),
-        createdAt: new Date("2024-05-09T00:00:00.000+00:00"),
-        updatedAt: new Date("2024-05-09T00:00:00.000+00:00")
+        createdAt: getTodaysDate(),
+        updatedAt: getTodaysDate()
     }
 ];
 
@@ -63,7 +64,7 @@ const prompts = [
     },
     {
         _id: new mongoose.Types.ObjectId("000000000000000000000005"),
-        date: new Date("2024-05-09T00:00:00.000+00:00"),
+        date: getTodaysDate(),
         prompt: "Prompt 2"
     }
 ];
@@ -392,8 +393,8 @@ describe("GET /:id/suggested/today", () => {
             expect(suggestedSong.caption).toBe("Song 2");
             expect(suggestedSong.prompt).toBe("000000000000000000000005");
             expect(suggestedSong.user).toBe("000000000000000000000002");
-            expect(suggestedSong.createdAt).toBe("2024-05-09T00:00:00.000Z");
-            expect(suggestedSong.updatedAt).toBe("2024-05-09T00:00:00.000Z");
+            expect(suggestedSong.createdAt).toBe(getTodaysDate().toISOString());
+            expect(suggestedSong.updatedAt).toBe(getTodaysDate().toISOString());
 
             return done();
         });
@@ -416,6 +417,47 @@ describe("GET /:id/suggested/today", () => {
         request(app)
         .get("/000000000000000000000004/suggested/today")
         .send()
+        .expect(404, done);
+    });
+});
+
+/**
+ * Tests for the PUT /:id/suggested route
+ */
+describe("PUT /:id/suggested", () => {
+    it("adds a song to the user's suggested songs, and adds a new suggested song entry", (done) => {
+        request(app)
+        .put("/000000000000000000000001/suggested")
+        .send({
+            spotifySongId: "song3Id",
+            caption: "An amazing song",
+            prompt: "000000000000000000000005"
+        })
+        .expect(200)
+        .end((err, res) => {
+            // If an error occurred, fail the test
+            if (err) {
+                return done(err);
+            }
+
+            const user = res.body;
+            expect(user.suggestedSongs.length).toBe(1);
+
+            return done();
+        });
+    });
+
+    /**
+     * Tests that the PUT /:id/suggested route returns 404 not found if the user is not found
+     */
+    it("returns 404 not found if the user is not found", (done) => {
+        request(app)
+        .put("/000000000000000000000004/suggested")
+        .send({
+            spotifySongId: "song3Id",
+            caption: "An amazing song",
+            prompt: "000000000000000000000005"
+        })
         .expect(404, done);
     });
 });
