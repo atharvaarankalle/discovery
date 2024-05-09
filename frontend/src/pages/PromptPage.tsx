@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import { Searchbar } from "../components/Searchbar";
 import { SkipButton } from "../components/SkipButton";
@@ -11,6 +11,7 @@ import { SongData } from "../utils/interfaces";
 import { useNavigate } from "react-router-dom";
 import useGet from "../utils/useGet";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { AppContext } from "../AppContextProvider.tsx";
 
 /**
  * This function searches the Spotify library for songs that matches the string given.
@@ -91,6 +92,7 @@ export const PromptPage = () => {
   const navigate = useNavigate();
   const [displayedSong, setDisplayedSong] =
     useState<SongData>(defaultTrackData);
+  const { setCurrentPreviewSong } = useContext(AppContext);
 
   const baseURL = import.meta.env.VITE_API_BASE_URL;
 
@@ -158,8 +160,10 @@ export const PromptPage = () => {
     if (songData !== null) {
       setDisplayedSong(songData);
       setOpenDrawer(true);
+      setCurrentPreviewSong(songData);
     } else {
       setOpenDrawer(false);
+      setCurrentPreviewSong(null);
     }
   };
 
