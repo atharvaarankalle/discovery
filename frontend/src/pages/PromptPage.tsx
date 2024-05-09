@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Box, Typography} from "@mui/material";
-import { Searchbar } from "../components/Searchbar"
+import { Box, Typography } from "@mui/material";
+import { Searchbar } from "../components/Searchbar";
 import { SkipButton } from "../components/SkipButton";
 import { ConfirmationDialog } from "../components/ConfirmDialog";
 import PromptSideDrawer from "../components/PromptSideDrawer";
@@ -9,6 +9,7 @@ import axios from "axios";
 import { colors } from "../theme";
 import { SongData } from "../utils/interfaces";
 import useGet from "../utils/useGet";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 /**
  * This function searches the Spotify library for songs that matches the string given.
@@ -17,26 +18,29 @@ import useGet from "../utils/useGet";
  * @param page The page number to display
  * @returns A list of song objects
  */
-async function searchSongs(query: string, numSongs: number, page: number): Promise<any> {
+async function searchSongs(
+  query: string,
+  numSongs: number,
+  page: number
+): Promise<any> {
   try {
     const baseURL = import.meta.env.VITE_API_BASE_URL;
 
     const response = await axios.get(`${baseURL}/songs/search`, {
-        params: {
-              searchQuery: query,
-              numSongs: numSongs,
-              page: page
-          }
-      });
-      // If the response is successful, return the data
-      return response.data; 
+      params: {
+        searchQuery: query,
+        numSongs: numSongs,
+        page: page,
+      },
+    });
+    // If the response is successful, return the data
+    return response.data;
   } catch (error) {
-      console.error('Failed to fetch songs with axios:', error);
-      // Return a default value in case of an error to keep the function's return type consistent
-      return [];
+    console.error("Failed to fetch songs with axios:", error);
+    // Return a default value in case of an error to keep the function's return type consistent
+    return [];
   }
 }
-
 
 /**
  * This function takes in a string and optionally a date to save the prompt to the database.
@@ -44,20 +48,19 @@ async function searchSongs(query: string, numSongs: number, page: number): Promi
  * @param promptText The prompt to be saved
  * @param date A date or null for today's date
  */
-async function savePrompt(promptText: String, date: Date | null) {
+async function savePrompt(promptText: string, date: Date | null) {
   try {
-      const baseURL = import.meta.env.VITE_API_BASE_URL;
-      const response = await axios.post(`${baseURL}/prompt/save`, {
-          prompt: promptText,
-          date: date
-      });
+    const baseURL = import.meta.env.VITE_API_BASE_URL;
+    const response = await axios.post(`${baseURL}/prompt/save`, {
+      prompt: promptText,
+      date: date,
+    });
 
-      console.log('Prompt saved successfully:', response.data);
+    console.log("Prompt saved successfully:", response.data);
   } catch (error) {
-      console.error('Failed to save prompt');
+    console.error("Failed to save prompt");
   }
 }
-
 
 /**
  * This prompt page ultilises the GPT API and the Spotify API to give a prompt
@@ -67,61 +70,50 @@ async function savePrompt(promptText: String, date: Date | null) {
  * @returns The prompt page to be rendered
  */
 export const PromptPage = () => {
-
   const mockTrackData = {
     id: "4kiVGEOrzWmEUCxXU21rtN",
     songTitle: "John The Fisherman",
     artists: "Primus",
     album: "They Can't All Be Zingers",
-    albumArtSrc: "https://i.scdn.co/image/ab67616d00001e02177b489f92c4157dd478916a",
+    albumArtSrc:
+      "https://i.scdn.co/image/ab67616d00001e02177b489f92c4157dd478916a",
     songAudioSrc: "https://open.spotify.com/track/4kiVGEOrzWmEUCxXU21rtN",
     openInSpotifyUrl: "https://open.spotify.com/track/4kiVGEOrzWmEUCxXU21rtN",
-  }
-  
+  };
 
-  const [prompt, setPrompt] = useState<String>("");
-  const [currentInput, setCurrentInput] = useState('');
+  const [prompt, setPrompt] = useState<string | null>(null);
+  const [currentInput, setCurrentInput] = useState("");
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [songs, setSongs] = useState([]);
   const [debouncedValue, setDebouncedValue] = useState("");
   const [displayedSong, setDisplayedSong] = useState<SongData>(mockTrackData);
- 
+
   const baseURL = import.meta.env.VITE_API_BASE_URL;
 
-  useEffect(()=>{handlePrompt()},[]);
+  const { data: existingResponse, isLoading: isExistingLoading } =
+    useGet<string>({
+      url: `${baseURL}/prompt/latest`,
+    });
 
-  const {
-      data: existingResponse
-  } = useGet<string>({
-      url: `${baseURL}/prompt/latest`
+  const { data: newResponse, isLoading: isNewLoading } = useGet<string>({
+    url: `${baseURL}/prompt`,
   });
 
-  const {
-    data: newResponse
-  } = useGet<string>({
-      url: `${baseURL}/prompt`
-  });
-
-
-  const handlePrompt = () => {
-    if(existingResponse) {
-      console.log(existingResponse)
+  useEffect(() => {
+    if (existingResponse) {
       setPrompt(existingResponse);
-    } else {
-      if(newResponse) {
-        console.log(newResponse)
-        setPrompt(newResponse);
-        savePrompt(newResponse, null);
-      }
-    }}
-  
+    } else if (newResponse) {
+      setPrompt(newResponse);
+      savePrompt(newResponse, null);
+    }
+  }, [existingResponse, newResponse]);
 
   //Using debounce to limit the amount of API calls
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedValue(currentInput);
-    }, 300); 
+    }, 300);
 
     return () => {
       clearTimeout(handler);
@@ -136,7 +128,7 @@ export const PromptPage = () => {
           const fetchedSongs = await searchSongs(debouncedValue, 50, 1);
           setSongs(fetchedSongs);
         } catch (error) {
-          console.error('Error fetching songs:', error);
+          console.error("Error fetching songs:", error);
           setSongs([]);
         }
       };
@@ -165,37 +157,62 @@ export const PromptPage = () => {
 
   //Confirm quit and takees the user to another page
   const handleConfirmQuit = () => {
-      handleCloseDialog();
-      // Additional actions to quit goes here
+    handleCloseDialog();
+    // Additional actions to quit goes here
   };
-  
 
   return (
     <div>
-      <Typography variant="h2" sx={{width: `calc(100vw - 37rem)`}}>{existingResponse? existingResponse:newResponse}</Typography>
+      {isExistingLoading || isNewLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <Typography variant="h2" sx={{ width: `calc(100vw - 37rem)` }}>
+          {prompt}
+        </Typography>
+      )}
+
       <Box>
-        <Box sx={{marginY: 1, width: `calc(100vw - 38rem)`, height: '80%', overflowY: 'auto'}}>
-          <Searchbar onInputChange={setCurrentInput}/>
+        <Box
+          sx={{
+            marginY: 1,
+            width: `calc(100vw - 38rem)`,
+            height: "80%",
+            overflowY: "auto",
+          }}
+        >
+          <Searchbar onInputChange={setCurrentInput} />
           {/* this switches between two boxes depending if there's anything in the search bar*/}
-          {(debouncedValue === '')? 
-            <Box sx={{display: 'flex', justifyContent: 'center', height: '35rem'}}>
-              <Typography variant="body2" sx={{color: colors.peach}}>
+          {debouncedValue === "" ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                height: "35rem",
+              }}
+            >
+              <Typography variant="body2" sx={{ color: colors.peach }}>
                 Search for a track that best describes the prompt above
               </Typography>
-            </Box>:
-              <SongSelectionContainer
-                songs={songs}
-                onSongCardClick={handleSongCardClick}
-                />}
+            </Box>
+          ) : (
+            <SongSelectionContainer
+              songs={songs}
+              onSongCardClick={handleSongCardClick}
+            />
+          )}
         </Box>
       </Box>
-      <SkipButton onOpen={handleOpenDialog}/>
+      <SkipButton onOpen={handleOpenDialog} />
       <ConfirmationDialog
-                open={openDialog}
-                onClose={handleCloseDialog}
-                onConfirm={handleConfirmQuit}
-            />
-      <PromptSideDrawer drawerOpen={openDrawer} toggleDrawer={handleDrawer} songData={displayedSong}/>
+        open={openDialog}
+        onClose={handleCloseDialog}
+        onConfirm={handleConfirmQuit}
+      />
+      <PromptSideDrawer
+        drawerOpen={openDrawer}
+        toggleDrawer={handleDrawer}
+        songData={displayedSong}
+      />
     </div>
   );
 };
