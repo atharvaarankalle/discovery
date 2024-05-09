@@ -1,6 +1,6 @@
 // current route: /api/prompt
 import express, { Request, Response, Router } from "express";
-import { Prompt } from "../../schemas/PromptSchema";
+import { IPrompt, Prompt } from "../../schemas/PromptSchema";
 import { getTodaysDate } from "../../utils/DateUtils";
 import generate from "./openAI";
 
@@ -77,6 +77,22 @@ router.get("/find/:id", async (req: Request, res: Response) => {
   } catch (error: any) {
     console.error("Error retrieving the prompt:", error);
     res.status(500).json({ message: error.message });
+  }
+});
+
+router.get("/latest", async (req: Request, res: Response) => {
+  try {
+    const date: Date = getTodaysDate();
+
+    const todayPrompt: IPrompt | null = await Prompt.findOne({ date });
+    if (!todayPrompt) {
+      return res.send(null);
+    } else {
+      return res.send({ prompt: todayPrompt.prompt, id: todayPrompt._id });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
   }
 });
 

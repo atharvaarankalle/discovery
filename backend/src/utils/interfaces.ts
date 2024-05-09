@@ -1,7 +1,3 @@
-/*
- * Commonly used interfaces for proptypes
- */
-
 /**
  * @interface SongData
  * * `id`: required string, uniquely identifies the song
@@ -24,28 +20,6 @@ export interface SongData {
 }
 
 /**
- * @interface User
- * * `id`: required string, the user document ID
- * * `displayName`: required string, the user's username
- * * `steakCount`: required number, the user's current streak count
- * * `likedSongs`: required array of strings, the songs (referenced by Spotify song ID) that the user has liked
- * * `suggestedSongs`: required array of strings, the songs (referenced by Spotify song ID) that the user has suggested
- * * `profilePic`: optional string, the url link to the user's profile picture
- * * `hasSubmitted`: required boolean, representing if the user has submitted a song suggestion today, or not
- *
- * */
-export interface User {
-  id: string;
-  displayName: string;
-  accountCreationDate: Date;
-  streakCount: number;
-  likedSongs: string[];
-  suggestedSongs: string[];
-  profilePic?: string;
-  hasSubmitted: boolean;
-}
-
-/**
  * @interface SongSuggestionData
  * * `id`: required string, uniquely identifies the song suggestion
  * * `songData`: required {@link SongData} object, containing songTitle, artist/s, album name, album art, preview audio or open in spotify url if no preview audio
@@ -60,4 +34,22 @@ export interface SongSuggestionData {
   username: string;
   caption?: string;
   profilePictureSrc?: string;
+}
+
+/**
+ * This interface is for the /api/feed endpoint's result.
+ */
+export interface FeedEndpointResult {
+  _id: string;
+  caption: string;
+  prompt: {
+    _id: string; // Prompt ID
+    prompt: string;
+  };
+  spotifySongId: string;
+  user: {
+    _id: string; // User ID
+    displayName: string;
+    profilePic: string;
+  };
 }

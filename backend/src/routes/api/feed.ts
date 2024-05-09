@@ -7,6 +7,8 @@ import {
   SuggestedSong,
 } from "../../schemas/SuggestedSongSchema";
 import { getTodaysDate } from "../../utils/DateUtils";
+import { FeedEndpointResult } from "../../utils/interfaces";
+import { getTrackBySpotifyId, spotifyTokenMiddleware } from "./songs";
 
 const router: Router = express.Router();
 
@@ -25,6 +27,7 @@ type GetSuggestedSongsQueryParams = {
  */
 router.get(
   "/",
+  spotifyTokenMiddleware,
   async (
     req: Request<any, any, any, GetSuggestedSongsQueryParams>,
     res: Response
@@ -44,9 +47,28 @@ router.get(
           .populate({ path: "user", select: ["profilePic", "displayName"] })
           .populate({ path: "prompt", select: "prompt" });
 
+        const songSuggestionPromises = suggestedSongs.map(async (song) => {
+          const { _id, caption, spotifySongId, user } =
+            song as unknown as FeedEndpointResult;
+
+          try {
+            const songData = await getTrackBySpotifyId(spotifySongId);
+            return {
+              id: _id,
+              songData,
+              username: user.displayName,
+              caption,
+              profilePictureSrc: user.profilePic,
+            };
+          } catch (error) {
+            res.status(500).json();
+          }
+        });
+
+        const songSuggestionData = await Promise.all(songSuggestionPromises);
         if (suggestedSongs.length > 0) {
           // Returning the suggested songs
-          res.status(200).json(suggestedSongs);
+          res.status(200).json(songSuggestionData);
         } else {
           // No suggestedSong entries found
           res

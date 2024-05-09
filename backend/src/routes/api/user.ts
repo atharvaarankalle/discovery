@@ -5,9 +5,11 @@ import {
   ISuggestedSong,
   SuggestedSong,
 } from "../../schemas/SuggestedSongSchema";
-import { Document, Schema, Types } from "mongoose";
+import { Schema } from "mongoose";
 import { Prompt } from "../../schemas/PromptSchema";
 import { compareDates, getTodaysDate } from "../../utils/DateUtils";
+
+import { getTrackBySpotifyId, spotifyTokenMiddleware } from "./songs";
 
 const router: Router = express.Router();
 
@@ -83,25 +85,50 @@ router.patch("/:id", async (req: Request, res: Response) => {
  *
  * @returns List of liked songs as JSON object
  */
-router.get("/:id/liked", async (req: Request, res: Response) => {
-  try {
-    const userId = req.params.id;
-    const user: IUser | null = await User.findById(userId).populate(
-      "likedSongs"
-    );
+router.get(
+  "/:id/liked",
+  spotifyTokenMiddleware,
+  async (req: Request, res: Response) => {
+    try {
+      const userId = req.params.id;
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      const user: IUser | null = await User.findById(userId).populate(
+        "likedSongs"
+      );
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const likedSongs: Array<ISuggestedSong> = await SuggestedSong.find({
+        _id: user.likedSongs,
+      });
+
+      if (!likedSongs || likedSongs.length === 0) {
+        return res.status(404).json({ message: "No liked songs found" });
+      }
+
+      const likedSongPromises = likedSongs.map(async (song) => {
+        const { spotifySongId } = song;
+
+        try {
+          const songData = await getTrackBySpotifyId(spotifySongId);
+
+          return songData;
+        } catch (error) {
+          res.status(500).json();
+        }
+      });
+
+      const likedSongsData = await Promise.all(likedSongPromises);
+
+      return res.json(likedSongsData);
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: `Error fetching user's liked songs: ${error}` });
     }
-
-    const likedSongs = user.likedSongs;
-    return res.json(likedSongs);
-  } catch (error) {
-    return res
-      .status(500)
-      .json({ message: `Error fetching user's liked songs: ${error}` });
   }
-});
+);
 
 /**
  * PUT add a song to a user's list of liked songs
@@ -168,47 +195,62 @@ router.delete("/:id/liked/:songId", async (req: Request, res: Response) => {
  *
  * @returns JSON object for the suggested song entry
  */
-router.get("/:id/suggested/today", async (req: Request, res: Response) => {
-  try {
-    const userId = req.params.id;
-    const user: IUser | null = await User.findById(userId);
+router.get(
+  "/:id/suggested/today",
+  spotifyTokenMiddleware,
+  async (req: Request, res: Response) => {
+    try {
+      const userId = req.params.id;
+      const user: IUser | null = await User.findById(userId);
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
 
-    // Find the date of the last suggested song
-    if (user.suggestedSongs.length == 0) {
-      return res.status(404).json({ message: "User has no suggested songs" });
-    }
-    const lastSuggestedSongId =
-      user.suggestedSongs[user.suggestedSongs.length - 1];
+      // Find the date of the last suggested song
+      if (user.suggestedSongs.length == 0) {
+        return res.status(404).json({ message: "User has no suggested songs" });
+      }
+      const lastSuggestedSongId =
+        user.suggestedSongs[user.suggestedSongs.length - 1];
 
-    const lastSuggestedSong = await SuggestedSong.findById(lastSuggestedSongId);
-    if (!lastSuggestedSong) {
-      return res
-        .status(404)
-        .json({ message: "Last suggested song is not found" });
-    }
-    // Get the date for the prompt
-    const lastPrompt = await Prompt.findById(lastSuggestedSong.prompt);
-    const lastSuggestedSongDate = lastPrompt?.date as Date | Schema.Types.Date;
+      const lastSuggestedSongEntry = await SuggestedSong.findById(
+        lastSuggestedSongId
+      );
+      if (!lastSuggestedSongEntry) {
+        return res
+          .status(404)
+          .json({ message: "Last suggested song is not found" });
+      }
+      // Get the date for the prompt
+      const lastPrompt = await Prompt.findById(lastSuggestedSongEntry.prompt);
+      const lastSuggestedSongDate = lastPrompt?.date as
+        | Date
+        | Schema.Types.Date;
 
-    if (
-      compareDates({ date1: lastSuggestedSongDate, date2: getTodaysDate() })
-    ) {
-      return res.json(lastSuggestedSong);
-    } else {
-      return res
-        .status(404)
-        .json({ message: "Last suggested song is not from today" });
+      if (
+        compareDates({ date1: lastSuggestedSongDate, date2: getTodaysDate() })
+      ) {
+        const { spotifySongId } = lastSuggestedSongEntry;
+
+        try {
+          const songData = await getTrackBySpotifyId(spotifySongId);
+          return res.json(songData);
+        } catch (error) {
+          res.status(500).json();
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ message: "Last suggested song is not from today" });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        message: `Error fetching user's today's suggested song: ${error}`,
+      });
     }
-  } catch (error) {
-    return res.status(500).json({
-      message: `Error fetching user's today's suggested song: ${error}`,
-    });
   }
-});
+);
 
 /**
  * PUT add a song to a user's suggested songs, and add new suggested song entry

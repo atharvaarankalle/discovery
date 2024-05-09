@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Searchbar } from "../components/Searchbar";
 import { SkipButton } from "../components/SkipButton";
 import { ConfirmationDialog } from "../components/ConfirmDialog";
 import PromptSideDrawer from "../components/PromptSideDrawer";
 import { SongSelectionContainer } from "../components/SongCardPaginationContainers";
 import axios from "axios";
+import { colors } from "../theme";
 import { SongData } from "../utils/interfaces";
+import { useNavigate } from "react-router-dom";
 
 /**
  * This function searches the Spotify library for songs that matches the string given.
@@ -18,7 +20,7 @@ import { SongData } from "../utils/interfaces";
 async function searchSongs(
   query: string,
   numSongs: number,
-  page: number,
+  page: number
 ): Promise<any> {
   try {
     const baseURL = import.meta.env.VITE_API_BASE_URL;
@@ -47,7 +49,7 @@ async function searchSongs(
  * @returns The prompt page to be rendered
  */
 export const PromptPage = () => {
-  const mockTrackData = {
+  const defaultTrackData = {
     id: "4kiVGEOrzWmEUCxXU21rtN",
     songTitle: "John The Fisherman",
     artists: "Primus",
@@ -58,13 +60,20 @@ export const PromptPage = () => {
     openInSpotifyUrl: "https://open.spotify.com/track/4kiVGEOrzWmEUCxXU21rtN",
   };
 
-  const [prompt, setPrompt] = useState("Press button for prompt");
   const [currentInput, setCurrentInput] = useState("");
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [songs, setSongs] = useState([]);
   const [debouncedValue, setDebouncedValue] = useState("");
-  const [displayedSong, setDisplayedSong] = useState<SongData>(mockTrackData);
+  const [displayedSong, setDisplayedSong] =
+    useState<SongData>(defaultTrackData);
+
+  const navigate = useNavigate();
+
+  //Checks if there is an existing prompt for the day, otherwise a new prompt is created and saved
+  useEffect(() => {
+    checkDrawer();
+  }, [currentInput]);
 
   //Using debounce to limit the amount of API calls
   useEffect(() => {
@@ -115,46 +124,47 @@ export const PromptPage = () => {
   //Confirm quit and takees the user to another page
   const handleConfirmQuit = () => {
     handleCloseDialog();
-    // Additional actions to quit goes here
+    navigate("../discover");
   };
 
-  //Retrieve the prompt using axios
-  const handlePrompt = async () => {
-    try {
-      const baseURL = import.meta.env.VITE_API_BASE_URL;
-
-      const response = await axios.get(`${baseURL}/prompt`);
-      if (response.status !== 200) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      setPrompt(response.data);
-    } catch (error) {
-      console.error("There was a problem fetching the message:", error);
+  //Put away drawer if searchbar is empty
+  const checkDrawer = () => {
+    if (!currentInput || currentInput === "") {
+      setOpenDrawer(false);
     }
   };
 
   return (
     <div>
-      <Typography variant="h2" sx={{ width: `calc(100vw - 37rem)` }}>
-        {prompt}
-      </Typography>
-      <Button variant="contained" sx={{ marginY: 3 }} onClick={handlePrompt}>
-        Generate
-      </Button>
       <Box>
         <Box
           sx={{
-            marginY: 1,
+            marginY: 3,
             width: `calc(100vw - 38rem)`,
             height: "80%",
             overflowY: "auto",
           }}
         >
           <Searchbar onInputChange={setCurrentInput} />
-          <SongSelectionContainer
-            songs={songs}
-            onSongCardClick={handleSongCardClick}
-          />
+          {/* this switches between two boxes depending if there's anything in the search bar*/}
+          {debouncedValue === "" ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                height: "35rem",
+              }}
+            >
+              <Typography variant="subtitle1" sx={{ color: colors.peach }}>
+                Search for a track that best describes the prompt above
+              </Typography>
+            </Box>
+          ) : (
+            <SongSelectionContainer
+              songs={songs}
+              onSongCardClick={handleSongCardClick}
+            />
+          )}
         </Box>
       </Box>
       <SkipButton onOpen={handleOpenDialog} />
