@@ -16,7 +16,7 @@ import { AppContext } from "../AppContextProvider";
  */
 const useAxiosInterceptor = () => {
   const navigate = useNavigate();
-  const { setIsUserAuthenticated } = useContext(AppContext);
+  const { setCurrentUserId } = useContext(AppContext);
 
   useEffect(() => {
     const interceptor = axios.interceptors.response.use(
@@ -28,7 +28,7 @@ const useAxiosInterceptor = () => {
         if ((error as AxiosError).response?.status === 401) {
           console.log("Unauthorized Error. Redirecting to login page...");
           // navigate user to login
-          setIsUserAuthenticated(false);
+          setCurrentUserId(null);
           navigate("/login");
         } else {
           console.error("There was a problem fetching the message:", error);
@@ -41,7 +41,7 @@ const useAxiosInterceptor = () => {
     return () => {
       axios.interceptors.response.eject(interceptor);
     };
-  }, [navigate, setIsUserAuthenticated]);
+  }, [navigate, setCurrentUserId]);
 };
 
 export default useAxiosInterceptor;

@@ -16,11 +16,10 @@ const SignupTab = () => {
   const [password, setPassword] = useState<string>("");
   const [displayName, setDisplayName] = useState<string>("");
   const navigate = useNavigate();
-  const { setIsUserAuthenticated } = useContext(AppContext);
+  const { setCurrentUserId } = useContext(AppContext);
 
-  // This method does a POST request to signup and sets user as authenticated in context if true,
+  // This method does a POST request to signup and sets user ID in context if successful,
   // thus logging them in automatically after sign up.
-  // TODO: Remove console.log for success and store user data as appropriate
   const postSignup = async (signUp: {
     email: string;
     password: string;
@@ -28,8 +27,7 @@ const SignupTab = () => {
   }) => {
     try {
       const response = await axios.post(`${API_BASE_URL}/auth/signup`, signUp);
-      console.log("Signup successful: ", response.data);
-      setIsUserAuthenticated(true);
+      setCurrentUserId(response.data.user._id); // sets the user ID in App Context (i.e. they are authenticated)
       navigate("/user/prompt");
     } catch (error: unknown) {
       console.error("Signup failed:", error);

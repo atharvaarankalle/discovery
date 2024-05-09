@@ -15,11 +15,11 @@ export const LoggedInBackground = styled("div")({
 });
 
 const UserAppBase = () => {
-  const { isUserAuthenticated } = useContext(AppContext);
+  const { currentUserId } = useContext(AppContext);
 
   return (
     <>
-      {isUserAuthenticated ? (
+      {currentUserId ? (
         <LoggedInBackground>
           <NavBar />
           {/* adding spacing around all child elements */}

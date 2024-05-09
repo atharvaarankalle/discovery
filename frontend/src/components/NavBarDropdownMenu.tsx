@@ -51,7 +51,7 @@ const NavBarDropdownMenu = ({
   const theme: Theme = useTheme();
   const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
   const navigate = useNavigate();
-  const { setIsUserAuthenticated } = useContext(AppContext);
+  const { setCurrentUserId } = useContext(AppContext);
 
   const handleProfilePictureClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElement(event.currentTarget);
@@ -92,7 +92,7 @@ const NavBarDropdownMenu = ({
         <MenuItem
           onClick={async () => {
             await axios.post(`${API_BASE_URL}/auth/logout`);
-            setIsUserAuthenticated(false);
+            setCurrentUserId(null);
             handleNavigation("/");
           }}
         >
