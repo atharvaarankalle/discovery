@@ -64,7 +64,7 @@ export const SongSelectionContainer = ({
       songsPerPage={6}
       songCardType="large"
       height={songs && songs.length > 0 ? "35rem" : "auto"}
-      noDataMessage="Search for a track that best describes the prompt above!"
+      noDataMessage="Loading..."
       onSongCardClick={onSongCardClick}
     />
   );

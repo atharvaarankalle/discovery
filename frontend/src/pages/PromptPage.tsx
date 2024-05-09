@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Searchbar } from "../components/Searchbar";
 import { SkipButton } from "../components/SkipButton";
 import { ConfirmationDialog } from "../components/ConfirmDialog";
 import PromptSideDrawer from "../components/PromptSideDrawer";
 import { SongSelectionContainer } from "../components/SongCardPaginationContainers";
 import axios from "axios";
+import { colors } from "../theme";
 import { SongData } from "../utils/interfaces";
 import { useNavigate } from "react-router-dom";
+import useGet from "../utils/useGet";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 /**
  * This function searches the Spotify library for songs that matches the string given.
@@ -41,6 +44,26 @@ async function searchSongs(
 }
 
 /**
+ * This function takes in a string and optionally a date to save the prompt to the database.
+ * If no date is given, it will be saved under today's date.
+ * @param promptText The prompt to be saved
+ * @param date A date or null for today's date
+ */
+async function savePrompt(promptText: string, date: Date | null) {
+  try {
+    const baseURL = import.meta.env.VITE_API_BASE_URL;
+    const response = await axios.post(`${baseURL}/prompt/save`, {
+      prompt: promptText,
+      date: date,
+    });
+
+    console.log("Prompt saved successfully:", response.data);
+  } catch (error) {
+    console.error("Failed to save prompt");
+  }
+}
+
+/**
  * This prompt page ultilises the GPT API and the Spotify API to give a prompt
  * to the user. The user then answer with a song by searching through the Spotify
  * library. A song can then be choosen and added to their personal list along with a comment.
@@ -48,7 +71,7 @@ async function searchSongs(
  * @returns The prompt page to be rendered
  */
 export const PromptPage = () => {
-  const mockTrackData = {
+  const defaultTrackData = {
     id: "4kiVGEOrzWmEUCxXU21rtN",
     songTitle: "John The Fisherman",
     artists: "Primus",
@@ -59,14 +82,40 @@ export const PromptPage = () => {
     openInSpotifyUrl: "https://open.spotify.com/track/4kiVGEOrzWmEUCxXU21rtN",
   };
 
-  const [prompt, setPrompt] = useState("Press button for prompt");
+  const [prompt, setPrompt] = useState<string | null>(null);
   const [currentInput, setCurrentInput] = useState("");
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [songs, setSongs] = useState([]);
   const [debouncedValue, setDebouncedValue] = useState("");
-  const [displayedSong, setDisplayedSong] = useState<SongData>(mockTrackData);
   const navigate = useNavigate();
+  const [displayedSong, setDisplayedSong] =
+    useState<SongData>(defaultTrackData);
+
+  const baseURL = import.meta.env.VITE_API_BASE_URL;
+
+  const { data: existingResponse, isLoading: isExistingLoading } =
+    useGet<string>({
+      url: `${baseURL}/prompt/latest`,
+    });
+
+  const { data: newResponse, isLoading: isNewLoading } = useGet<string>({
+    url: `${baseURL}/prompt`,
+  });
+
+  useEffect(() => {
+    checkDrawer();
+  }, [currentInput]);
+
+  //Checks if there is an existing prompt for the day, otherwise a new prompt is created and saved
+  useEffect(() => {
+    if (existingResponse) {
+      setPrompt(existingResponse);
+    } else if (newResponse) {
+      setPrompt(newResponse);
+      savePrompt(newResponse, null);
+    }
+  }, [existingResponse, newResponse]);
 
   //Using debounce to limit the amount of API calls
   useEffect(() => {
@@ -120,18 +169,10 @@ export const PromptPage = () => {
     navigate("/user/discover");
   };
 
-  //Retrieve the prompt using axios
-  const handlePrompt = async () => {
-    try {
-      const baseURL = import.meta.env.VITE_API_BASE_URL;
-
-      const response = await axios.get(`${baseURL}/prompt`);
-      if (response.status !== 200) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      setPrompt(response.data);
-    } catch (error) {
-      console.error("There was a problem fetching the message:", error);
+  //Put away drawer if searchbar is empty
+  const checkDrawer = () => {
+    if (!currentInput || currentInput === "") {
+      setOpenDrawer(false);
     }
   };
 
@@ -145,12 +186,13 @@ export const PromptPage = () => {
         overflowX: "clip",
       }}
     >
-      <Typography variant="h2" sx={{ width: `calc(100vw - 37rem)` }}>
-        {prompt}
-      </Typography>
-      <Button variant="contained" sx={{ marginY: 3 }} onClick={handlePrompt}>
-        Generate
-      </Button>
+      {isExistingLoading || isNewLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <Typography variant="h2" sx={{ width: `calc(100vw - 37rem)` }}>
+          {prompt}
+        </Typography>
+      )}
       <Box>
         <Box
           sx={{
@@ -159,10 +201,25 @@ export const PromptPage = () => {
           }}
         >
           <Searchbar onInputChange={setCurrentInput} />
-          <SongSelectionContainer
-            songs={songs}
-            onSongCardClick={handleSongCardClick}
-          />
+          {/* this switches between two boxes depending if there's anything in the search bar*/}
+          {debouncedValue === "" ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                height: "35rem",
+              }}
+            >
+              <Typography variant="subtitle1" sx={{ color: colors.peach }}>
+                Search for a track that best describes the prompt above
+              </Typography>
+            </Box>
+          ) : (
+            <SongSelectionContainer
+              songs={songs}
+              onSongCardClick={handleSongCardClick}
+            />
+          )}
         </Box>
       </Box>
       <ConfirmationDialog
