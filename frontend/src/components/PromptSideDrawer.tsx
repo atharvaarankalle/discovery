@@ -6,6 +6,7 @@ import { useContext, useState } from "react";
 import { SongData } from "../utils/interfaces";
 import axios from "axios";
 import { AppContext } from "../AppContextProvider";
+import { useNavigate } from "react-router-dom";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -72,6 +73,7 @@ interface PromptSideDrawerPropTypes extends DrawerProps {
 const PromptSideDrawer = ({ drawerOpen, toggleDrawer, songData }: PromptSideDrawerPropTypes) => {
     const [caption, setCaption] = useState("");
     const { currentUserId, promptIdOfTheDay } = useContext(AppContext);
+    const navigate = useNavigate();
 
     const handleCaptionChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         // If the input is empty, set caption to undefined
@@ -89,6 +91,7 @@ const PromptSideDrawer = ({ drawerOpen, toggleDrawer, songData }: PromptSideDraw
             prompt: promptIdOfTheDay
         });
         setCaption("");
+        navigate("/user/discover");
     }
 
     return (
