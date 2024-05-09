@@ -2,8 +2,12 @@ import { Box, Button, Drawer, DrawerProps, TextField, styled } from "@mui/materi
 import CustomTypography from "./CustomTypography";
 import SongCard from "./SongCard";
 import SendIcon from '@mui/icons-material/Send';
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { SongData } from "../utils/interfaces";
+import axios from "axios";
+import { AppContext } from "../AppContextProvider";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 /* Custom styles applied to MUI Drawer */
 const StyledDrawer = styled(Drawer)(() => ({
@@ -67,6 +71,7 @@ interface PromptSideDrawerPropTypes extends DrawerProps {
  */
 const PromptSideDrawer = ({ drawerOpen, toggleDrawer, songData }: PromptSideDrawerPropTypes) => {
     const [caption, setCaption] = useState("");
+    const { currentUserId, promptIdOfTheDay } = useContext(AppContext);
 
     const handleCaptionChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         // If the input is empty, set caption to undefined
@@ -78,7 +83,11 @@ const PromptSideDrawer = ({ drawerOpen, toggleDrawer, songData }: PromptSideDraw
     }
 
     const handleSuggestionSubmit = () => {
-        console.log(caption);
+        axios.put(`${API_BASE_URL}/user/${currentUserId}/suggested`, {
+            spotifySongId: songData.id,
+            caption: caption,
+            prompt: promptIdOfTheDay
+        });
         setCaption("");
     }
 
