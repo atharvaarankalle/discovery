@@ -56,7 +56,7 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
             id="alert-dialog-description"
             sx={{ color: colors.peach }}
           >
-            This prompt expires at night.
+            This prompt expires at midnight.
             <br />
             You can still post a song recommendation if you skip.
           </Typography>
