@@ -174,6 +174,21 @@ const ActiveMusicPlayerContent = () => {
     }
   };
 
+  // handle pause and play state when the song audio ends
+  useEffect(() => {
+    const currentSong = songAudioRef.current;
+
+    const handleSongEnd = () => {
+      setIsPlaying(false);
+    };
+
+    currentSong.addEventListener("ended", handleSongEnd);
+
+    return () => {
+      currentSong.removeEventListener("ended", handleSongEnd);
+    };
+  }, []);
+
   // handle audio controls when switching between songs
   useEffect(() => {
     // change audio to the new song
