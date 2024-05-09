@@ -9,6 +9,7 @@ const users = [
     {
         _id: new mongoose.Types.ObjectId("000000000000000000000001"),
         email: "user1@test.com",
+        password: "password123",
         displayName: "User 1",
         accountCreationDate: new Date("2024-05-03T00:00:00.000+00:00"),
         streakCount: 2,
@@ -19,6 +20,7 @@ const users = [
     {
         _id: new mongoose.Types.ObjectId("000000000000000000000002"),
         email: "user2@test.com",
+        password: "password234",
         displayName: "User 2",
         accountCreationDate: new Date("2024-05-02T00:00:00.000+00:00"),
         streakCount: 5,
@@ -117,6 +119,7 @@ it("gets a single user", async () => {
 it("creates a user", async () => {
     const newUser = new User({
         email: "user4@test.com",
+        password: "password456",
         displayName: "User 4",
         accountCreationDate: new Date("2024-05-08T00:00:00.000+00:00"),
         streakCount: 0,
@@ -144,6 +147,7 @@ it("creates a user", async () => {
 it("successfully inserts a user with an empty displayName field", async () => {
     const newUser = new User({
         email: "user4@test.com",
+        password: "password456",
         accountCreationDate: new Date("2024-05-08T00:00:00.000+00:00"),
         streakCount: 0,
         likedSongs: [],
@@ -171,6 +175,7 @@ it("successfully inserts a user with an empty displayName field", async () => {
 it("successfully inserts a user with an empty profilePic field", async () => {
     const newUser = new User({
         email: "user4@test.com",
+        password: "password456",
         displayName: "User 4",
         accountCreationDate: new Date("2024-05-08T00:00:00.000+00:00"),
         streakCount: 0,
