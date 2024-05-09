@@ -180,7 +180,7 @@ export const PromptPage = () => {
     <Box
       sx={{
         marginY: 1,
-        width: `calc(100vw - 38rem)`,
+        width: `calc(100vw - 33.5rem)`,
         height: "calc(100vh - 350px)", // SUBJECT TO CHANGE
         overflowY: "scroll",
         overflowX: "clip",

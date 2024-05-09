@@ -132,7 +132,7 @@ const NavBar = () => {
           direction="row"
           gap={6}
           alignItems="center"
-          sx={{ paddingRight: currentPage !== "Prompt" ? "0.5rem" : "33rem" }}
+          sx={{ paddingRight: currentPage !== "Prompt" ? "0.5rem" : "28em" }}
         >
           <Stack direction="row" alignItems="center">
             {currentUser?.hasSubmitted ? (
