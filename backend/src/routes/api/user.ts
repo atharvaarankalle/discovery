@@ -9,10 +9,7 @@ import { Schema } from "mongoose";
 import { Prompt } from "../../schemas/PromptSchema";
 import { compareDates, getTodaysDate } from "../../utils/DateUtils";
 import axios from "axios";
-import dotenv from "dotenv";
-
-dotenv.config();
-const API_BASE_URL = process.env.API_BASE_URL ?? "https://localhost:3000/api";
+import { getTrackBySpotifyId } from "./songs";
 
 const router: Router = express.Router();
 
@@ -207,10 +204,8 @@ router.get("/:id/suggested/today", async (req: Request, res: Response) => {
       const { spotifySongId } = lastSuggestedSongEntry;
 
       try {
-        const response = await axios.get(
-          `${API_BASE_URL}/songs/${spotifySongId}`
-        );
-        return res.json(response.data);
+        const songData = await getTrackBySpotifyId(spotifySongId);
+        return res.json(songData);
       } catch (error) {
         res.status(500).json();
       }

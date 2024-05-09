@@ -19,9 +19,11 @@ const DiscoverPage = () => {
   const { currentUserId, setCurrentPreviewSong } = useContext(AppContext);
 
   // Getting Current User's Song Suggestion
-  const { data: todaysSongSuggestionData } = useGet<SongData>({
-    url: `${API_BASE_URL}/user/${currentUserId}/suggested/today`,
-  });
+  const { data: todaysSongSuggestionData, isLoading: isSuggestionLoading } =
+    useGet<SongData>({
+      url: `${API_BASE_URL}/user/${currentUserId}/suggested/today`,
+    });
+
   const todaysSongSuggestion =
     todaysSongSuggestionData === null ? undefined : todaysSongSuggestionData;
 
@@ -29,7 +31,7 @@ const DiscoverPage = () => {
   const { isLoading: isFeedLoading, data: feedData } = useGet<
     SongSuggestionData[]
   >({
-    url: `${API_BASE_URL}/feed`,
+    url: `${API_BASE_URL}/feed?date=2024-05-05`,
   });
   const songs = feedData === null ? [] : feedData;
 
@@ -42,8 +44,21 @@ const DiscoverPage = () => {
 
   return (
     <StyledDiscoverContainer>
-      <DiscoverPageHeader songData={todaysSongSuggestion} />
-      {isFeedLoading ? (
+      {todaysSongSuggestionData || isSuggestionLoading ? (
+        <DiscoverPageHeader songData={todaysSongSuggestion} />
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "15vh",
+          }}
+        >
+          <LoadingSpinner />
+        </Box>
+      )}
+      {isFeedLoading || !feedData ? (
         <Box
           sx={{
             display: "flex",
