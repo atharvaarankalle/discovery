@@ -13,13 +13,14 @@ import LocalFireDepartmentTwoToneIcon from "@mui/icons-material/LocalFireDepartm
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import PriorityHighTwoToneIcon from "@mui/icons-material/PriorityHighTwoTone";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AppContext } from "../AppContextProvider";
 import NavBarDropdownMenu from "./NavBarDropdownMenu";
 import StyledToolTip from "./StyledTooltip";
 import CustomTypography from "./CustomTypography";
 import useGet from "../utils/useGet";
 import { SongData, User } from "../utils/interfaces";
+import axios from "axios";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
 
@@ -64,7 +65,43 @@ const NavBar = () => {
     hasSubmitted: todaysSongData !== null,
   };
 
-  const { promptOfTheDay } = useContext(AppContext);
+  const { promptOfTheDay, setPromptOfTheDay } = useContext(AppContext);
+
+  /**
+   * This function takes in a string and optionally a date to save the prompt to the database.
+   * If no date is given, it will be saved under today's date.
+   * @param promptText The prompt to be saved
+   * @param date A date or null for today's date
+   */
+  async function savePrompt(promptText: string, date: Date | null) {
+    try {
+      const baseURL = import.meta.env.VITE_API_BASE_URL;
+      const response = await axios.post(`${baseURL}/prompt/save`, {
+        prompt: promptText,
+        date: date,
+      });
+
+      console.log("Prompt saved successfully:", response.data);
+    } catch (error) {
+      console.error("Failed to save prompt");
+    }
+  }
+  const { data: existingPrompt } = useGet<string>({
+    url: `${API_BASE_URL}/prompt/latest`,
+  });
+
+  const { data: newPromptOfDay } = useGet<string>({
+    url: `${API_BASE_URL}/prompt`,
+  });
+
+  //Checks if there is an existing prompt for the day, otherwise a new prompt is created and saved
+  useEffect(() => {
+    if (existingPrompt) {
+      setPromptOfTheDay(existingPrompt);
+    } else if (newPromptOfDay) {
+      savePrompt(newPromptOfDay, null);
+    }
+  }, [existingPrompt, newPromptOfDay, setPromptOfTheDay]);
 
   // Determine the current page based on the URL path
   let currentPage: LoggedInUserPages;
@@ -164,7 +201,7 @@ const NavBar = () => {
       {currentPage === "Prompt" && (
         <Stack direction="column" sx={{ padding: "1rem 0 0 2.5rem" }}>
           <Typography variant="h4">TODAY'S DISCO:</Typography>
-          <CustomTypography variant="h1" num_lines={1}>
+          <CustomTypography variant="h2" num_lines={1}>
             {promptOfTheDay}
           </CustomTypography>
         </Stack>
